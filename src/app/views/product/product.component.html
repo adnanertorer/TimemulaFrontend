@@ -1,0 +1,96 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Ürün</strong> Kayıt Formu
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="product.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <label for="name">Ürün Adı</label>
+                <input type="text" id="name" [(ngModel)]="product.name"
+                       name="name" class="form-control">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <label for="price">Birim Fiyat (TL)</label>
+                <input type="number" id="price" name="price" [(ngModel)]="product.price" class="form-control" placeholder="Birim fiyat (TL)">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <label for="description">Ürün Açıklaması</label>
+                <input type="text" id="description" name="description" [(ngModel)]="product.description" 
+                class="form-control">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input class="uploadButton-input" #file type="file" (change)="uploadFile(file.files)"  accept="images/*" id="file" name="file">
+              </div>
+            </div>
+            <!--<div class="form-group row">
+              <label class="col-md-3 col-form-label" for="firstAmount">İlk Stok Adedi</label>
+              <div class="col-md-9">
+                <input type="number" id="firstAmount" name="firstAmount" [(ngModel)]="firstAmount" class="form-control" placeholder="İlk Stok Adedi">
+              </div>
+            </div>-->
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="button" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i> {{buttonText}}</button>
+          <button type="reset" (click)="reset()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Vazgeç</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-form-field appearance="standard">
+  <mat-label>Sonuçlar içinde aramak için tıklayınız</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort #productSort="matSort">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ürün Adı</th>
+      <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Fiyat</th>
+      <td mat-cell *matCellDef="let row"> {{row.price}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlem Zamanı</th>
+      <td mat-cell *matCellDef="let row"> {{row.createdAt | date: 'dd/M/yyyy hh:mm'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="isActive">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Durum</th>
+      <td mat-cell *matCellDef="let row"> {{row.isActive ? 'Aktif' : 'Pasif'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Açıklama</th>
+      <td mat-cell *matCellDef="let row"> {{row.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+      <td mat-cell *matCellDef="let row">
+        <button type="button" (click)="getDetails(row)" class="btn btn-info">Detaylar</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+    </tr>
+  </table>
+
+   <app-generic-paginator #productPaginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+</div>
+

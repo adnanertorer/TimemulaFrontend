@@ -1,0 +1,82 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Paket</strong> Değişiklik Formu
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <p>Öğrenci Mevcut Haftalık Ders Günleri</p>
+            <ul>
+              <li *ngFor="let item of daysStrArr">{{dayLabels[item]}}</li>
+            </ul>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="selectedCustomerLessonId">Hangi dersten sonra program değişecek?</label>
+              <div class="col-md-9">
+                <select name="selectedCustomerLessonId" id="selectedCustomerLessonId" [(ngModel)]="selectedCustomerLessonId"
+                 class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of customerLessons">Başlama: {{item.startDate | date: 'dd/M/yyyy H:mm'}}  =>  Bitiş: {{item.finishDate | date: 'dd/M/yyyy H:mm'}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="dayList">Gün Seçiniz</label>
+              <div class="col-md-3">
+                <select name="dayList" id="dayList" #dayList (change)="dayOnChange(dayList.value)" class="form-control">
+                  <option value="-1">Seçiniz</option>
+                  <option *ngFor="let item of weekDays" value="{{item}}">{{ dayLabels[item] }}</option> 
+                </select>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="selectedDays.length>0">
+              <label class="col-md-3 col-form-label" for="dayList">Seçili Günler</label>
+              <div class="col-md-3">
+                <ul>
+                  <li *ngFor="let item of selectedDays">{{dayLabels[item.day]}} 
+                    <i class="icon-remove" (click)="removeDayFromList(item.day)"></i>
+                    <input type="time" name="{{item.day}}-firstTime" id="{{item.day}}-firstTime" class="form-control" />
+                    <input type="time" name="{{item.day}}-finishTime" id="{{item.day}}-finishTime" class="form-control" />
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" (click)="sendForFilter()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>Sonuçları Getir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <strong>Sonuç Listesi</strong> 
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Durum</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.description}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" *ngIf="isOk" (click)="approveChange()" class="btn btn-success">Kaydet</button>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="filterResponses" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>
+</div> 

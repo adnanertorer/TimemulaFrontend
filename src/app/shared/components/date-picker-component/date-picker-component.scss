@@ -1,0 +1,37 @@
+.dtp {
+  display: grid;
+  gap: 6px;
+}
+
+.dtp__label {
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.dtp__control-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dtp__input {
+  min-width: 260px;
+  padding: 3px 5px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.dtp__btn {
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.dtp__btn--ghost {
+  opacity: 0.85;
+}
+
+.dtp__error {
+  color: #b42318;
+  font-size: 0.8rem;
+}

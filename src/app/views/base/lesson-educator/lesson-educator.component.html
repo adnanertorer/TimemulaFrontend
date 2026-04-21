@@ -1,0 +1,99 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Hizmet/Personel İlişkisi Kayıt Formu</h5>
+          <span class="align-middle">
+            <i class="fi fi-rr-info"></i>
+            Hizmet/Personel ilişkisi oluşturmadan önce dilerseniz hizmet ve personel oluşturabilirsiniz. <br>
+            <ul>
+              <li><a href="/genel-tanimlar/dersler.html">Hizmet oluştur</a></li>
+              <li><a href="/personeller">Personel oluştur</a></li>
+            </ul>
+          </span>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="model.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-4">
+                <label for="lessonId">Hizmet</label>
+                <select name="lessonId" id="lessonId" [(ngModel)]="model.lessonId" class="form-control"
+                  (change)="lessonOnChange($event.target.value)">
+                  <option value="0">Hizmet Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of lessonList">{{item.category.categoryName}}
+                    {{item.subCategory.subCategoryName}} {{item.lessonName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-4">
+                <label for="staffId">Hizmeti Veren Personel</label>
+                <select name="staffId" id="staffId" [(ngModel)]="model.staffId" class="form-control"
+                  (change)="staffOnChange($event.target.value)">
+                  <option value="0">Personel Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of staffList">{{item.name}} {{item.surname}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-4" *ngIf="salaryTypeId !== 1">
+                <label for="seansPrice">Seans Başı Ücret</label>
+                <input type="number" name="seansPrice" class="form-control" id="seansPrice"
+                  [(ngModel)]="model.seansPrice" placeholder="Personel Hak Ediş Tutarı">
+              </div>
+            </div>
+
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i>
+              {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-danger"><i class="fi fi-rr-cross-circle"></i>
+              Formu Temizle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header">
+            <h5 class="font-weight-bold">Hizmet/Personel İlişki Listesi</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Hizmet Adı</th>
+                  <th>Personel Adı</th>
+                  <th>Hakediş Tutarı</th>
+                  <th>Aktif mi?</th>
+                  <th style="text-align: right;">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of list">
+                  <td>
+                    {{item.lesson?.category?.categoryName}}/{{item.lesson?.subCategory?.subCategoryName}}/{{item.lesson?.lessonName}}
+                  </td>
+                  <td>{{item.staff.name}} {{item.staff.surname}}</td>
+                  <td>{{item.staff.salaryTypeId != 1 ? item.seansPrice : 'Aylık Ücret Alır'}}</td>
+                  <td>{{item.isActive ? 'Aktif' : 'Pasif'}}</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-orange btn-info" (click)="getDetailFromTable(item)" title="Düzenle"><i
+                        class="fi fi-rr-user-pen"></i></button>
+                    <button class="btn btn-red btn-info" (click)="remove(item.id)" title="Sil"><i
+                        class="fi fi-rr-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer pb-0 pt-3">
+            <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+          </div>
+        </div><!--/.col-->
+      </div><!--/.row-->
+    </div>

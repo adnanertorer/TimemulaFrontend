@@ -1,0 +1,70 @@
+<h5>Müşteri Ödeme Planı Listesi</h5>
+<mat-form-field appearance="standard">
+  <mat-label>Filtre</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Adı Soyadı..." #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort #installmentSort="matSort">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cari Hesap</th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} {{row.surname}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalInstallment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Toplam Taksit Miktarı</th>
+      <td mat-cell *matCellDef="let row"> {{row.totalInstallment}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Aylık Ödeme Miktarı</th>
+      <td mat-cell *matCellDef="let row"> {{row.paymentAmount}} TL</td>
+    </ng-container>
+
+    <ng-container matColumnDef="interestPercent">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vade Oranı</th>
+      <td mat-cell *matCellDef="let row"> %{{row.interestPercent}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dayNumber">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ödeme Günü</th>
+      <td mat-cell *matCellDef="let row"> {{row.dayNumber}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="interestAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Vade Farkı</th>
+      <td mat-cell *matCellDef="let row"> {{row.interestAmount}} TL </td>
+    </ng-container>
+
+    <ng-container matColumnDef="mainDept">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ana Borç</th>
+      <td mat-cell *matCellDef="let row"> {{row.mainDept}} TL </td>
+    </ng-container>
+
+    <ng-container matColumnDef="withInterestAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Toplam Borç</th>
+      <td mat-cell *matCellDef="let row"> {{row.withInterestAmount}} TL </td>
+    </ng-container>
+
+    <ng-container matColumnDef="createdByName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemi Yapan</th>
+      <td mat-cell *matCellDef="let row"> {{row.createdByName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+      <td mat-cell *matCellDef="let row"> 
+        <button type="button" (click)="openDetailList(row.id)" class="btn btn-warning">Taksit Listesi</button>  
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator #installmentPaginator [pageSizeOptions]="[10, 25, 50, 75, 100]" aria-label="Select page of users"></mat-paginator>
+</div>

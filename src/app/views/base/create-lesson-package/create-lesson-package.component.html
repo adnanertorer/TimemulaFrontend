@@ -1,0 +1,273 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header"><strong>Paket</strong> Kayıt Formu</div>
+                <div class="card-body">
+                    <form action="" method="post" class="form-horizontal">
+                        <input type="hidden" name="id" id="id" [(ngModel)]="artPackage.id" />
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="categoryId">Kategori</label>
+                            <div class="col-md-9">
+                                <select name="categoryId" id="categoryId"
+                                    (change)="categoryOnChange($event.target.value)" [(ngModel)]="artPackage.categoryId"
+                                    class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="{{ item.id }}" *ngFor="let item of categories">
+                                        {{ item.categoryName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="subCategoryId">Alt Kategori Adı</label>
+                            <div class="col-md-9">
+                                <select name="subCategoryId" id="subCategoryId"
+                                    (change)="subCategoryOnChange($event.target.value)"
+                                    [(ngModel)]="artPackage.subCategoryId" class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="{{ item.id }}" *ngFor="let item of subCategories">
+                                        {{ item.subCategoryName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="lessonId">İşin Adı</label>
+                            <div class="col-md-9">
+                                <select name="lessonId" id="lessonId" [(ngModel)]="artPackage.lessonId"
+                                    class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="{{ item.id }}" *ngFor="let item of lessons">
+                                        {{ item.lessonName }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="artPackageName">Paket Adı</label>
+                            <div class="col-md-9">
+                                <input type="text" name="artPackageName" class="form-control" id="artPackageName"
+                                    [(ngModel)]="artPackage.artPackageName" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="seanceCount">Seans/Gün Sayısı</label>
+                            <div class="col-md-9">
+                                <input type="number" name="seanceCount" class="form-control" id="seanceCount"
+                                    [(ngModel)]="artPackage.seanceCount" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="seanceCount">Maksimum Katılımcı Sayısı</label>
+                            <div class="col-md-9">
+                                <input type="number" name="maxCapacity" class="form-control" id="maxCapacity"
+                                    [(ngModel)]="artPackage.maxCapacity" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="duration">Seansın Süresi (dk)</label>
+                            <div class="col-md-9">
+                                <input type="number" name="duration" class="form-control" id="duration"
+                                    [(ngModel)]="artPackage.duration" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="unitPrice">Birim Fiyat</label>
+                            <div class="col-md-9">
+                                <input type="number" name="unitPrice" class="form-control" id="unitPrice"
+                                    [(ngModel)]="artPackage.unitPrice" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="seancePrice">Paket Fiyatı</label>
+                            <div class="col-md-9">
+                                <input type="number" name="seancePrice" class="form-control" id="seancePrice"
+                                    [(ngModel)]="artPackage.seancePrice" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="discount">İndirim</label>
+                            <div class="col-md-9">
+                                <input type="number" name="discount" class="form-control" id="discount"
+                                    [(ngModel)]="artPackage.discount" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="participantTypeId">Müşteri Türü</label>
+                            <div class="col-md-9">
+                                <select name="participantTypeId" id="participantTypeId" [(ngModel)]="artPackage.participantTypeId" class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="1">Yetişkin</option>
+                                    <option value="2">Çocuk</option>
+                                    <option value="3">Kriter Yok</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="participantId">Katılım Türü</label>
+                            <div class="col-md-9">
+                                <select name="participantId" id="participantId" [(ngModel)]="artPackage.participantId" class="form-control">
+                                    <option value="0">Seçiniz</option>
+                                    <option value="1">Bireysel</option>
+                                    <option value="2">Grup</option>
+                                    <option value="3">Kriter Yok</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row" *ngIf="isGroup">
+                            <label class="col-md-3 col-form-label" for="maxCapacity">Max Kapasite</label>
+                            <div class="col-md-9">
+                                <input type="number" name="maxCapacity" class="form-control" id="maxCapacity"
+                                    [(ngModel)]="artPackage.maxCapacity" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="description">Açıklama</label>
+                            <div class="col-md-9">
+                                <input type="text" name="description" class="form-control" id="description"
+                                    [(ngModel)]="artPackage.description" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="isActive">Aktif</label>
+                            <div class="col-md-9">
+                                <input type="checkbox" name="isActive" id="isActive"
+                                    [(ngModel)]="artPackage.isActive" />
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="card-footer">
+                        <button type="submit" (click)="add()" class="btn btn-sm btn-primary">
+                            <i class="fa fa-dot-circle-o"></i> {{ buttonText }}
+                        </button>
+                        <button type="reset" (click)="reset()" class="btn btn-sm btn-danger">
+                            <i class="fa fa-ban"></i> Vazgeç
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <mat-form-field appearance="standard">
+                <mat-label>Filtre</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Paket Adı..." #input />
+            </mat-form-field>
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort>
+                    <ng-container matColumnDef="categoryName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Kategori</th>
+                        <td mat-cell *matCellDef="let row">{{ row.category.categoryName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="subCategoryName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Alt Kategori
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.subCategory.subCategoryName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="lessonName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>İş/Hizmet</th>
+                        <td mat-cell *matCellDef="let row">{{ row.lesson.lessonName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="artPackageName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Paket</th>
+                        <td mat-cell *matCellDef="let row">{{ row.artPackageName }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="seanceCount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Seans Sayısı
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.seanceCount }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="duration">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Seans Süresi
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.duration }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unitPrice">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fiyat</th>
+                        <td mat-cell *matCellDef="let row">{{ row.unitPrice }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="seancePrice">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Seans Ücreti
+                        </th>
+                        <td mat-cell *matCellDef="let row">{{ row.seancePrice }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="discount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>İndirim</th>
+                        <td mat-cell *matCellDef="let row">{{ row.discount }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="participantTypeName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Katılımcı Türü
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <span *ngIf="row.participantTypeId == 1">Yetişkin</span>
+                            <span *ngIf="row.participantTypeId == 2">Çocuk</span>
+                            <span *ngIf="row.participantTypeId == 3">Kriter Yok</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="participantName">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            Katılım Türü
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <span *ngIf="row.participantId == 1">Bireysel</span>
+                            <span *ngIf="row.participantId == 2">Grup</span>
+                            <span *ngIf="row.participantId == 3">Kriter Yok</span>    
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="isActive">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktif</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{ row.isActive ? "Aktif" : "Pasif" }}
+                        </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Açıklama</th>
+                        <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+                        <td mat-cell *matCellDef="let row">
+                            <button (click)="getDetailFromTable(row.id)" class="btn btn-info" value="Detaylar">
+                                Detaylar
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">
+                            Aradığınız kriterlere uygun kayıt bulunamadı "{{ input.value }}"
+                        </td>
+                    </tr>
+                </table>
+                <app-generic-paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[2, 5, 10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)">
+                </app-generic-paginator>
+            </div>
+            <!--/.row-->
+        </div>
+    </div>
+</div>

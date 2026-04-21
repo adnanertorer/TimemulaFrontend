@@ -1,0 +1,19 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CashboxComponent } from './cashbox.component';
+import { FormsModule } from '@angular/forms';
+import { JwPaginationModule } from 'jw-angular-pagination';
+import { MyMaterialModule } from 'src/app/material.module';
+import { CashBoxRouterModule } from './cashbox-router.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    FormsModule,
+    JwPaginationModule,
+    MyMaterialModule,
+    CashBoxRouterModule
+  ],
+  declarations: [CashboxComponent]
+})
+export class CashboxModule { }

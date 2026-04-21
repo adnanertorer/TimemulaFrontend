@@ -1,0 +1,258 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-6">
+              <h6 style="margin-top: 8px;">Alt Hizmet Listesi</h6>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <button class="btn btn-success" (click)="openModal()"
+              >Yeni Alt Hizmet</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Hizmet Adı</th>
+                <th>Ücret</th>
+                <th>Ders Süresi (dk)</th>
+                <th>Katılım Türü</th>
+                <th>Katılımcı Türü</th>
+                <th style="text-align: right;">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.subServiceName}}</td>
+                <td>{{item.price}}</td>
+                <td>{{item.durationMinute}}</td>
+                <td>{{item.isGroup == true ? 'Grub Ders' : 'Bireysel'}}</td>
+                <td>{{item.isAdult == true ? 'Yetişkin' : 'Çocuk'}}</td>
+                <td style="text-align: right;">
+                  <button class="btn btn-info" (click)="getDetailFromTable(item)">Düzenle</button>
+                  <button class="btn btn-warning" (click)="openClassroomModal(item.id)">Derslikler</button>
+                  <button class="btn" (click)="openTeacherModal(item.id)">Eğitmenler</button>
+                  <button class="btn btn-danger" (click)="remove(item.id)">Sil</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="subServiceList" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>
+
+<div [ngClass]="{'modal show': modalOpen}" [ngClass]="{'modal fade': !modalOpen}" 
+id="exampleModal" tabindex="-1" 
+role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="exampleModalLabel">Alt Hizmet Kaydı</h6>
+        <input type="hidden" name="id" id="id" #id="ngModel"
+      [(ngModel)]="subService.id" />
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-12 col-md-12">
+            <div class="submit-field"> 
+              <h6>Alt Hizmet Adı</h6>
+              <input type="text" class="form-control" name="subServiceName" id="subServiceName" #subServiceName="ngModel"
+                [(ngModel)]="subService.subServiceName">
+            </div> 
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Ücret</h6>
+            <input type="number" class="form-control" name="price" id="price" #price="ngModel"
+              [(ngModel)]="subService.price">
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Ders Süresi (dk)</h6>
+            <input type="number" class="form-control" name="durationMinute" id="durationMinute" #price="ngModel"
+              [(ngModel)]="subService.durationMinute">
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Grup Dersi</h6>
+            <input type="checkbox" name="isGroup" id="isGroup" #isGroup="ngModel"
+              [(ngModel)]="subService.isGroup">
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Yetişkinler İçin</h6>
+            <input type="checkbox" name="isAdult" id="isAdult" #isAdult="ngModel"
+              [(ngModel)]="subService.isAdult">
+          </div> 
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeModal()" type="button" class="btn btn-secondary" 
+        data-dismiss="modal">Kapat</button>
+        <button type="button" (click)="add()" class="btn btn-success">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [ngClass]="{'modal show': classroomModalOpen}" [ngClass]="{'modal fade': !classroomModalOpen}" 
+id="classroomModal" tabindex="-1" 
+role="dialog" aria-labelledby="classroomModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="classroomModalLabel">Derslik Ekle</h6>
+        <input type="hidden" name="id" id="id" #id="ngModel"
+      [(ngModel)]="subserviceClassroom.id" />
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-12 col-md-12">
+            <div class="submit-field"> 
+              <h6>Derslik</h6>
+              <select name="classroom_id" id="classroom_id" [(ngModel)]="subserviceClassroom.classroom_id" class="form-control">
+                <option value="0">Lütfen bir derslik seçiniz</option>
+                <option value="{{item.id}}" *ngFor="let item of classrooms">{{item.classroom_name}}</option>
+              </select>
+            </div> 
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Öncelik</h6>
+            <input type="number" class="form-control" name="priority" id="priority" #priority="ngModel"
+              [(ngModel)]="subserviceClassroom.priority">
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12" style="margin-top: 5px; margin-right: 5px;text-align: right;">
+          <button *ngIf="isUpdateClassroom" type="button" class="btn btn-warning" (click)="resetClassroom()">Vazgeç</button>
+          <button type="button" (click)="addClassroom()" class="btn btn-success">{{classroomButtonText}}</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Derslik Adı</th>
+              <th>Öncelik</th>
+              <th style="text-align: right;">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pageOfItemsSubServiceClassroom">
+              <td>{{item.classroom_name}}</td>
+              <td>{{item.priority}}</td>
+              <td style="text-align: right;">
+                <button class="btn btn-info" (click)="getDetailClassroom(item)">Düzenle</button>
+                <button (click)="removeClassroom(item.sub_service_classroom_id)" class="btn btn-danger">Sil</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button (click)="closeClassroomModal()" type="button" class="btn btn-secondary" 
+        data-dismiss="modal">Kapat</button>
+       
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div [ngClass]="{'modal show': teacherModalOpen}" [ngClass]="{'modal fade': !teacherModalOpen}" 
+id="teacherModal" tabindex="-1" 
+role="dialog" aria-labelledby="teacherModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="teacherModalLabel">Eğitmen Ekle</h6>
+        <input type="hidden" name="id" id="id" #id="ngModel"
+      [(ngModel)]="subServiceTeacher.id" />
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xl-12 col-md-12">
+            <div class="submit-field"> 
+              <h6>Eğitmen</h6>
+              <select name="staff_id" id="staff_id" [(ngModel)]="subServiceTeacher.staff_id" 
+              class="form-control">
+                <option value="0">Lütfen bir eğitmen seçiniz</option>
+                <option value="{{item.id}}" *ngFor="let item of staffs">{{item.name}} {{item.surname}}</option>
+              </select>
+            </div> 
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12">
+          <div class="submit-field"> 
+            <h6>Öncelik</h6>
+            <input type="number" class="form-control" name="priority" id="priority-teacher" 
+              [(ngModel)]="subServiceTeacher.priority">
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xl-12 col-md-12" style="margin-top: 5px; margin-right: 5px;text-align: right;">
+          <button *ngIf="isUpdateTeacher" type="button" class="btn btn-warning" (click)="resetTeacher()">Vazgeç</button>
+          <button type="button" (click)="addTeacher()" class="btn btn-success">{{teacherButtonText}}</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>Eğitmen Adı</th>
+              <th>Öncelik</th>
+              <th style="text-align: right;">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of pageOfItemsTeachers">
+              <td>{{item.name}} {{item.surname}}</td>
+              <td>{{item.priority}}</td>
+              <td style="text-align: right;">
+                <button class="btn btn-info" (click)="getDetailTeacher(item)">Düzenle</button>
+                <button (click)="removeTeacher(item.id)" class="btn btn-danger">Sil</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="modal-footer">
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="subServiceTeacherList" (changePage)="onChangePageTeacher($event)"></jw-pagination>
+      </div>
+        <button (click)="closeTeacherModal()" type="button" class="btn btn-secondary" 
+        data-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+

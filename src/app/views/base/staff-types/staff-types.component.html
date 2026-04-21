@@ -1,0 +1,58 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Personel Türü</strong> Kayıt Formu
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="staffType.id">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="staffTypeName">Personel Türü</label>
+              <div class="col-md-9">
+                <input type="text" id="staffTypeName" [(ngModel)]="staffType.staffTypeName" 
+                name="staffTypeName" class="form-control">
+              </div>
+            </div>
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Vazgeç</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <strong>Personel Türü Listesi</strong> 
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Personel Türü</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.staffTypeName}}</td>
+                <td>
+                  <a (click)="getDetailFromTable(item)" title="Detay">Detay</a>
+                  <a (click)="remove(item.id)" title="Sil">Sil</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="staffTypes" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>

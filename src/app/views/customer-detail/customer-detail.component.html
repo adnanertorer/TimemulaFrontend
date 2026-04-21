@@ -1,0 +1,70 @@
+<div class="animated">
+  <div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-6">
+          </div>
+          <div class="col-sm-6" style="text-align: right;">
+            <button class="btn btn-success" (click)="openPDF()">Çıktı Al</button>
+          </div>
+        </div>
+        <div class="row" id="htmlData">
+          <div class="col-md-12"  style="margin-top: 20px;">
+            <div class="col-sm-12">
+              <h5>{{vcustomer.name}} {{vcustomer.surname}}</h5>
+              <hr>
+            </div>
+          </div>
+          <div class="col-md-12 infoDiv">
+            <div class="col-md-6">
+              <h5>Kişisel Bilgiler</h5>
+              <p><b>Vatandaşlık Numarası: </b>{{vcustomer.citizenIdentityNumber}}</p> 
+              <p><b>Cinsiyet: </b>{{vcustomer.gender}}</p>
+              <p><b>Doğum Tarihi: </b>{{vcustomer.birthDate}}</p>
+              <p><b>Doğum Yeri: </b>{{vcustomer.birthPlace}}</p>
+            </div>
+            <hr>
+            <div class="col-md-6">
+              <h5>İletişim Bilgileri</h5>
+              <p><b>E-Posta: </b>{{vcustomer.email}}</p>
+              <p><b>Sabit Telefon: </b>{{vcustomer.phone}}</p>
+              <p><b>Gsm: </b>{{vcustomer.gsm}}</p>
+              <p><b>Adres: </b>{{vcustomer.address}}</p>
+            </div>
+          </div>
+          <div class="col-md-12 infoDiv">
+            <div class="col-sm-6">
+              <h5>Sosyal Medya</h5>
+              <p><b>Facebook: </b>{{vcustomer.facebookAddress}}</p> 
+              <p><b>Instagram: </b>{{vcustomer.instagramAddress}}</p>
+              <p><b>Linkedin: </b>{{vcustomer.linkedinAddress}}</p>
+            </div>
+            <hr>
+            <div class="col-sm-6">
+              <h5>Sağlık Bilgileri</h5>
+              <p><b>Kan Grubu: </b>{{vcustomer.blood_group_name}}</p>
+              <p><b>Hastalık Kaydı: </b>{{vcustomer.disease}}</p>
+            </div>
+          </div>
+          <div class="col-md-12 infoDiv">
+            <div class="col-sm-6">
+              <h5>Ebeveyn Bilgileri</h5>
+              <p><b>Vatandaşlık Numarası: </b>{{vcustomer.parentIdentity}}</p> 
+              <p><b>Adı: </b>{{vcustomer.parentName}}</p> 
+              <p><b>Soyadı: </b>{{vcustomer.parentSurname}}</p>
+              <p><b>E-Posta: </b>{{vcustomer.parentEmail}}</p>
+              <p><b>Gsm: </b></p>
+              <p><b>Yakınlığı: </b>{{vcustomer.parent_type_name}}</p>
+            </div>
+            <hr>
+            <div class="col-sm-6">
+              <p><b>Meslek: </b>{{vcustomer.parentProf}}</p>
+              <p><b>Facebook: </b>{{vcustomer.facebookParentAddress}}</p>
+              <p><b>Instagram: </b>{{vcustomer.instagramParentAddress}}</p>
+              <p><b>Linkedin: </b>{{vcustomer.linkedinParentAddress}}</p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<h5>{{customerName}} Taksit Listesi</h5>
+<mat-form-field appearance="standard">
+  <mat-label>Filtre</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Adı Soyadı..." #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort #installmentSubSort="matSort">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cari Hesap</th>
+      <td mat-cell *matCellDef="let row"> {{row.name}} {{row.surname}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Beklenen Ödeme Zamanı</th>
+      <td mat-cell *matCellDef="let row"> {{row.paymentDate | date: 'dd/MM/yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="paymentAmount">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ödeme Miktarı</th>
+      <td mat-cell *matCellDef="let row"> {{row.paymentAmount}} TL</td>
+    </ng-container>
+
+    <ng-container matColumnDef="isPayment">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ödeme Yapıldı mı?</th>
+      <td mat-cell *matCellDef="let row"> {{row.isPayment ? 'Evet': 'Hayır'}}</td>
+    </ng-container> 
+
+    <ng-container matColumnDef="paymentAt">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Ödeme Zamanı</th>
+      <td mat-cell *matCellDef="let row"> {{row.paymentAt | date: 'dd/MM/yyyy'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+      <td mat-cell *matCellDef="let row"> 
+        <button *ngIf="!row.isPayment" (click)="getCollection(row)" type="button" class="btn btn-warning">Tahsilat</button>  
+        <p *ngIf="row.isPayment">Ödeme Yapılmış</p>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator #installmentSubPaginator [pageSizeOptions]="[10, 25, 50, 75, 100]" aria-label="Select page of users"></mat-paginator>
+</div>

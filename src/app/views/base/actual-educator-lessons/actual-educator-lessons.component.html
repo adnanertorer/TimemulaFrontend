@@ -1,0 +1,64 @@
+<div class="card">
+  <div class="card-header">
+    <h5 class="font-weight-bold">Paket Listesi</h5>
+    <span class="align-middle">
+      <i class="fi fi-rr-info"></i>
+        Müşteri ve paket oluşturabilirsiniz. Mevcut olanları görüntüleyebilirsiniz. <br>
+      <ul>
+        <li><a href="/musteriler">Müşteri oluştur</a></li>
+        <li><a href="/musteri-islemleri/paket-ekle.html">Paket Oluştur</a></li>
+
+      </ul>
+    </span>
+  </div>
+</div>
+<mat-form-field appearance="standard">
+  <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
+  <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
+</mat-form-field>
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="lessonName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Hizmet/Paket</th>
+      <td mat-cell *matCellDef="let row"> {{row.lessonName}} / {{row.artPackageName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="classromName">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Hizmet Ortamı</th>
+      <td mat-cell *matCellDef="let row"> {{row.classromName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstLessonDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>İlk Hizmetin Başlama Zamanı</th>
+      <td mat-cell *matCellDef="let row"> {{row.firstLessonDate  | date: 'dd/M/yyyy hh:mm:ss'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastLessonDate">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Son Hizmetin Bitiş Zamanı</th>
+      <td mat-cell *matCellDef="let row"> {{row.lastLessonDate  | date: 'dd/M/yyyy hh:mm:ss'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalCustomer">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Toplam Müşteri Sayısı</th>
+      <td mat-cell *matCellDef="let row"> {{row.totalCustomer}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> İşlemler </th>
+      <td mat-cell *matCellDef="let row">
+        <button (click)="openStudents(row)" class="btn btn-primary" value="Paketler">Öğrenciler</button>  
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
+

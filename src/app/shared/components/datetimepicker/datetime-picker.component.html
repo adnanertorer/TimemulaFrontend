@@ -1,0 +1,23 @@
+<div class="dtp">
+  <label class="dtp__label" [for]="id" *ngIf="label">{{ label }}</label>
+
+  <div class="dtp__control-row">
+    <input
+      class="dtp__input"
+      [id]="id"
+      type="datetime-local"
+      [attr.placeholder]="placeholder || null"
+      [value]="value ?? ''"
+      [attr.min]="min || null"
+      [attr.max]="max || null"
+      [required]="required"
+      [disabled]="disabled"
+      (input)="onInput(($any($event.target)).value)"
+      (blur)="onBlur()"
+    />
+  </div>
+
+  <small class="dtp__error" *ngIf="requiredInvalid">Bu alan zorunludur.</small>
+  <small class="dtp__error" *ngIf="minInvalid">Girilen değer minimum tarihten küçük.</small>
+  <small class="dtp__error" *ngIf="maxInvalid">Girilen değer maksimum tarihten büyük.</small>
+</div>

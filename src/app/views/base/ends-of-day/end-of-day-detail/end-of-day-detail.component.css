@@ -1,0 +1,46 @@
+.mat-form-field + .mat-form-field {
+    margin-left: 8px;
+}
+.mat-accordion{
+    background-color: #ffffff;
+    margin: 10px;
+    border-radius: 10px;
+    color: #000000;
+    padding: 10px 0;
+}
+.primary-button {
+    background-color: #13aa52;
+    border: 1px solid #13aa52;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, .1) 0 2px 4px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 400;
+    outline: none;
+    outline: 0;
+    padding: 5px;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 150ms, box-shadow 150ms;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    margin: 6px;
+}
+
+.primary-button:hover {
+    box-shadow: rgba(0, 0, 0, .15) 0 3px 9px 0;
+    transform: translateY(-2px);
+}
+.secondary-button{
+    background-color: #F32424;
+    border: 1px solid #F32424;
+}
+
+@media (min-width: 768px) {
+    .primary-button {
+        padding: 5px;
+    }
+}

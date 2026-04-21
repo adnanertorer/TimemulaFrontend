@@ -1,0 +1,33 @@
+<section class="row d-flex" style="margin: 0;">
+    <div class="col-lg-6">
+        <img src="../../../assets/img/timemula_randevu.jpg" style="width: 88%;" alt="">
+    </div>
+    <div class="col-lg-6 flex-center flex-column" style="height: 100vh;">
+        <h3 class="mb-8">Timemula Uygulamasına Giriş Yap 👋</h3>
+        <div class="mb-24">
+            <label for="email" class="form-label mb-8 h6">Email</label>
+            <div class="position-relative">
+                <input type="email" class="form-control" name="email" id="email" [(ngModel)]="user.email" required>
+                <span class="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex"><i
+                        class="ph ph-user"></i></span>
+            </div>
+        </div>
+        <div class="mb-24">
+            <label for="current-password" class="form-label mb-8 h6">Parola</label>
+            <div class="position-relative">
+                <input type="password" class="form-control" name="password" id="password" [(ngModel)]="user.password"
+                    required>
+                <span
+                    class="toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ph ph-eye-slash"
+                    id="#current-password"></span>
+                <span class="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex"><i
+                        class="ph ph-lock"></i></span>
+            </div>
+        </div>
+        <button type="button" (click)="login()" class="btn btn-small btn-info">Giriş Yap</button>
+        <p class="mt-32 text-gray-600 text-center">Üyeliğiniz yok mu? <a (click)="register()"
+                class="text-main-600 hover-text-decoration-underline">Şimdi üye ol</a></p>
+        <p class="text-gray-600 text-center">Parolanızı mı unuttunuz? <a (click)="goResetPassword()"
+                class="text-main-600 hover-text-decoration-underline">Buraya Tıklayın</a></p>
+    </div>
+</section>

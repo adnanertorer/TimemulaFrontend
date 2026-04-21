@@ -1,0 +1,239 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Müşteri Paket Kontrol ve Kayıt Formu</h5>
+          <span class="align-middle">
+            <i class="fi fi-rr-info"></i>
+            Paket kaydı yapmadan önce dilerseniz üst kategori, alt kategori, hizmet ve paket oluşturabilirsiniz. <br>
+            <ul>
+              <li><a href="/genel-tanimlar/kategoriler.html">Üst kategori oluştur</a></li>
+              <li><a href="/genel-tanimlar/alt-kategoriler.html">Alt kategori oluştur</a></li>
+              <li><a href="/genel-tanimlar/dersler.html">Hizmet oluştur</a></li>
+              <li><a href="/genel-tanimlar/paketler.html">Paket oluştur</a></li>
+            </ul>
+          </span>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="customerLesson.id">
+            <div class="form-group row" style="display: none;">
+              <label class="col-md-3 col-form-label"  for="customerId">Müşteri</label>
+              <div class="col-md-9">
+                <mat-select [formControl]="customerCtrl" [(value)]="selectedCustomerId" placeholder="Müşteri" #singleSelect>
+                  <mat-option>
+                    <ngx-mat-select-search [formControl]="customerFilterCtrl"></ngx-mat-select-search>
+                  </mat-option>
+                  <mat-option [value]="0">Müşteri Seçiniz</mat-option>
+                  <mat-option *ngFor="let customer of filteredCustomers | async" [value]="customer.id">
+                    {{customer.name}} {{customer.surname}}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <select name="categoryId" (change)="categoryOnChange($event.target.value)" id="categoryId" [(ngModel)]="customerLesson.categoryId"
+                 class="form-control">
+                  <option value="0">Kategori Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of categories">{{item.categoryName}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <select name="subCategoryId" id="subCategoryId" (change)="subCategoryOnChange($event.target.value)" [(ngModel)]="customerLesson.subCategoryId" class="form-control">
+                  <option value="0">Alt Kategori Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of subCategories">{{item.subCategoryName}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <select name="lessonId" id="lessonId" (change)="lessonOnChange($event.target.value)" [(ngModel)]="customerLesson.lessonId" class="form-control">
+                  <option value="0">Hizmet Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of lessons">{{item.lessonName}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <select name="artPackageId" id="artPackageId" (change)="packageOnChange($event.target.value)" [(ngModel)]="customerLesson.artPackageId" class="form-control">
+                  <option value="0">Paket Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of artPackages"><b></b> {{item.artPackageName}} 
+                    Toplam Seans: {{item.seanceCount}} <span *ngIf="item.participant">({{item.participant.participantName}})</span></option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <select name="educatorId" id="educatorId" (change)="getEducatorDayHours($event.target.value)" [(ngModel)]="customerLesson.educatorId" class="form-control">
+                  <option value="0">Personel Seçiniz</option>
+                  <option value="{{item.staffId}}" *ngFor="let item of lessonEducators">{{item.staff.name}} {{item.staff.surname}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <ejs-datepicker #date (change)="onDateChange()" format='yyyy-MM-dd' placeholder='Hizmet Başlangıcı'
+                [value]=dateValue></ejs-datepicker>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6" *ngIf="selectedPackage.unitPrice!==0">
+                <span class="align-middle">
+                  <i class="fi fi-rr-info"></i>
+                  Seçilen Paketin Genel Bilgileri
+                </span>
+                <table class="table">
+                  <tr>
+                    <th>Seans Ücreti</th>
+                    <th>Toplam Seans</th>
+                    <th>İndirim</th>
+                    <th>Toplam Tutar</th>
+                  </tr>
+                  <tbody>
+                    <tr>
+                      <td>{{selectedPackage.unitPrice}} TL</td>
+                      <td>{{selectedPackage.seanceCount}}</td>
+                      <td>%{{selectedPackage.discount}}</td>
+                      <td>{{selectedPackage.seancePrice}} TL</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="row">
+                  <div class="col-md-12 col-lg-6">
+                    <input type="checkbox" name="manuelPrice" id="manuelPrice" [(ngModel)]="manuelPrice" /> Ücreti Manuel Belirle
+                  </div>
+                  <div class="col-md-12 col-lg-6" *ngIf="manuelPrice">
+                    <input type="number" name="authorized_price" id="authorized_price" [(ngModel)]="authorized_price" class="form-control" style="height: 34px;"/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6" *ngIf="educatorDayHours.length > 0">
+                <span class="align-middle">
+                  <i class="fi fi-rr-info"></i>
+                  Seçilen Personelin Mesai Bilgileri
+                </span>
+                <table class="table">
+                  <tr>
+                    <th>Gün</th>
+                    <th>Mesai Başlangıç</th>
+                    <th>Mesai Bitiş</th>
+                  </tr>
+                  <tbody>
+                    <tr *ngFor="let item of educatorDayHours">
+                      <td>{{dayLabels[item.day]}}</td>
+                      <td>{{item.startTime}}</td>
+                      <td>{{item.finishTime}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--<div class="form-group row">
+              <label class="col-md-3 col-form-label" for="personCount">Kişi Sayısı</label>
+              <div class="col-md-9">
+                <input type="number" name="personCount" id="personCount" [(ngModel)]="personCount" class="form-control" style="height: 34px;"/>
+              </div>
+            </div>-->
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <span class="align-middle">
+                  <i class="fi fi-rr-info"></i>
+                  Müşterinin hizmetten yararlanmak istediği günleri seçin. Tekil seçim yaptıktan sonra gün gün listeye ekleyebilirsiniz.
+                </span>
+                <select name="dayList" id="dayList" #dayList (change)="dayOnChange(dayList.value)" class="form-control">
+                  <option value="-1">Hizmet Günleri Seçiniz</option>
+                  <option *ngFor="let item of weekDays" value="{{item}}">{{ dayLabels[item] }}</option> 
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6 justify-content-center" *ngIf="selectedDays!= null && selectedDays.length>0">
+                
+                <div class="row" *ngFor="let item of selectedDays">
+                    <div class="col-md-12">
+                      <div class="card card-body">
+                        <div class="dayslist media align-items-center align-items-md-start flex-column flex-md-row">
+                            <a class="text-teal mr-md-3 align-self-md-center marginon-top" data-abc="true">
+                              <i class="fi fi-rr-trash" (click)="removeDayFromList(item.day)"></i>
+                            </a>
+                            <div class="media-body text-center text-md-left">
+                                <h6 class="media-title font-weight-semibold">{{dayLabels[item.day]}} </h6>
+                                <div class="row">
+                                  <div class="col-6">
+                                    <input type="time" name="{{item.day}}-firstTime" id="{{item.day}}-firstTime" class="form-control" />
+                                  </div>
+                                  <div class="col-6">
+                                    <input type="time" name="{{item.day}}-finishTime" id="{{item.day}}-finishTime" class="form-control" />
+                                  </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>            
+            </div>
+              <!--<div class="form-group row" *ngIf="selectedDays.length>0">
+              <div class="col-md-4" style="padding-top: 55px;">
+                <label class="col-md-6 col-form-label" for="startDate">Başlama Tarihi Seçiniz</label>
+                <div class="input-group">
+                  <input class="form-control"
+                (dateSelect)="onStartDateSelection($event)"
+                 placeholder="yyyy-mm-dd"
+                name="startDate" [(ngModel)]="startDateModel" ngbDatepicker #d="ngbDatepicker">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                     <img (click)="show(d)" src="../../../../assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                  </button>
+                </div>
+              </div>
+                <div class="col-md-3">
+                  <label class="col-md-6 col-form-label" for="time">Başlama Saati Seçiniz</label>
+                <ngb-timepicker [(ngModel)]="time" [seconds]="true"
+                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="time"></ngb-timepicker>
+                </div>
+                <div class="col-md-3">
+                <label class="col-md-6 col-form-label" for="timeLast">Bitiş Saati Seçiniz</label>
+                <ngb-timepicker [(ngModel)]="timeLast" [seconds]="true"
+                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="timeLast"></ngb-timepicker>
+              </div>
+            </div>-->
+            <div class="card-footer">
+              <button type="button"  (click)="sendCriteria()" class="btn btn-sm btn-primary"><i class="fi fi-rr-search"></i> Kontrol Et</button>
+              <button type="button" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu Temizle</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Sonuç Listesi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Durum</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.title}}</td>
+                <td>
+                  <button class="btn btn-orange" *ngIf="!item.status" (click)="openDetail(item.classroomId)" title="Programı Göster"><i class="fi fi-rr-calendar-clock"></i></button>
+                  <button *ngIf="!item.status" class="btn btn-primary" (click)="add()" title="Kaydet"><i class="fi fi-rr-calendar-check"></i></button>
+                </td>
+              </tr>
+              <tr *ngIf="filterDetailResponses.length>0">
+                <td>
+                  <ul>
+                    <li *ngFor="let itemDetail of filterDetailResponses">{{itemDetail.description}}</li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="groupedList" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>

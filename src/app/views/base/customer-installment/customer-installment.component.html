@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <strong>{{customerName}} Ödeme Planı Formu</strong>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <tbody>
+            <tr>
+              <td>Müşteri Adı : {{transaction.currentAccount}}</td>
+            </tr>
+            <tr>
+              <td>Toplam Borç : {{transaction.currentBalance}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-lg-6">
+              <h4>Aylık Taksitlendirme Formu</h4>
+              <form action="" method="post" class="form-horizontal">
+                <input type="hidden" name="id" id="id" [(ngModel)]="installment.id">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="amount">Yapılandırma Miktarı</label>
+                  <div class="col-md-6">
+                   <input type="number" name="amount" id="amount" [(ngModel)]="installment.amount"
+                   class="form-control" />
+                  </div>
+                   <div class="col-md-3">
+                   <button (click)="allDept()" type="button" class="btn btn-info">Tüm Borç</button>
+                   </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="totalInstallment">Taksit Miktarı</label>
+                  <div class="col-md-6">
+                   <input type="number" name="totalInstallment" id="totalInstallment" [(ngModel)]="installment.totalInstallment"
+                   class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="dayNumber">Ödemeler ayın kaçını günü olacak?</label>
+                  <div class="col-md-6">
+                   <input type="number" name="dayNumber" id="dayNumber" [(ngModel)]="installment.dayNumber"
+                   class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="interest">Vade farkı oranı (%)</label>
+                  <div class="col-md-6">
+                   <input type="number" name="interest" id="interest" [(ngModel)]="installment.interest"
+                   class="form-control" />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="col-lg-6">
+              <h4>Belirli Tarih İçin Borç Yapılandırma</h4>
+              <form action="" method="post" class="form-horizontal">
+                <input type="hidden" name="id" id="id" [(ngModel)]="installment.id">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="amount">Yapılandırma Miktarı</label>
+                  <div class="col-md-6">
+                   <input type="number" name="amount" id="amount" [(ngModel)]="manuelTotalPayment"
+                   class="form-control" />
+                  </div>
+                   <div class="col-md-3">
+                   <button (click)="setManuelPaymentAmount()" type="button" class="btn btn-info">Tüm Borç</button>
+                   </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="dayNumber">Ödeme Ne Zaman Yapılacak?</label>
+                  <div class="col-md-6">
+                    <ejs-datepicker #date (change)="onDateChange()" format='yyyy-MM-dd' placeholder='Enter date'
+                    [value]=dateValue></ejs-datepicker>
+                  </div>
+                </div>
+                <button type="submit" (click)="addManuel()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>Kaydet</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>Hesapla</button>
+        </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>
+  <div class="col-md-12" *ngIf="instalmentResult.paymentAmount > 0">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <strong>{{customerName}} Ödeme Planı Sonucu</strong>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <tbody>
+            <tr>
+              <td>Müşteri Borcu : {{instalmentResult.mainDept.toFixed(2)}} TL</td>
+            </tr>
+            <tr>
+              <td>Taksit Adedi : {{instalmentResult.totalInstallment}}</td>
+            </tr>
+            <tr>
+              <td>Vade Farkı : {{instalmentResult.interestAmount.toFixed(2)}} TL</td>
+            </tr>
+            <tr>
+              <td>Toplam Ödenecek Tutar : {{instalmentResult.withInterestAmount.toFixed(2)}} TL</td>
+            </tr>
+            <tr>
+              <td>Aylık Ödeme Miktarı : {{instalmentResult.paymentAmount.toFixed(2)}} TL</td>
+            </tr>
+            </tbody>
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Ödeme Tarihi</th>
+                  <th>Ödeme Miktarı</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of instalmentResult.paymentDates">
+                  <td>{{item | date: 'dd/M/yyyy'}}</td>
+                  <td>{{instalmentResult.paymentAmount.toFixed(2)}} TL</td>
+                </tr>
+              </tbody>
+            </table>
+          </table>
+        </div>
+        <div class="card-footer">
+          <button type="submit" (click)="approve()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>Onayla</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

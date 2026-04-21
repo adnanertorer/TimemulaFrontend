@@ -1,0 +1,66 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Alt Kategori Kayıt Formu</h5>
+          <span class="align-middle"><i class="fi fi-rr-info"></i> Sağlayacağınız hizmetlerin alt kategorisini buradan oluşturabilirsiniz. Üst kategori oluşturmak için <a href="/genel-tanimlar/kategoriler.html">tıklayınız</a></span>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="subCategory.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <select name="categoryId" id="categoryId" [(ngModel)]="subCategory.categoryId" class="form-control">
+                  <option value="0"> Kategori Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of categories">{{item.categoryName}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="text" id="subCategoryName" [(ngModel)]="subCategory.name" 
+                name="subCategoryName" class="form-control" placeholder="Alt Kategori Adı">
+              </div>
+            </div>
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i> {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu Temizle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Alt Kategori Listesi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Kategori Adı</th>
+                <th>Alt Kategori Adı</th>
+                <th style="text-align: right; padding-right: 70px;">İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.category.categoryName}}</td>
+                <td>{{item.name}}</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-success btn-orange" (click)="getDetailFromTable(item)" title="Düzenle"><i class="fi fi-rr-user-pen"></i></button>
+                    <button class="btn btn-danger btn-red" (click)="remove(item.id)" title="Sil"><i class="fi fi-rr-trash"></i></button>
+                  </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="subCategories" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>

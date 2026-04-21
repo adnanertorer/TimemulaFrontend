@@ -1,0 +1,362 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-10">
+              <h5 class="font-weight-bold">Müşteri Yönetimi</h5>
+              <span class="align-middle"><i class="fi fi-rr-info"></i> Yeni müşteri oluşturma, düzenleme ve var olan
+                müşteri bilgilerini görüntüleyebilirsiniz.</span>
+            </div>
+            <div class="col-2">
+              <button class="btn btn-primary" *ngIf="isVisibleAddButton" (click)="openNewRecord()"
+                style="float: right;">Yeni Kayıt</button>
+              <button class="btn btn-orange" *ngIf="isReset" (click)="resetForm()" style="float: right;">Vazgeç</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" *ngIf="isNewRecord">
+          <mat-tab-group style="padding: 10px;">
+            <mat-tab label="Kişisel Bilgiler">
+              <form action="" method="post" class="form-horizontal">
+                <input type="hidden" name="id" id="id" [(ngModel)]="customer.id">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="name">Adı</label>
+                  <div class="col-md-9" [formGroup]="form">
+                    <input type="text" formControlName="name" class="form-control" name="name"
+                      [(ngModel)]="customer.name" placeholder="Müşteri Adı">
+                    <small *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">İsim alanı
+                      gereklidir</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="surname">Soyadı</label>
+                  <div class="col-md-9" [formGroup]="form">
+                    <input type="text" formControlName="surname" [(ngModel)]="customer.surname" name="surname"
+                      class="form-control" placeholder="Müşteri Soyadı">
+                    <small *ngIf="form.get('surname').invalid && form.get('surname').touched"
+                      class="text-danger">Soyisim alanı gereklidir</small>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="gender">Cinsiyet</label>
+                  <div class="col-md-9" [formGroup]="form">
+                    <select formControlName="gender" [(ngModel)]="customer.gender" name="gender" class="form-control">
+                      <option value="0">Cinsiyet Seçiniz</option>
+                      <option value="{{item.id}}" *ngFor="let item of genders">{{item.genderName}}</option>
+                    </select>
+                    <small *ngIf="form.get('gender').value == 'Seçiniz' && form.get('gender').touched"
+                      class="text-danger">Cinsiyet gereklidir</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="birthDate">Doğum Tarihi</label>
+                  <div class="col-md-9" [formGroup]="form">
+                    <ejs-datepicker #birthDate (change)="onDateChange()" [(ngModel)]="customer.birthDate"
+                      formControlName="birthDate" format='yyyy-MM-dd' placeholder='Enter date'
+                      [value]=dateValue></ejs-datepicker>
+                  </div>
+                  <small *ngIf="form.get('birthDate').hasError('required')" class="text-danger">Doğum tarihi
+                    gereklidir</small>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="birthPlace">Doğum Yeri</label>
+                  <div class="col-md-9" [formGroup]="form">
+                    <input type="text" formControlName="birthPlace" name="birthPlace" [(ngModel)]="customer.birthPlace"
+                      class="form-control" placeholder="Müşteri Doğum Yeri">
+                    <small *ngIf="form.get('birthPlace').invalid  && form.get('birthPlace').touched"
+                      class="text-danger">Doğum yeri gereklidir</small>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="emailRequest">E-Posta bildirimi istiyor mu?</label>
+                  <div class="col-md-9">
+                    <input type="checkbox" id="emailRequest" [(ngModel)]="customer.emailRequest" name="emailRequest">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="smsRequest">Sms bildirimi istiyor mu?</label>
+                  <div class="col-md-9">
+                    <input type="checkbox" id="smsRequest" [(ngModel)]="customer.smsRequest" name="smsRequest">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="isActive">Aktif</label>
+                  <div class="col-md-9">
+                    <input type="checkbox" id="isActive" [(ngModel)]="customer.isActive" name="isActive">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="isAdult">Yetişkin mi?</label>
+                  <div class="col-md-9">
+                    <input type="checkbox" id="isAdult" [(ngModel)]="customer.isAdult" name="isAdult">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="search_resource_id">Bizi Nereden Buldu?</label>
+                  <div class="col-md-9">
+                    <select name="searchResourceId" id="searchResourceId" [(ngModel)]="customer.searchResourceId"
+                      class="form-control">
+                      <option value="0">Seçiniz</option>
+                      <option value="{{row.id}}" *ngFor="let row of searchServices">{{row.searchResourceName}}</option>
+                    </select>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="İletişim Bilgileri">
+              <form action="" method="post" class="form-horizontal">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="email">E-Posta</label>
+                  <div class="col-md-9">
+                    <input type="email" id="email" [(ngModel)]="customer.email" name="email" class="form-control"
+                      placeholder="Müşteri E-Posta">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="phone">Sabit Telefon</label>
+                  <div class="col-md-9">
+                    <input type="phone" id="phone" [(ngModel)]="customer.phone" name="phone" class="form-control"
+                      placeholder="Ev, iş yeri vb.">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="gsm">Gsm</label>
+                  <div class="col-md-9">
+                    <input type="phone" id="gsm" [(ngModel)]="customer.gsm" name="gsm" class="form-control"
+                      placeholder="Müşteri Gsm">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="address">Adres</label>
+                  <div class="col-md-9">
+                    <textarea id="address" [(ngModel)]="customer.address" cols="30" rows="3" name="address"
+                      class="form-control" placeholder="Müşteri Adresi"></textarea>
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Sosyal Medya">
+              <form action="" method="post" class="form-horizontal">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="facebookAddress">Facebook</label>
+                  <div class="col-md-9">
+                    <input type="text" id="facebookAddress" [(ngModel)]="customer.facebookAddress"
+                      name="facebookAddress" class="form-control" placeholder="Facebook adresi">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="instagramAddress">İnstagram</label>
+                  <div class="col-md-9">
+                    <input type="text" id="instagramAddress" [(ngModel)]="customer.instagramAddress"
+                      name="instagramAddress" class="form-control" placeholder="İnstagram adresi">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="linkedinAddress">Linkedin</label>
+                  <div class="col-md-9">
+                    <input type="text" id="linkedinAddress" [(ngModel)]="customer.linkedinAddress"
+                      name="linkedinAddress" class="form-control" placeholder="Linkedin adresi">
+                  </div>
+                </div>
+              </form>
+            </mat-tab>
+            <mat-tab label="Ebeveyn Bilgileri">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentIdentity">Ebeveyn T.C. Kimlik Numarası</label>
+                <div class="col-md-9">
+                  <input type="number" id="parentIdentity" [(ngModel)]="customer.parentIdentity" name="parentIdentity"
+                    maxlength="11" class="form-control" placeholder="Ebeveyn T.C. Kimlik Numarası">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentTypeId">Yakınlık Derecesi</label>
+                <div class="col-md-9">
+                  <select type="text" id="parentTypeId" [(ngModel)]="customer.parentTypeId" name="parentTypeId"
+                    class="form-control">
+                    <option value="0">Seçiniz</option>
+                    <option value="{{row.id}}" *ngFor="let row of parentTypes">{{row.parentTypeName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentName">Ebeveyn Adı</label>
+                <div class="col-md-9">
+                  <input type="text" id="parentName" [(ngModel)]="customer.parentName" name="parentName"
+                    class="form-control" placeholder="Ebeveyn Adı">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentSurname">Ebeveyn Soyadı</label>
+                <div class="col-md-9">
+                  <input type="text" id="parentSurname" [(ngModel)]="customer.parentSurname" name="parentSurname"
+                    class="form-control" placeholder="Ebeveyn Soyadı">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentEmail">Ebeveyn E-Posta</label>
+                <div class="col-md-9">
+                  <input type="email" id="parentEmail" [(ngModel)]="customer.parentEmail" name="parentEmail"
+                    class="form-control" placeholder="Ebeveyn E-Posta">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="parentProf">Ebeveyn Meslek</label>
+                <div class="col-md-9">
+                  <input type="text" id="parentProf" [(ngModel)]="customer.parentProf" name="parentProf"
+                    class="form-control" placeholder="Ebeveyn Meslek">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="facebookParentAddress">Ebeveyn Facebook</label>
+                <div class="col-md-9">
+                  <input type="text" id="facebookParentAddress" [(ngModel)]="customer.facebookParentAddress"
+                    name="facebookParentAddress" class="form-control" placeholder="Ebeveyn Facebook adresi">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="instagramParentAddress">Ebeveyn İnstagram</label>
+                <div class="col-md-9">
+                  <input type="text" id="instagramParentAddress" [(ngModel)]="customer.instagramParentAddress"
+                    name="instagramParentAddress" class="form-control" placeholder="Ebeveyn İnstagram adresi">
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Sağlık Bilgileri">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="bloodGroupId">Kan Grubu</label>
+                <div class="col-md-9">
+                  <select name="bloodGroupId" id="bloodGroupId" [(ngModel)]="customer.bloodGroupId"
+                    class="form-control">
+                    <option value="0">Seçiniz</option>
+                    <option value="{{row.id}}" *ngFor="let row of bloodGroups">{{row.bloodGroupName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="disease">Kronik bir rahatsızlık ya da hastalık</label>
+                <div class="col-md-9">
+                  <textarea id="disease" [(ngModel)]="customer.disease" cols="30" rows="3" name="disease"
+                    class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="form-group row" style="float: right;padding-right: 18px;">
+                <input type="button" value="{{buttonText}}" class="btn btn-primary" (click)="add()">
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+
+        </div>
+      </div>
+      <div class="row border-radius">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="col-md-12">
+              <div class="card-header" style="margin-top: 5px;">
+                <h5 class="font-weight-bold">Müşterilerimde Ara</h5>
+                <span><i class="fi fi-rr-info"></i> En az bir kriter girerek arama yapabilirsiniz.</span>
+              </div>
+              <div class="card-body">
+                <div class="form-group row">
+                  <div class="col-md-3">
+                    <input type="text" name="name" [(ngModel)]="customerFilter.name" class="form-control"
+                      placeholder="Adı">
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" name="surname" class="form-control" [(ngModel)]="customerFilter.surname"
+                      placeholder="Soyadı">
+                  </div>
+                  <div class="col-md-3">
+                    <select name="gender" class="form-control" [(ngModel)]="customerFilter.gender">
+                      <option value="0">Cinsiyet Seçiniz</option>
+                      <option value="{{item.id}}" *ngFor="let item of genders">{{item.genderName}}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <select name="child" class="form-control" [(ngModel)]="customerFilter.isAdult">
+                      <option value="0">Yetişkin mi?</option>
+                      <option value="1">Evet</option>
+                      <option value="2">Hayır</option>
+                    </select>
+                  </div>
+                  <div class="col-md-3">
+                    <input type="text" name="address" class="form-control" [(ngModel)]="customerFilter.address"
+                      placeholder="Adres">
+                  </div>
+                  <div class="col-md-6">
+                    <input type="button" class="btn btn-primary filter-button" value="Kriterlere Göre Ara"
+                      (click)="getWithFilter()">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <mat-form-field appearance="standard">
+        <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
+      </mat-form-field>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort #customerSort="matSort">
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Adı</th>
+            <td mat-cell *matCellDef="let row">{{row.name}} {{row.surname}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="gsm">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Gsm</th>
+            <td mat-cell *matCellDef="let row">
+              {{row.gsm}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="birthDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Doğum Tarihi</th>
+            <td mat-cell *matCellDef="let row">{{row.birthDate | date: 'dd/M/yyyy'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="isChild">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Yetişkin mi?</th>
+            <td mat-cell *matCellDef="let row">{{row.isChild == 1 ? 'Evet': 'Hayır'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="isActive">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Aktif mi?</th>
+            <td mat-cell *matCellDef="let row">{{row.isActive == 1 ? 'Evet': 'Hayır'}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+            <td mat-cell *matCellDef="let row">
+              <table class="action-buttons">
+                <tr>
+                  <td><button class="btn btn-orange btn-block" title="Düzenle" (click)="getDetailFromTable(row)"><i
+                        class="fi fi-rr-user-pen"></i></button></td>
+                  <td><button class="btn btn-primary btn-block" title="Profili Gör" (click)="getDetail(row.id)"><i
+                        class="fi fi-rr-clipboard-user"></i></button></td>
+                  <td><button class="btn btn-primary btn-block" title="Satın Alımlar" (click)="getServices(row.id)"><i
+                        class="fi fi-rr-shopping-basket"></i></button></td>
+                  <td><button class="btn btn-primary btn-block" title="Sağlık Bilgileri" (click)="getHealts(row.id)"><i
+                        class="fi fi-rr-heart-health-muscle"></i></button></td>
+                  <td><button class="btn btn-red btn-block" title="Sil" (click)="remove(row.id)"><i
+                        class="fi fi-rr-trash"></i></button></td>
+                </tr>
+              </table>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+          </tr>
+        </table>
+        <app-generic-paginator #customerPaginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[2, 5, 10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)">
+          
+        </app-generic-paginator>
+      </div>

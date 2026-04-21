@@ -1,0 +1,19 @@
+#lessonModal{
+    left: 10%;
+    width: 85%;
+    position: absolute;
+    height: auto;
+}
+
+.modal-dialog {
+    max-width: 80%;
+    margin: 1.75rem auto;
+}
+
+.custom-input-margin{
+    margin-top: 10px;
+}
+
+
+
+

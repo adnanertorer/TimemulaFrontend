@@ -1,0 +1,118 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Randevu Kayıt Formu</h5>
+          <span class="align-middle">
+            <i class="fi fi-rr-info"></i>
+            Randevu oluşturmadan önce dilerseniz personel oluşturabilirsiniz. <br>
+            <ul>
+              <li><a href="/personeller">Personel oluştur</a></li>
+            </ul>
+          </span>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="model.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-4">
+                <input type="text" name="requestByName" id="requestByName" [(ngModel)]="model.requestByName" class="form-control" placeholder="Müşterinin Adı ve Soyadı">
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <input type="text" name="title" id="title" [(ngModel)]="model.title" class="form-control" placeholder="Konu">
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <select name="relationStaff" id="relationStaff" [(ngModel)]="model.relationStaff" class="form-control">
+                  <option value="0">İlgili Personeli Seçiniz</option>
+                  <option *ngFor="let item of staffList" value="{{item.id}}">{{item.name}} {{item.surname}}</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <ejs-datepicker #date (change)="onDateChange()" format='yyyy-MM-dd' placeholder='Enter date'
+                [value]=dateValue></ejs-datepicker>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <ngb-timepicker [(ngModel)]="time" [seconds]="true"
+                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="time" [spinners] = "false"></ngb-timepicker>
+              </div>
+              <div class="col-md-12 col-lg-4">
+                <input type="checkbox" name="isDone" id="isDone"
+                [(ngModel)]="model.isDone"> Görüşme gerçekleşti
+              </div>
+              <div class="col-md-12 col-lg-12">
+                <textarea cols="30" rows="5" name="requestDescription" id="requestDescription" [(ngModel)]="model.requestDescription" class="form-control" placeholder="Açıklama"></textarea>
+              </div>
+            </div>
+
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="addOrUpdate()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i> {{buttonText}}</button>
+            <button *ngIf="isVisibleCancelButton" type="reset" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu Temizle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <mat-form-field appearance="standard">
+        <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazın..." #input>
+      </mat-form-field>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+      
+          <ng-container matColumnDef="requestByName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Müşteri Adı ve Soyadı</th>
+            <td mat-cell *matCellDef="let row"> {{row.requestByName}} </td>
+          </ng-container>
+      
+          <ng-container matColumnDef="meetingDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Randevu Tarihi</th>
+            <td mat-cell *matCellDef="let row"> {{row.meetingDate | date: 'dd.MM.yyyy hh:mm'}}</td>
+          </ng-container>
+      
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Konu</th>
+            <td mat-cell *matCellDef="let row"> {{row.title}} </td>
+          </ng-container>
+      
+          <ng-container matColumnDef="requestDescription">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Açıklama</th>
+            <td mat-cell *matCellDef="let row"> {{row.requestDescription}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlem Zamanı</th>
+            <td mat-cell *matCellDef="let row"> {{row.createdAt | date: 'dd.MM.yyyy hh:mm'}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Personel</th>
+            <td mat-cell *matCellDef="let row"> {{row.staff.name}} {{row.staff.surname}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="isDone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Görüşme Durumu</th>
+            <td mat-cell *matCellDef="let row"> {{row.isDone ? 'Gerçekleşti' : 'Gerçekleşmedi'}} </td>
+          </ng-container>
+      
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> İşlemler </th>
+            <td mat-cell *matCellDef="let row">
+              <button (click)="getDetail(row)" class="btn btn-orange" title="Düzenle" value="Detaylar"><i class="fi fi-rr-user-pen"></i></button>&nbsp;<button (click)="remove(row.id)" class="btn btn-danger" value="Detaylar" title="Sil"><i class="fi fi-rr-trash"></i></button>  
+            </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+          </tr>
+        </table>
+        <mat-paginator #meetingPaginator [pageSizeOptions]="[10, 25, 50, 75, 100]" aria-label="Select page of users"></mat-paginator>
+    </div><!--/.row-->
+  </div>
+</div>

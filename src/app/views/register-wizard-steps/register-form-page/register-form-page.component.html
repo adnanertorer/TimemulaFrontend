@@ -1,0 +1,47 @@
+<div class="form-page-container" style="margin: 0;">
+  <div class="row" style="margin: 0;">
+    <div class="col-md-4">
+        <img src="../../../assets/img/timemula_randevu.jpg" alt="" style="width: 100%;">
+      <app-register-wizard-steps></app-register-wizard-steps>
+    </div>
+    <div class="col-md-8">
+      <div class="step-page-container">
+        <div class="form-step">
+            <ng-container [ngSwitch]="(currentStep | async)?.stepIndex">
+                <ng-container *ngSwitchCase="'1'">
+                    <app-step-template [step]="(currentStep | async)"></app-step-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'2'">
+                  <app-step-template [step]="(currentStep | async)"></app-step-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'3'">
+                  <app-step-template [step]="(currentStep | async)"></app-step-template>
+                </ng-container>
+              <ng-container *ngSwitchCase="'4'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'5'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'6'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'7'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'8'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+              <ng-container *ngSwitchCase="'9'">
+                <app-step-template [step]="(currentStep | async)"></app-step-template>
+              </ng-container>
+            </ng-container>
+        </div>
+      </div>
+      <button (click)="onPreviousStep()" class="btn btn-sm btn-danger" style="float: left;">Önceki Adım</button>
+      <button (click)="onNextStep()" class="btn btn-sm btn-success" style="float: right;">
+        {{ showButtonLabel() }}
+      </button>
+    </div>
+  </div>
+</div>

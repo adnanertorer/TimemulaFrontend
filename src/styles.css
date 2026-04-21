@@ -1,0 +1,35 @@
+@import url('../node_modules/@syncfusion/ej2-schedule/styles/material.css'); 
+#js-licensing{
+    display: none;
+}
+
+.custom-input-margin{
+    margin-top: 10px;
+}
+
+body {
+    font-family: Algerian;
+  }
+
+  .btn.btn-primary{
+    color: #fff;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+  }
+
+  .btn.btn-orange{
+    color: #fff !important;
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+  }
+
+  .border-radius{
+    border-radius: 112px;
+  }
+
+  .box-shadow{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  }
+
+
+

@@ -1,0 +1,168 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Personel Kayıt Formu</h5>
+          <span class="align-middle"><i class="fi fi-rr-info"></i> Yeni personel veya mevcut personeli
+            güncelleyebilirsiniz.</span>
+
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="staff.id">
+            <div class="form-group row">
+              <div class="col-md-6 col-lg-4">
+                <label for="identityNumber">Kimlik Numarası</label>
+                <input type="number" id="identityNumber" [(ngModel)]="staff.identityNumber" name="identityNumber"
+                  maxlength="11" class="form-control" placeholder="T.C. Kimlik Numarası">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="name">Adı</label>
+                <input type="text" id="name" name="name" [(ngModel)]="staff.name" class="form-control"
+                  placeholder="Personelin Adı">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="surname">Soyadı</label>
+                <input type="text" id="surname" name="surname" class="form-control" [(ngModel)]="staff.surname"
+                  placeholder="Personelin soyadı">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="gsm">Cep Telefonu</label>
+                <input type="text" id="gsm" name="gsm" class="form-control" [(ngModel)]="staff.gsm" placeholder="Gsm">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="address">Adres</label>
+                <input type="text" id="address" name="address" class="form-control" [(ngModel)]="staff.address"
+                  placeholder="Adres">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="email">E-Posta</label>
+                <input type="email" id="email" name="email" class="form-control" [(ngModel)]="staff.email"
+                  placeholder="E-Posta Adresi">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="birthDate">Doğum Tarihi</label>
+                <input type="date" name="birthDate" id="birthDate" #birthDate class="form-control"
+                  [value]="staff.birthDate | date:'yyyy-MM-dd'"
+                  (input)="staff.birthDate = parseDate($event.target.value)">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="staffTypeId">Personel Türü</label>
+                <select name="staffTypeId" id="staffTypeId" [(ngModel)]="staff.staffTypeId" class="form-control">
+                  <option value="0">Lütfen personel türünü seçiniz</option>
+                  <option *ngFor="let item of staffTypes" value="{{item.id}}">
+                    {{item.staffTypeName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="salaryTypeId">Maaş Tipi</label>
+                <select name="salaryTypeId" id="salaryTypeId" [(ngModel)]="staff.salaryTypeId" class="form-control">
+                  <option value="0">Lütfen maaş tipini seçiniz</option>
+                  <option *ngFor="let item of salaryTypes" value="{{item.id}}">
+                    {{item.salaryTypeName}}</option>
+                </select>
+              </div>
+              <div class="col-md-6 col-lg-4" *ngIf="staff.salaryTypeId == 1">
+                <label for="salaryAmount">Maaş</label>
+                <input type="number" id="salaryAmount" [(ngModel)]="staff.salaryAmount" name="salaryAmount"
+                  class="form-control" />
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="workStarDateTime">İşe Başlama Tarihi</label>
+                <input type="date" name="workStarDateTime" id="workStarDateTime" #workStarDateTime class="form-control"
+                  [value]="staff.workStarDateTime | date:'yyyy-MM-dd'"
+                  (input)="staff.workStarDateTime = parseDate($event.target.value)">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="workFinishDateTime">İşten Ayrılma Tarihi</label>
+                <input type="date" name="workFinishDateTime" id="workFinishDateTime" #workFinishDateTime
+                  class="form-control" [value]="staff.workFinishDateTime | date:'yyyy-MM-dd'"
+                  (input)="staff.workFinishDateTime = parseDate($event.target.value)">
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <label for="branchId">Şube</label>
+                <select name="branchId" id="branchId" [(ngModel)]="staff.branchId" class="form-control">
+                  <option value="0">Lütfen şube seçiniz</option>
+                  <option *ngFor="let item of branches" value="{{item.id}}">
+                    {{item.branchName}}</option>
+                </select>
+              </div>
+
+            </div>
+
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i>
+            {{buttonText}}</button>
+          <button type="reset" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu
+            Temizle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Personel Listesi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Adı Soyadı</th>
+                <th>Gsm</th>
+                <th>Personel Türü</th>
+                <th>Maaş Tipi</th>
+                <th>Giriş Tarihi</th>
+                <th>Çıkış Tarihi</th>
+                <th>Doğum Tarihi</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.name}} {{item.surname}}</td>
+                <td>{{item.gsm}}</td>
+                <td>{{item.staffType.staffTypeName}}</td>
+                <td>{{item.salaryType.salaryTypeName}}</td>
+                <td>{{item.workStarDateTime | date: 'dd/M/yyyy'}}</td>
+                <td>{{item.workFinishDateTime | date: 'dd/M/yyyy'}}</td>
+                <td>{{item.birthDay | date: 'dd/M/yyyy'}}</td>
+                <td class="action-buttons">
+              <tr>
+                <td>
+                  <button class="btn btn-orange btn-block" (click)="getDetailFromTable(item)" title="Düzenle"><i
+                      class="fi fi-rr-user-pen"></i></button>
+                </td>
+                <td>
+                  <button class="btn btn-red btn-block" (click)="remove(item.id)" title="Sil"><i
+                      class="fi fi-rr-trash"></i></button>
+                </td>
+              </tr>
+              </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="staffList" (changePage)="onChangePage($event)"></jw-pagination>
+        </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>

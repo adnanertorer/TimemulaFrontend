@@ -1,0 +1,181 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-6">
+              <h6 style="margin-top: 8px;">{{customerName}} Hizmet Kaydı</h6>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+              <button class="btn btn-success" (click)="openModal()"
+              >Yeni Hizmet Ekle</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <ejs-schedule #scheduleObj  (actionBegin)="onBegin($event)"
+           locale='en' width='100%' height='550px' (popupOpen)='onPopupOpen($event)' [eventSettings]='eventSettings'></ejs-schedule>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+        </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+</div>
+
+<div [ngClass]="{'modal show': modalOpen}" [ngClass]="{'modal fade': !modalOpen}" 
+id="lessonModal" tabindex="-1" 
+role="dialog" aria-labelledby="lessonModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title" id="lessonModalLabel">Ders Kaydı</h6>
+      </div>
+      <div class="modal-body row">
+        <div class="col-xl-6 col-md-6">
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>İstenen Hizmet</h6>
+                <select name="service_id" id="service_id"  #serviceControl (change)="onChangeService($event, serviceControl.value)" [(ngModel)]="customerLesson.service_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of lifeArtsServices">{{item.serviceName}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>İstenen Alt Hizmet Hizmet</h6>
+                <select name="sub_service_id" id="sub_service_id" #subServiceControl (change)="onChangeSubService($event, subServiceControl.value)" [(ngModel)]="customerLesson.sub_service_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of subServices">{{item.sub_service_name}} {{item.is_group ? 'Grub Dersi' : 'Bireysel'}}
+                    {{item.is_adult ? 'Yetişkin' : 'Çocuk'}}
+                  </option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>İşlem Tarihi</h6>
+                <input type="date" name="process_at" class="form-control" id="process_at" #process_at="ngModel"
+                  [(ngModel)]="customerLesson.process_at">
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>İşlem Detayı</h6>
+                <input type="text" name="process_detail" class="form-control" id="process_detail"
+                  [(ngModel)]="customerLesson.process_detail">
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>İşlem Tutarı</h6>
+                <input type="number" name="price" class="form-control" id="price"
+                  [(ngModel)]="customerLesson.price">
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-md-6">
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Derslik</h6>
+                <select name="classroom_id" id="classroom_id" [(ngModel)]="customerLesson.classroom_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.classroom_id}}" *ngFor="let item of classrooms">{{item.classroom_name}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Sorumlu Eğitmen</h6>
+                <select name="educator_id" id="educator_id" [(ngModel)]="customerLesson.educator_id" 
+                class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.staff_id}}" *ngFor="let item of subServiceTeacherList">{{item.name}} {{item.surname}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Yönlendiren Personel</h6>
+                <select name="leading_person_id" id="leading_person_id" [(ngModel)]="customerLesson.leading_person_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of staffs">{{item.name}} {{item.surname}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Ödenen Tutar</h6>
+                <input type="number" name="paid" id="paid" (input)="onPaidChange($event.target.value)" class="form-control"
+                  [(ngModel)]="customerLesson.paid">
+              </div> 
+            </div>
+          </div>
+          <div class="row" >
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Kalan Tutar</h6>
+                <input type="number" name="remaining_price" id="remaining_price" class="form-control"
+                  [(ngModel)]="customerLesson.remaining_price">
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Ödeme Yöntemi</h6>
+                <select name="payment_type_id" id="payment_type_id" [(ngModel)]="customerLesson.payment_type_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of paymentTypes">{{item.payment_type_name}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="row" *ngIf="isRemainPayment">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Kalan ödemenin vadesi</h6>
+                <input type="date" name="remaining_payment_at" class="form-control" id="remaining_payment_at" #remaining_payment_at="ngModel"
+                  [(ngModel)]="customerLesson.remaining_payment_at">
+              </div> 
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-12 col-md-12">
+              <div class="submit-field"> 
+                <h6>Şube</h6>
+                <select name="branch_id" id="branch_id" [(ngModel)]="customerLesson.branch_id" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of branches">{{item.branch_name}}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" (click)="closeModal()" class="btn btn-secondary">Kapat</button>
+        <button type="button" (click)="add()" class="btn btn-success">Kaydet</button>
+      </div>
+    </div>
+  </div>
+</div>

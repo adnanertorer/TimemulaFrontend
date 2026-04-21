@@ -1,0 +1,134 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>İş Alanı/İş <=> İş Alanı/İş İlişkisi Tanımları</h5>
+          <p>
+            Şimdi hangi iş ya da hizmetlerimizi hangi atölye ya da salonlarda gerçekleştiriyoruz tanımlayalım.
+          </p>
+        </div>
+        <div class="card-body">
+          <div class="animated fadeIn">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                  <div class="card-header">
+                    <strong>İş/İş Alanı</strong> İlişkisi Kayıt Formu
+                  </div>
+                  <div class="card-body">
+                    <form action="" method="post" class="form-horizontal">
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="categoryId">Kategori</label>
+                        <div class="col-md-9">
+                          <select name="categoryId" (change)="categoryOnChange($event.target.value)" id="categoryId" [(ngModel)]="createClassroomForLesson.lesson.categoryId"
+                           class="form-control">
+                            <option value="0">Seçiniz</option>
+                            <option value="{{item.id}}" *ngFor="let item of categories">{{item.categoryName}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="subCategoryId">Alt Kategori</label>
+                        <div class="col-md-9">
+                          <select name="subCategoryId" id="subCategoryId" (change)="subCategoryOnChange($event.target.value)" [(ngModel)]="createClassroomForLesson.lesson.subCategoryId" class="form-control">
+                            <option value="0">Seçiniz</option>
+                            <option value="{{item.id}}" *ngFor="let item of subCategories">{{item.subCategoryName}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="lessonId">İşin Adı</label>
+                        <div class="col-md-9">
+                          <select name="lessonId" id="lessonId" (change)="lessonOnChange($event.target.value)" [(ngModel)]="selectedLessonId" class="form-control">
+                            <option value="0">Seçiniz</option>
+                            <option value="{{item.id}}" *ngFor="let item of lessons">{{item.lessonName}}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="classromName">İşin Yapıldığı Alan</label>
+                        <div class="col-md-9">
+                          <input type="text" name="classromName" class="form-control" id="classromName"
+                          [(ngModel)]="createClassroomForLesson.classroom.classromName">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="quta">Alan Kotası (İş Alanının iş yada kişi sayısına göre kapasitesi)</label>
+                        <div class="col-md-9">
+                          <input type="number" name="quta" class="form-control" id="quta"
+                          [(ngModel)]="createClassroomForLesson.classroom.quta">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="minCapacity">Minimum İş/Kişi Sayısı</label>
+                        <div class="col-md-9">
+                          <input type="number" name="minCapacity" class="form-control" id="minCapacity"
+                          [(ngModel)]="createClassroomForLesson.lesson.minCapacity">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="maxCapacity">Maksimum İş/Kişi Sayısı</label>
+                        <div class="col-md-9">
+                          <input type="number" name="maxCapacity" class="form-control" id="maxCapacity"
+                          [(ngModel)]="createClassroomForLesson.lesson.maxCapacity">
+                        </div>
+                      </div>
+                    </form>
+                    <div class="card-footer">
+                      <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> {{buttonText}}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="card">
+                <div class="col-md-12">
+                  <div class="card-header">
+                    <strong>İş/İş Alanı İlişkisi Listesi</strong> 
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th>İş Alanı Adı</th>
+                          <th>İş/Hizmet Adı</th>
+                          <th>İş Alanı Kapasitesi</th>
+                          <th>İş Alanı Min. İş/Kişi Sayısı</th>
+                          <th>İş Alanı Max. İş/Kişi Sayısı</th>
+                          <th>İş/Hizmetin Önceliği</th>
+                          <th>Kayıt Zamanı</th>
+                          <th>İşlemler</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of pageOfItems">
+                          <td>{{item.classroom.classromName}}</td>
+                          <td>{{item.lesson.lessonName}}</td>
+                          <td>{{item.maxCapacity}}</td>
+                          <td>{{item.minCapacity}}</td>
+                          <td>{{item.maxCapacity}}</td>
+                          <td>{{item.priority}}</td>
+                          <td>{{item.createdAt | date: 'dd/M/yyyy hh:mm'}}</td>
+                          <td>
+                            <button class="btn btn-sm btn-info btn-block" (click)="getDetailFromTable(item)" title="Detay">
+                              Detay</button>&nbsp;
+                            <button class="btn btn-sm btn-danger btn-block" (click)="remove(item.id)" title="Sil">Sil</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="card-footer pb-0 pt-3">
+                    <jw-pagination [items]="list" (changePage)="onChangePage($event)"></jw-pagination>
+                </div>
+                </div><!--/.col-->
+              </div><!--/.row-->
+          </div>          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

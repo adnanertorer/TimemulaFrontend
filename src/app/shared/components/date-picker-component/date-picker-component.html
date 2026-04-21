@@ -1,0 +1,18 @@
+
+<div class="dtp">
+  <label class="dtp__label" [for]="id" *ngIf="label">{{ label }}</label>
+
+  <div class="dtp__control-row">
+    <input
+      class="dtp__input"
+      [id]="id"
+      type="date"
+      [value]="formattedValue"
+      (change)="onChange($event)"
+      [attr.min]="min || null"
+      [attr.max]="max || null"
+      [required]="required"
+      [disabled]="disabled"
+    />
+  </div>
+</div>

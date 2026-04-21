@@ -1,0 +1,124 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Tahsilat Yönetimi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Adı</th>
+                <th>Kalan Müşteri Borcu</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of generalDebts">
+                <td>{{item.name}} {{item.surname}}</td>
+                <td>{{item.cashDebt}}</td>
+                <td>
+                  <button *ngIf="item.cashDebt > 0" (click)="getCollection(item)" type="button"
+                    class="btn btn-primary">Ödeme Al</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header" style="margin-top: 5px;">
+          <h5 class="font-weight-bold">Tahsilat Ara</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group row">
+            <div class="col-md-2">
+              <label for="transactionTypeId">Kasa</label>
+              <select name="cashBoxId" class="form-control" [(ngModel)]="filter.cashBoxId">
+                <option value="0">Seçiniz</option>
+                <option value="{{item.id}}" *ngFor="let item of cashBoxes">{{item.cashBoxName}}</option>
+              </select>
+            </div>
+            <div class="col-md-2">
+              <label for="educatorId">Müşteri</label>
+              <select name="educatorId" class="form-control" [(ngModel)]="filter.customerId">
+                <option value="0">Seçiniz</option>
+                <option value="{{item.id}}" *ngFor="let item of customers">{{item.name}} {{item.surname}}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <app-date-picker id="startDate" label="Başlangıç Tarihi" (valueChange)="startDateChange($event)"
+                [(value)]="startDate" [min]="minDate | date: 'yyyy-MM-dd'" [max]="maxDate | date: 'yyyy-MM-dd'"
+                [required]="true">
+              </app-date-picker>
+
+            </div>
+            <div class="col-md-3">
+              <app-date-picker id="endDate" label="Bitiş Tarihi" (valueChange)="endDateChange($event)"
+                [(value)]="endDate" [min]="minDate | date: 'yyyy-MM-dd'" [max]="maxDate | date: 'yyyy-MM-dd'"
+                [required]="true">
+              </app-date-picker>
+            </div>
+            <div class="col-md-2">
+              <label for=""></label>
+              <input type="button" style="margin-top: 25px;" class="btn btn-primary" value="Ara"
+                (click)="getWithFilter()">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Tahsilat Listesi</h5>
+          <span class="align-middle">
+            <h6>Listenin Genel Özeti</h6>
+            <b>Toplam Tahsilat:</b> {{totalCollection}} TL
+          </span>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Adı</th>
+                <th>Kasa</th>
+                <th>İşlem Zamanı</th>
+                <th>Tahsilat Tutarı</th>
+                <th>Açıklama</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of deptCollectionList">
+                <td>{{item.name}} {{item.surname}}</td>
+                <td>{{item.cashBoxName}}</td>
+                <td>{{item.createdAt | date: 'dd/M/yyyy H:mm'}}</td>
+                <td>{{item.collectionAmount}} TL</td>
+                <td>{{item.description}}</td>
+                <td>
+                  <button class="btn btn-orange btn-info"><i class="fi fi-rr-user-pen"></i></button>
+                  <button class="btn btn-red btn-info"><i class="fi fi-rr-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <app-generic-paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+        </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>
+</div>

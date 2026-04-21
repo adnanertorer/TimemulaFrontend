@@ -1,0 +1,148 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <p>Şimdi çalışanlarımızın çalışma gün ve saatlerini kaydedelim.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">
+        <strong>Çalışan</strong> Mesai Kayıt Formu
+      </div>
+      <div class="card-body">
+        <form action="" method="post" class="form-horizontal">
+          <input type="hidden" name="id" id="id" [(ngModel)]="model.id" />
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="educatorId">Çalışan</label>
+            <div class="col-md-9">
+              <select name="educatorId" id="educatorId" [(ngModel)]="model.educatorId" class="form-control">
+                <option value="0">Seçiniz</option>
+                <option value="{{ item.id }}" *ngFor="let item of staffList">
+                  {{ item.name }} {{ item.surname }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="day">Günler</label>
+            <div class="col-md-9">
+              <select name="day" id="day" [(ngModel)]="model.day" class="form-control">
+                <option value="0">Seçiniz</option>
+                <option value="1">Pazartesi</option>
+                <option value="2">Salı</option>
+                <option value="3">Çarşamba</option>
+                <option value="4">Perşembe</option>
+                <option value="5">Cuma</option>
+                <option value="6">Cumartesi</option>
+                <option value="7">Pazar</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="startTime">Mesai Başlama Saati</label>
+            <div class="col-md-9">
+              <input type="time" name="startTime" id="startTime" [(ngModel)]="model.startTime" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="startTime">Mesai Bitiş Saati</label>
+            <div class="col-md-9">
+              <input type="time" name="finishTime" id="finishTime" [(ngModel)]="model.finishTime"
+                class="form-control" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="submit" (click)="add()" class="btn btn-sm btn-primary">
+        <i class="fa fa-dot-circle-o"></i> {{ buttonText }}
+      </button>
+      <button type="reset" (click)="reset()" class="btn btn-sm btn-danger">
+        <i class="fa fa-ban"></i> Vazgeç
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-header">Mesai Listesi</div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-12">
+            <mat-form-field appearance="standard">
+              <mat-label>Filtre</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Adı Soyadı..." #input />
+            </mat-form-field>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" matSort #educatorSort="matSort">
+                <ng-container matColumnDef="educatorId">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Adı Soyadı
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.educatorName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dayName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Gün
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.dayName }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="startTime">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Başlama Saati
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.startTime }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="finishTime">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Bitiş Saati
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    {{ row.finishTime }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    İşlemler
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button class="btn btn-warning" (click)="getDetail(row.id)" value="Detay">
+                      Detaylar
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayColums"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayColums"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">
+                    Aradığınız kriterlere uygun kayıt bulunamadı "{{
+                    input.value
+                    }}"
+                  </td>
+                </tr>
+              </table>
+              <mat-paginator #paginatorEducator [pageSizeOptions]="[5, 10, 25, 100]"
+                aria-label="Select page of users"></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

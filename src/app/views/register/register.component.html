@@ -1,0 +1,94 @@
+<section class="row d-flex" style="margin: 0;">
+  <div class="col-lg-6">
+    <img src="../../../assets/img/timemula_randevu.jpg" style="width: 88%;" alt="">
+  </div>
+  <div class="col-lg-6 flex-center flex-column" style="height: 100vh;">
+    <h3 class="mb-8">Timemula Uygulamasına Üye Ol 👋</h3>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="row">
+        <div class="col-md-6 contents">
+          <div class="col-md-12">
+            <p class="font-weight-bold text-left sub-title">Kurumsal</p>
+            <div class="form-group">
+              <label for="companyName">Firma Adı*</label>
+              <input type="text" class="form-control" formControlName="companyName" id="companyName"
+                placeholder="Firma adını yazınız" autocomplete="companyName" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">Firma Adresi*</label>
+              <input type="text" class="form-control" formControlName="companyAddress" id="formControlName"
+                placeholder="Firma adresini yazınız" autocomplete="companyAddress" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">Firma Telefon*</label>
+              <input type="tel" class="form-control" formControlName="companyPhone" id="companyPhone"
+                placeholder="Firma telefonunu yazınız" autocomplete="companyPhone" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">il*</label>
+              <select type="text" class="form-control" formControlName="cityId" id="cityId" (change)="cityOnChange($event.target.value)">
+                <option value="0">Seçiniz</option>
+                <option *ngFor="let item of cities" value="{{item.id}}">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">ilçe*</label>
+              <select type="text" class="form-control" formControlName="districtId" id="districtId">
+                <option value="0">Seçiniz</option>
+                <option *ngFor="let item of districts" value="{{item.id}}">{{item.name}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 contents">
+          <div class="col-md-12">
+            <p class="font-weight-bold text-left sub-title">Kişisel</p>
+            <div class="form-group">
+              <label for="name">Adınız*</label>
+              <input type="text" class="form-control" formControlName="name" id="name" placeholder="Adınızı yazınız"
+                autocomplete="name" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="name">Soyadınız*</label>
+              <input type="text" class="form-control" formControlName="surname" id="surname"
+                placeholder="Soyadınızı yazınız" autocomplete="surname" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">E-Posta Adresiniz*</label>
+              <input type="email" class="form-control" formControlName="email" id="email"
+                placeholder="E-Posta adresinizi yazınız" autocomplete="email" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">Parolanız*</label>
+              <input type="password" class="form-control" formControlName="password" id="password" required>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="companyPhone">Tekrar Parolanız*</label>
+              <input type="password" class="form-control" formControlName="passwordAgain" id="passwordAgain" required>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 pd-10">
+          <button type="submit" class="btn-sm btn-block btn-info">Hesap Oluştur</button>
+          <p class="mt-32 text-gray-600 text-center">Hesabınız var mı? <a (click)="login()"  class="text-main-600 hover-text-decoration-underline">Giriş Yap</a></p>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

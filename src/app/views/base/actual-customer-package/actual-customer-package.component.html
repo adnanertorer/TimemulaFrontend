@@ -1,0 +1,130 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Müşteri</strong> Ders Kaydırma Formu
+        </div>
+        <div class="card-body">
+          <table class="table">
+            <tr>
+              <th>Müşteri</th>
+              <th>Ders</th>
+              <th>Paket</th>
+              <th>Mevcut Başlama Zamanı</th>
+              <th>Mevcut Bitiş Zamanı</th>
+              <th>Mevcut Eğitmen</th>
+            </tr>
+            <tr>
+              <td>{{customerNameStr}}
+              </td>
+              <td>{{lessonNameStr}}
+              </td>
+              <td>{{packageNameStr}}
+              </td>
+              <td>{{customerLesson.startDate}}</td>
+              <td>{{customerLesson.finishDate}}</td>
+              <td>{{educatorNameStr}}</td>
+            </tr>
+          </table>
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="actualCustomerPackage.id">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="educatorId">Eğitmen</label>
+              <div class="col-md-9">
+                <select name="educatorId" id="educatorId" (change)="getEducatorDayHours($event.target.value)"
+                  [(ngModel)]="actualCustomerPackage.educatorId" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.staffId}}" *ngFor="let item of staffs">{{item.staff.name}} {{item.staff.surname}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="educatorDayHours.length > 0">
+              <label class="col-md-3 col-form-label">Mesai Çizelgesi</label>
+              <div class="col-md-9">
+                <table class="table">
+                  <tr>
+                    <th>Gün</th>
+                    <th>Mesai Başlama</th>
+                    <th>Mesai Bitiş</th>
+                  </tr>
+                  <tbody>
+                    <tr *ngFor="let item of educatorDayHours">
+                      <td>{{dayLabels[item.day]}}</td>
+                      <td>{{item.startTime}}</td>
+                      <td>{{item.finishTime}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-md-4" style="padding-top: 55px;">
+                <label class="col-md-6 col-form-label" for="startDate">Başlama Tarihi Seçiniz</label>
+                <div class="input-group">
+                  <ejs-datepicker #date (change)="onDateChange()" format='yyyy-MM-dd' placeholder='Enter date'
+                    [value]=dateValue></ejs-datepicker>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <label class="col-md-6 col-form-label" for="time">Başlama Saati Seçiniz</label>
+                <ngb-timepicker [(ngModel)]="time" [seconds]="true" [hourStep]="hourStep" [minuteStep]="minuteStep"
+                  [secondStep]="secondStep" name="time"></ngb-timepicker>
+              </div>
+              <div class="col-md-3">
+                <label class="col-md-6 col-form-label" for="timeLast">Bitiş Saati Seçiniz</label>
+                <ngb-timepicker [(ngModel)]="timeLast" [seconds]="true" [hourStep]="hourStep" [minuteStep]="minuteStep"
+                  [secondStep]="secondStep" name="timeLast"></ngb-timepicker>
+              </div>
+            </div>
+            <div class="card-footer" style="text-align: right;">
+              <button type="button" (click)="sendCriteria()" class="btn btn-sm btn-primary"><i
+                  class="fa fa-dot-circle-o"></i> Uygunluk Kontrolü</button>
+            </div>
+          </form>
+          <div class="card-footer">
+            <button type="button" (click)="reset()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i>
+              Vazgeç</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header">
+            <strong>Sonuç Listesi</strong>
+          </div>
+          <div class="card-body">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Durum</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of pageOfItems">
+                  <td>{{item.description}}</td>
+                  <td>
+                    <button *ngIf="item.isAvailable" class="btn btn-success" (click)="add(item)">Kaydet</button>
+                  </td>
+                </tr>
+                <tr *ngIf="filterDetailResponses.length>0">
+                  <td>
+                    <ul>
+                      <li *ngFor="let itemDetail of filterDetailResponses">{{itemDetail.description}}</li>
+                    </ul>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer pb-0 pt-3">
+            <jw-pagination [items]="filterResponses" (changePage)="onChangePage($event)"></jw-pagination>
+          </div>
+        </div><!--/.col-->
+      </div><!--/.row-->
+    </div>

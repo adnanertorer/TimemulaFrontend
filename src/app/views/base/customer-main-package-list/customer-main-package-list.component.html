@@ -1,0 +1,74 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header">
+            <strong>{{name}} {{surname}} Paket Dersleri</strong>
+          </div>
+        </div><!--/.col-->
+      </div><!--/.row-->
+    </div>
+  </div>
+</div>
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <mat-form-field appearance="standard">
+          <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
+        </mat-form-field>
+        <div class="mat-elevation-z8" style="width: 100%;">
+          <table mat-table [dataSource]="dataSource" matSort #lessonsSort="matSort">
+            <ng-container matColumnDef="artPackageName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Paket</th>
+              <td mat-cell *matCellDef="let row">{{row.artPackageName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="lessonName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Ders</th>
+              <td mat-cell *matCellDef="let row">{{row.lessonName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="classromName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Sınıf</th>
+              <td mat-cell *matCellDef="let row">{{row.classromName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Başlama</th>
+              <td mat-cell *matCellDef="let row">{{row.startDate | date: 'yyyy-MM-dd H:mm'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="finishDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Bitiş</th>
+              <td mat-cell *matCellDef="let row">{{row.finishDate | date: 'yyyy-MM-dd H:mm'}}</td>
+            </ng-container>
+            <ng-container matColumnDef="isDone">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Durum</th>
+              <td mat-cell *matCellDef="let row">
+                <span style="color: green; font-weight: bold;" *ngIf="row.isDone">Tamamlandı</span>
+                <span *ngIf="!row.isDone && !row.isCancel">Tamamlanmadı</span>
+                <span style="color: red; font-weight: bold;" *ngIf="row.isCancel">Ders Yandı</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>İşlemler</th>
+              <td mat-cell *matCellDef="let row">
+                <button *ngIf="!row.isDone && !row.isCancel" (click)="openPackageMove(row.id)" type="button"
+                  class="btn btn-warning">Ders Kaydır</button>
+                &nbsp; <button *ngIf="!row.isDone && !row.isCancel" (click)="cancelLesson(row.id)" type="button"
+                  class="btn btn-danger">Ders İptal</button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">Aradığınız kriterlere uygun kayıt bulunamadı "{{input.value}}"</td>
+            </tr>
+          </table>
+         <app-generic-paginator #lessonsPaginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

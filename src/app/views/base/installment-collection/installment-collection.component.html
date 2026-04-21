@@ -1,0 +1,60 @@
+<div mat-dialog-content>
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <strong>Tahsilat</strong> Formu
+          </div>
+          <div class="card-body">
+            <form action="" method="post" class="form-horizontal">
+              <input type="hidden" name="id" id="id" [(ngModel)]="data.deptCollection.id">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="strcurrentAccount">Hesap</label>
+                <div class="col-md-9">
+                 <input type="text" name="strcurrentAccount" id="strcurrentAccount" [(ngModel)]="data.currentAccount"
+                 class="form-control" disabled />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="strDept">Toplam Alacak</label>
+                <div class="col-md-9">
+                 <input type="number" name="strDept" id="strDept" [(ngModel)]="data.strDept"
+                 class="form-control" disabled />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="cashBoxId">Kasa</label>
+                <div class="col-md-9">
+                  <select id="cashBoxId" name="cashBoxId"  [(ngModel)]="data.deptCollection.cashBoxId" class="form-control">
+                    <option value="0">Seçiniz</option>
+                    <option *ngFor="let item of cashBoxList" value="{{item.id}}">{{item.cashBoxName}}</option>
+                  </select>
+                </div>
+              </div>
+             
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="unityPrice">Tahsilat Tutarı</label>
+                <div class="col-md-9">
+                  <input type="number" [(ngModel)]="data.deptCollection.collectionAmount" id="collectionAmount"
+                   name="collectionAmount" disabled class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="description">Açıklama</label>
+                <div class="col-md-9">
+                  <input type="text" [(ngModel)]="data.deptCollection.description" id="description"
+                   name="description" class="form-control" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="button" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Kaydet</button>
+      <button type="button" (click)="onNoClick()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Vazgeç</button>
+    </div>
+  </div>
+</div>

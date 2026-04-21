@@ -1,0 +1,93 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header" style="margin-top: 5px;">
+            <h5 class="font-weight-bold">Kasa Hareketleri Arama</h5>
+          </div>
+          <div class="card-body">
+            <div class="form-group row">
+              <div class="col-md-2">
+                <label for="transactionTypeId">Kasa</label>
+                <select name="cashBoxId" class="form-control" [(ngModel)]="cashBoxId">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of cashBoxes">{{item.cashBoxName}}</option>
+                </select>
+              </div>
+              <div class="col-md-2">
+                <label for="transactionTypeId">İşlem Tipi</label>
+                <select name="transactionTypeId" class="form-control" [(ngModel)]="transactionTypeId">
+                  <option value="0">Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of transactionTypes">{{item.transactionType}}</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <app-date-picker id="startDate" label="Başlangıç Tarihi" (valueChange)="startDateChange($event)"
+                [(value)]="dateValue" [min]="minDate | date: 'yyyy-MM-dd'"
+                  [max]="maxDate | date: 'yyyy-MM-dd'" [required]="true">
+                </app-date-picker>
+              </div>
+              <div class="col-md-3">
+                <app-date-picker id="endDate" label="Bitiş Tarihi" (valueChange)="endDateChange($event)"
+                [(value)]="endDateValue" [min]="minDate | date: 'yyyy-MM-dd'" [max]="maxDate | date: 'yyyy-MM-dd'" [required]="true">
+                </app-date-picker>
+              </div>
+              <div class="col-md-2">
+                <label for=""></label>
+                <input type="button" style="margin-top: 25px;" class="btn btn-primary" value="Ara"
+                  (click)="getWithFilter()">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Kasa Hareketleri Listesi</h5>
+        </div>
+        <div class="card-body">
+          <div class="pl-3">
+            <h4><b>Genel Özet</b></h4>
+            <div class="row">
+              <div class="col-4"><b>Toplam Gelir:</b> {{totalIncome}} TL</div>
+              <div class="col-4"><b>Toplam Gider:</b> {{totalExpense}} TL</div>
+              <div class="col-4"><b>Kasa Net:</b> {{net}} TL</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              <div class="col-md-12 pt-4">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Kasa Adı</th>
+                      <th>İşlem Tipi</th>
+                      <th>İşlem Tutarı</th>
+                      <th>İşlem Zamanı</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of pageOfItems">
+                      <td>{{item.cashBoxName}}</td>
+                      <td>{{item.transactionType}}</td>
+                      <td>{{item.cost}} TL</td>
+                      <td>{{item.createdAt | date: 'dd/M/yyyy H:mm'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="card-footer pb-0 pt-3">
+                  <jw-pagination [items]="list" (changePage)="onChangePage($event)"></jw-pagination>
+                </div>
+              </div><!--/.col-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

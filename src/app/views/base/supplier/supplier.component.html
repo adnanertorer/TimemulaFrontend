@@ -1,0 +1,81 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Tahsilat Kayıt Formu</h5>
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="supplier.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <input type="text" id="companyName" [(ngModel)]="supplier.companyName"
+                       name="companyName" class="form-control" placeholder="Firma adı">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="text" id="authorized" name="authorized" [(ngModel)]="supplier.authorized" class="form-control" placeholder="Yetkili kişi">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="tel" id="phone" name="phone" [(ngModel)]="supplier.phone" class="form-control" placeholder="Telefon">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="text" id="address" name="address" [(ngModel)]="supplier.address" class="form-control" placeholder="Firma adresi">
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="checkbox" id="isActive" name="isActive" [(ngModel)]="supplier.isActive" /> Aktif mi?
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="button" (click)="add()"  class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> {{buttonText}}</button>
+          <button type="button" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu Temizle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Tedarikçi Listesi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+            <tr>
+              <th>Firma Adı</th>
+              <th>Yetkili Kişi</th>
+              <th>Telefon</th>
+              <th>Adres</th>
+              <th>Aktif</th>
+              <th>İşlemler</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of supplierList">
+                <td>{{item.companyName}}</td>
+                <td>{{item.authorized}}</td>
+                <td>{{item.phone}}</td>
+                <td>{{item.address}}</td>
+                <td>{{item.isActive ? 'Evet' : 'Hayır'}}</td>
+                <td>
+                  <button class="btn btn-orange btn-info"(click)="getDetailFromTable(item)" ><i class="fi fi-rr-user-pen"></i></button>
+                <button class="btn btn-red btn-info" (click)="remove(item.id)"><i class="fi fi-rr-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>

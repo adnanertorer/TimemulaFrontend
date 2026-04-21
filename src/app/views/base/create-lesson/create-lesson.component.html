@@ -1,0 +1,109 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>İş Tanımları</h5>
+          <p>Şimdi kategorilerimize bağlı iş tanımlarımızı ekleyelim.</p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <form class="form-horizontal" style="width: 100%;">
+              <input type="hidden" name="id" id="id" [(ngModel)]="lesson.id" />
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="categoryId">Kategori</label>
+                <div class="col-md-9">
+                  <select name="categoryId" (change)="categoryOnChange($event.target.value)" id="categoryId"
+                    [(ngModel)]="lesson.categoryId" class="form-control">
+                    <option value="0">Seçiniz</option>
+                    <option value="{{ item.id }}" *ngFor="let item of categories">
+                      {{ item.categoryName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="subCategoryId">Alt Kategori</label>
+                <div class="col-md-9">
+                  <select name="subCategoryId" id="subCategoryId" [(ngModel)]="lesson.subCategoryId"
+                    class="form-control">
+                    <option value="0">Seçiniz</option>
+                    <option value="{{ item.id }}" *ngFor="let item of subCategories">
+                      {{ item.subCategoryName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="lessonName">İşin Adı</label>
+                <div class="col-md-9">
+                  <input type="text" name="lessonName" id="lessonName" [(ngModel)]="lesson.lessonName"
+                    class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="file">İşin görseli yüklemek için tıklayın</label>
+                <div class="col-md-9">
+                  <input class="uploadButton-input" #file type="file" (change)="uploadFile(file.files)"
+                    accept="images/*" id="file" name="file" />
+                </div>
+              </div>
+            </form>
+            <div class="card-footer">
+              <button type="submit" (click)="add()" class="btn btn-sm btn-primary">
+                <i class="fa fa-dot-circle-o"></i> {{ buttonText }}
+              </button>
+              <button type="reset" (click)="reset()" class="btn btn-sm btn-danger">
+                <i class="fa fa-ban"></i> Vazgeç
+              </button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="card">
+              <div class="col-md-12">
+                <div class="card-header">
+                  <strong>Hizmet Listesi</strong>
+                </div>
+                <div class="card-body">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>İşin Adı</th>
+                        <th>Kategori</th>
+                        <th>Alt Kategori</th>
+                        <th>İşin Görseli</th>
+                        <th>İşlemler</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of lessons">
+                        <td>{{ item.lessonName }}</td>
+                        <td>{{ item.category.categoryName }}</td>
+                        <td>{{ item.subCategory.subCategoryName }}</td>
+                        <td>
+                          <img src="{{ mainUrl }}lesson-images/{{
+                                item.lessonPhoto
+                              }}" width="75" alt="" />
+                        </td>
+                        <td>
+                          <button class="btn btn-sm btn-info" (click)="getDetailFromTable(item)"
+                            title="Detay">Detay</button>&nbsp;
+                          <button class="btn btn-sm btn-danger" (click)="remove(item.id)" title="Sil">Sil</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="card-footer pb-0 pt-3">
+                    <app-generic-paginator #lessonPaginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+                </div>
+              </div>
+              <!--/.col-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,135 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Hizmet Kayıt Formu</h5>
+          <span class="align-middle">
+            <i class="fi fi-rr-info"></i>
+            Hizmet/Ortam ilişkisi oluşturmadan önce dilerseniz üst kategori, alt kategori, hizmet ve hizmet ortamı
+            oluşturabilirsiniz. <br>
+            <ul>
+              <li><a href="/genel-tanimlar/kategoriler.html">Üst kategori oluştur</a></li>
+              <li><a href="/genel-tanimlar/alt-kategoriler.html">Alt kategori oluştur</a></li>
+              <li><a href="/genel-tanimlar/dersler.html">Hizmet oluştur</a></li>
+              <li><a href="/genel-tanimlar/derslikler.html">Hizmet ortamı oluştur</a></li>
+            </ul>
+          </span>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="packageClassroom.id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <label for="categoryId">Kategori</label>
+                <select name="categoryId" (change)="categoryOnChange($event.target.value)" id="categoryId"
+                  [(ngModel)]="packageClassroom.categoryId" class="form-control">
+                  <option value="0">Kategori Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of categories">{{item.categoryName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="subCategoryId">Alt Kategori</label>
+                <select name="subCategoryId" id="subCategoryId" (change)="subCategoryOnChange($event.target.value)"
+                  [(ngModel)]="packageClassroom.subCategoryId" class="form-control">
+                  <option value="0">Alt Kategori Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of subCategories">{{item.subCategoryName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="lessonId">Hizmet</label>
+                <select name="lessonId" id="lessonId" [(ngModel)]="packageClassroom.lessonId" class="form-control">
+                  <option value="0">Hizmet Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of lessons">{{item.lessonName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="classroomId">Derslik/Hizmet Ortamı</label>
+                <select name="classroomId" id="classroomId" [(ngModel)]="packageClassroom.classroomId"
+                  class="form-control">
+                  <option value="0">Hizmet Ortamı Seçiniz</option>
+                  <option value="{{item.id}}" *ngFor="let item of classrooms">{{item.classromName}} / Kapasite
+                    ({{item.quta}}) </option>
+                </select>
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="minCapacity">Minimum Kişi Sayısı</label>
+                <input type="number" name="minCapacity" class="form-control" id="minCapacity"
+                  [(ngModel)]="packageClassroom.minCapacity" placeholder="Hizmet Minimum Kişi Sayısı">
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="maxCapacity">Maksimum Kişi Sayısı</label>
+                <input type="number" name="maxCapacity" class="form-control" id="maxCapacity"
+                  [(ngModel)]="packageClassroom.maxCapacity" placeholder="Hizmet Maksimum Kişi Sayısı">
+              </div>
+
+              <div class="col-md-12 col-lg-6">
+                <label for="priority">Hizmet Önceliği</label>
+                <input type="number" name="priority" class="form-control" id="priority"
+                  [(ngModel)]="packageClassroom.priority" placeholder="Hizmet Önceliği">
+              </div>
+            </div>
+
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i>
+              {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i>
+              Formu Temizle</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header">
+            <h5 class="font-weight-bold">Hizmet/Ortam İlişkisi Listesi</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Ortam Adı</th>
+                  <th>Hizmet Adı</th>
+                  <th>Ortam Kapasitesi</th>
+                  <th>Hizmet Min. Kişi Sayısı</th>
+                  <th>Hizmet Maks. Kişi Sayısı</th>
+                  <th>Hizmet Önceliği</th>
+                  <th>Kayıt Zamanı</th>
+                  <th style="text-align: right;">İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of list">
+                  <td>{{item.classroom.classromName}}</td>
+                  <td>{{item.lesson.lessonName}}</td>
+                  <td>{{item.maxCapacity}}</td>
+                  <td>{{item.minCapacity}}</td>
+                  <td>{{item.maxCapacity}}</td>
+                  <td>{{item.priority}}</td>
+                  <td>{{item.createdAt | date: 'dd/M/yyyy hh:mm'}}</td>
+                  <td style="text-align: right;">
+                    <button class="btn btn-orange btn-info" (click)="getDetailFromTable(item)"><i
+                        class="fi fi-rr-user-pen"></i></button>
+                    <button class="btn btn-red btn-info" (click)="remove(item.id)"><i
+                        class="fi fi-rr-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer pb-0 pt-3">
+            <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+          </div>
+        </div><!--/.col-->
+      </div><!--/.row-->
+    </div>

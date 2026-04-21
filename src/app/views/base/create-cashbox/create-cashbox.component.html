@@ -1,0 +1,99 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Kasa Tanımları</h5>
+          <p>
+            Şimdi firmanızın gelir ve giderlerini yöneteceğimiz kasalarımızı tanımlayalım.
+          </p>
+          <p>Nakit Kasa, Banka gibi...</p>
+        </div>
+        <div class="card-body">
+          <form class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="cashBox.id" />
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="cashBoxType">Kasa Türü</label>
+              <div class="col-md-9">
+                <select id="cashBoxType" name="cashBoxType" #cashBoxType (change)="typeOnChange(cashBoxType.value)"
+                  [(ngModel)]="cashBox.cashBoxType" class="form-control">
+                  <option value="0">Seçiniz</option>
+                  <option value="1">Nakit Kasa</option>
+                  <option value="2">Banka</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="cashBoxName">Kasa Adı</label>
+              <div class="col-md-9">
+                <input type="text" name="cashBoxName" id="cashBoxName" [(ngModel)]="cashBox.cashBoxName"
+                  class="form-control" />
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="isBank">
+              <label class="col-md-3 col-form-label" for="iban">İban</label>
+              <div class="col-md-9">
+                <input type="text" name="iban" id="iban" [(ngModel)]="cashBox.iban" class="form-control" />
+              </div>
+            </div>
+            <div class="form-group row" *ngIf="isBank">
+              <label class="col-md-3 col-form-label" for="bankAccountNumber">Hesap Numarası</label>
+              <div class="col-md-9">
+                <input type="text" [(ngModel)]="cashBox.bankAccountNumber" id="bankAccountNumber"
+                  name="bankAccountNumber" class="form-control" />
+              </div>
+            </div>
+          </form>
+          <div class="card-footer">
+            <button type="button" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i>
+              {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i>
+              Vazgeç</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="col-md-12">
+          <div class="card-header">
+            <strong>Kasa Listesi</strong>
+          </div>
+          <div class="card-body">
+            <table class="table table-sm">
+              <thead>
+                <tr>
+                  <th>Türü</th>
+                  <th>Adı</th>
+                  <th>Iban</th>
+                  <th>Hesap No</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of pageOfItems">
+                  <td>{{item.cashBoxType == 1 ? 'Nakit Kasa' : 'Banka'}}</td>
+                  <td>{{item.cashBoxName}}</td>
+                  <td>{{item.iban}}</td>
+                  <td>{{item.bankAccountNumber}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-info" (click)="getDetailFromTable(item)"
+                title="Detay">Detay</button>&nbsp;
+              <button class="btn btn-sm btn-danger" (click)="remove(item.id)" title="Sil">Sil</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer pb-0 pt-3">
+            <jw-pagination [items]="cashBoxList" (changePage)="onChangePage($event)"></jw-pagination>
+          </div>
+        </div>
+        <!--/.col-->
+      </div>
+      <!--/.row-->
+    </div>
+  </div>
+</div>

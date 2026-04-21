@@ -1,0 +1,87 @@
+<div mat-dialog-content>
+  <div class="animated fadeIn">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <strong>Hakediş</strong> Formu
+          </div>
+          <div class="card-body">
+            <form action="" method="post" class="form-horizontal">
+              <input type="hidden" name="id" id="id" [(ngModel)]="data.id">
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="staffName">Tarih</label>
+                <div class="col-md-9">
+                 <p>Tarih: {{educatorCost.currentDate | date: 'dd/M/yyyy'}}</p>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="strDept">Ders</label>
+                <div class="col-md-9">
+                  <p>{{educatorCost.lessonName}}</p>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="strDept">Sınıf</label>
+                <div class="col-md-9">
+                  <p>{{educatorCost.classroomName}}</p>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="cashBoxId">Uygulama</label>
+                <div class="col-md-9">
+                  <select id="costSettings" name="costSettings" #approveCost
+                  [(ngModel)]="educatorCost.approveType" (change)="approveChanged(approveCost.value)" class="form-control">
+                    <option value="0">Lütfen Seçiniz</option>
+                    <option value="1">Uygula (Sisteme tanımlı ücret)</option>
+                    <option value="2">Manuel Uygula (Sistemden bağımsız)</option>
+                    <option value="3">Uygulama (Eğitmen hakediş almayacak)</option>
+                  </select>
+                </div>
+              </div>
+              <div *ngIf="selectedApproveNumber != 0 && selectedApproveNumber != 3">
+                <div class="form-group row" *ngIf="selectedApproveNumber != 0 && selectedApproveNumber != 3">
+                  <label class="col-md-3 col-form-label" for="cashBoxId">Kasa</label>
+                  <div class="col-md-9">
+                    <select id="cashBoxId" name="cashBoxId" [(ngModel)]="educatorCost.cashBoxId" class="form-control">
+                      <option value="0">Lütfen Seçiniz</option>
+                      <option *ngFor="let item of cashboxModelList" value="{{item.id}}">{{item.cashBoxName}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+
+              <div class="form-group row" *ngIf="standardPrice">
+                <label class="col-md-3 col-form-label" for="cost">Standart Hakediş Tutarı</label>
+                <div class="col-md-9">
+                  <input type="number" [(ngModel)]="educatorCost.cost" id="cost"
+                   name="cost" class="form-control" disabled />
+                </div>
+              </div>
+             
+              <div class="form-group row" *ngIf="isManuelCost">
+                <label class="col-md-3 col-form-label" for="cost">Hakediş Tutarı</label>
+                <div class="col-md-9">
+                  <input type="number" [(ngModel)]="educatorCost.cost" id="cost"
+                   name="cost" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="description">Açıklama</label>
+                <div class="col-md-9">
+                  <input type="text" [(ngModel)]="educatorCost.description" id="description"
+                   name="description" class="form-control" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button type="button" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Kaydet</button>
+      <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Vazgeç</button>
+    </div>
+  </div>
+</div>

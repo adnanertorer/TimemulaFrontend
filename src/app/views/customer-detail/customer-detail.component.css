@@ -1,0 +1,8 @@
+.infoDiv{
+    border-style: solid;border-color: darkgray;border-width: thin;padding: 5px;
+    margin-bottom: 5px;
+    background-color: white;
+}
+.infoDiv h5{
+    color: darkslategrey;
+}

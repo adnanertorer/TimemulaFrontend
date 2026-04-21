@@ -1,0 +1,29 @@
+<div class="step-template">
+  <div *ngIf="step.stepIndex == 1">
+    <app-create-category></app-create-category>
+  </div>
+  <div *ngIf="step.stepIndex == 2">
+    <app-create-sub-category></app-create-sub-category>
+  </div>
+  <div *ngIf="step.stepIndex == 3">
+    <app-create-lesson></app-create-lesson>
+  </div>
+  <div *ngIf="step.stepIndex == 4">
+    <app-create-classroom></app-create-classroom>
+  </div>
+  <div *ngIf="step.stepIndex == 5">
+    <app-create-educator></app-create-educator>
+  </div>
+  <div *ngIf="step.stepIndex == 6">
+    <app-create-lesson-educator></app-create-lesson-educator>
+  </div>
+  <div *ngIf="step.stepIndex == 7">
+    <app-create-educator-working-hours></app-create-educator-working-hours>
+  </div>
+  <div *ngIf="step.stepIndex == 8">
+    <app-create-lesson-package></app-create-lesson-package>
+  </div>
+  <div *ngIf="step.stepIndex == 9">
+    <app-create-cashbox></app-create-cashbox>
+  </div>
+</div>

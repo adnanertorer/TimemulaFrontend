@@ -1,0 +1,79 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Kasa Tanımları</h5>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id">
+            <div class="form-group row">
+              <div class="col-md-12 col-lg-6">
+                <select id="cashBoxType" name="cashBoxType" #cashBoxType (change)="typeOnChange(cashBoxType.value)" [(ngModel)]="cashBox.cashBoxType" class="form-control">
+                  <option value="0">Kasa Türü Seçiniz</option>
+                  <option value="1">Nakit Kasa</option>
+                  <option value="2">Banka</option>
+                </select>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <input type="text" name="cashBoxName" id="cashBoxName" placeholder="Kasa Adı" [(ngModel)]="cashBox.cashBoxName" class="form-control" />
+              </div>
+              <div class="col-md-12 col-lg-6" *ngIf="isBank">
+                  <input type="text" name="iban" id="iban" [(ngModel)]="cashBox.iban" class="form-control" placeholder="İban" />
+              </div>
+              <div class="col-md-12 col-lg-6"  *ngIf="isBank">
+                  <input type="text" [(ngModel)]="cashBox.bankAccountNumber" placeholder="Hesap Numarası" id="bankAccountNumber" name="bankAccountNumber" class="form-control" />
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="button" (click)="add()" class="btn btn-sm btn-primary"><i class="fi fi-rr-check"></i> {{buttonText}}</button>
+          <button type="reset" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Vazgeç</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <h5 class="font-weight-bold">Kasa Listesi Listesi</h5>
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+            <tr>
+              <th>Türü</th>
+              <th>Adı</th>
+              <th>Iban</th>
+              <th>Hesap No</th>
+              <th style="text-align: right;">İşlemler</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of pageOfItems">
+              <td>{{item.cashBoxType == 1 ? 'Nakit Kasa' : 'Banka'}}</td>
+              <td>{{item.cashBoxName}}</td>
+              <td>{{item.iban}}</td>
+              <td>{{item.bankAccountNumber}}</td>
+              <td style="text-align: right;">
+                <button class="btn btn-primary" (click)="getDetailFromTable(item)" value="Detay"><i class="fi fi-rr-eye"></i></button>  
+                <button class="btn btn-red" (click)="remove(item.id)" value="Sil"><i class="fi fi-rr-trash"></i></button>  
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+          <jw-pagination [items]="cashBoxList" (changePage)="onChangePage($event)"></jw-pagination>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+  </div>
+</div>
+

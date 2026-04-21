@@ -1,0 +1,60 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Katılımcı Türü</strong> Kayıt Formu
+        </div>
+        <div class="card-body">
+          <form action="" method="post" class="form-horizontal">
+            <input type="hidden" name="id" id="id" [(ngModel)]="participantType.id">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="participantTypeName">Katılımcı Türü</label>
+              <div class="col-md-9">
+                <input type="text" id="participantTypeName" [(ngModel)]="participantType.participantTypeName" 
+                name="participantTypeName" class="form-control">
+              </div>
+            </div>
+          </form>
+          <div class="card-footer">
+            <button type="submit" (click)="add()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> {{buttonText}}</button>
+            <button type="reset" (click)="reset()" class="btn btn-sm btn-danger"><i class="fa fa-ban"></i> Vazgeç</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+      <div class="col-md-12">
+        <div class="card-header">
+          <strong>Katılımcı Türü Listesi</strong> 
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th>Katılımcı Türü</th>
+                <th>İşlemler</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of pageOfItems">
+                <td>{{item.participantTypeName}}</td>
+                <td>
+                  <a (click)="getDetailFromTable(item)" title="Detay">Detay</a>
+                  <a (click)="remove(item.id)" title="Sil">Sil</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer pb-0 pt-3">
+         <app-generic-paginator #participantTypePaginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+        [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
+      </div>
+      </div><!--/.col-->
+    </div><!--/.row-->
+    </div>
+</div>
