@@ -337,6 +337,10 @@ export const routes: Routes = [
         component: AccountTransactionsByCustomerComponent
       },
       {
+        path: 'kullanicilar',
+        loadChildren: () => import('./views/base/company-users/company-user.module').then(m => m.CompanyUserModule)
+      },
+      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule)
       },

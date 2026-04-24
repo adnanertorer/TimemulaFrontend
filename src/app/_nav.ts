@@ -203,4 +203,16 @@ export const navItems: INavData[] = [
       }
     ],
   },
+  {
+    name: 'Kullanıcı İşlemleri',
+    url: '#',
+    icon: 'icon-briefcase',
+    children: [
+      {
+        name: 'Kullanıcılar',
+        url: '/kullanicilar',
+        icon: 'icon-basket-loaded'
+      },
+    ],
+  },
 ];
