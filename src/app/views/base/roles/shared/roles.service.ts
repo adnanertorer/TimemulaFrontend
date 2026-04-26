@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 
-import { Roles } from './roles.model';
+import { Permission, Roles } from './roles.model';
 import { BaseResponse } from 'src/app/shared/model/BaseResponse';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
@@ -36,6 +36,59 @@ export class RolesService {
   getList() {
     return this.http
       .get<BaseResponse>(`${this.apiUrl}/User/Roles`, { observe: 'body' })
+      .pipe(
+        map((x) => {
+          return x;
+        }),
+      );
+  }
+
+  remove(id: number) {
+    return this.http
+      .delete<BaseResponse>(`${this.apiUrl}/User/Roles?id=${id.toString()}`, { observe: 'body' })
+      .pipe(
+        map((x) => {
+          return x;
+        }),
+      );
+  }
+
+  getPermissions() {
+    return this.http
+      .get<BaseResponse>(`${this.apiUrl}/User/PermissionList`, { observe: 'body' })
+      .pipe(
+        map((x) => {
+          return x;
+        }),
+      );
+  }
+
+  getRolePermissions(roleId: number) {
+    return this.http
+      .get<BaseResponse>(`${this.apiUrl}/User/RolePermissionList?id=${roleId.toString()}`, { observe: 'body' })
+      .pipe(
+        map((x) => {
+          return x;
+        }),
+      );
+  }
+
+  addRolePermission(roleId: number, permission: Permission) {
+    return this.http
+      .post<BaseResponse>(`${this.apiUrl}/User/AddPermissionToRole`, {
+        roleId: roleId,
+        permissionId: permission.id,
+      })
+      .pipe(
+        map((x) => {
+          return x;
+        }),
+      );
+  }
+
+  removeRolePermission(roleId: number, permissionId: number) {
+    return this.http
+      .delete<BaseResponse>(`${this.apiUrl}/User/RolePermission?roleId=${roleId.toString()}&permissionId=${permissionId.toString()}`, { observe: 'body' })
       .pipe(
         map((x) => {
           return x;

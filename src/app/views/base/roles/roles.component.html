@@ -50,6 +50,7 @@
                                 <tr>
                                     <th>Role</th>
                                     <th>Kod</th>
+                                    <th>Yetkiler</th>
                                     <th style="text-align: right;">İşlemler</th>
                                 </tr>
                             </thead>
@@ -57,9 +58,20 @@
                                 <tr *ngFor="let item of roles">
                                     <td>{{item.name}}</td>
                                     <td>{{item.code}}</td>
+                                    <td>
+                                        <span *ngFor="let permission of item.permissions" class="badge badge-info mr-1">
+                                            {{permission.name || permission.code}}
+                                        </span>
+                                        <span *ngIf="!item.permissions || item.permissions.length === 0" class="text-muted">
+                                            -
+                                        </span>
+                                    </td>
                                     <td style="text-align: right;">
-                                        <button class="btn btn-orange btn-info"
-                                            (click)="getDetailFromTable(item, item.id)"><i
+                                        <button class="btn btn-primary btn-info mr-1"
+                                            (click)="openPermissionModal(item)" title="Yetkiler"><i
+                                                class="fi fi-rr-key"></i></button>
+                                        <button class="btn btn-orange btn-info mr-1"
+                                            (click)="getDetailFromTable(item)"><i
                                                 class="fi fi-rr-user-pen"></i></button>
                                         <button class="btn btn-red btn-info" (click)="remove(item.id)"><i
                                                 class="fi fi-rr-trash"></i></button>
@@ -68,6 +80,43 @@
                             </tbody>
                         </table>
                     </div>
-                </div><!--/.col-->
-            </div><!--/.row-->
+                </div>
+            </div>
         </div>
+    </div>
+</div>
+
+<div [ngClass]="{'modal show role-permission-modal': permissionModalOpen, 'modal fade': !permissionModalOpen}"
+    id="permissionModal" tabindex="-1" role="dialog" aria-labelledby="permissionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="permissionModalLabel">
+                    {{selectedRole?.name}} Yetkileri
+                </h6>
+                <button type="button" class="close" (click)="closePermissionModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="permissions.length === 0" class="text-muted">
+                    Listelenecek permission bulunamadı.
+                </div>
+                <div class="permission-list" *ngIf="permissions.length > 0">
+                    <label class="permission-item" *ngFor="let permission of permissions">
+                        <input type="checkbox"
+                            [checked]="isPermissionSelected(permission.id)"
+                            (change)="togglePermission(permission, $event)">
+                        <span>{{permission.name || permission.code}}</span>
+                        <small *ngIf="permission.code" class="text-muted">{{permission.code}}</small>
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button (click)="closePermissionModal()" type="button" class="btn btn-secondary">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-backdrop fade show" *ngIf="permissionModalOpen"></div>
