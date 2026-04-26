@@ -38,6 +38,16 @@
                                 <input type="password" id="password" [(ngModel)]="companyUserModel.password"
                                     name="password" class="form-control" placeholder="Parola">
                             </div>
+                            <div *ngIf="!isDetail" class="col-md-12 col-lg-6">
+                                <label for="passwordAgain">Parola Tekrar</label>
+                                <input type="password" id="passwordAgain" [(ngModel)]="companyUserModel.passwordAgain"
+                                    name="passwordAgain" class="form-control" placeholder="Parola Tekrar">
+                            </div>
+                            <div class="col-md-12 col-lg-6" style="margin-top: 10px;">
+                                <label for="isActive" style="padding-right: 10px;">Aktif/Pasif</label>
+                                <input type="checkbox" name="isActive" id="isActive"
+                                    [(ngModel)]="companyUserModel.isActive"> 
+                            </div>
                         </div>
                     </form>
                     <div class="card-footer">
@@ -67,6 +77,7 @@
                                     <th>Soyadı</th>
                                     <th>E-Posta</th>
                                     <th>Telefon</th>
+                                    <th>Aktif/Pasif</th>
                                     <th>Role</th>
                                     <th style="text-align: right;">İşlemler</th>
                                 </tr>
@@ -78,12 +89,16 @@
                                     <td>{{item.email}}</td>
                                     <td>{{item.phoneNumber}}</td>
                                     <td>
+                                        <span class="badge badge-success" *ngIf="item.isActive">Aktif</span>
+                                        <span class="badge badge-danger" *ngIf="!item.isActive">Pasif</span>
+                                    <td>
                                         <span *ngFor="let role of item.roles" class="badge badge-info mr-1">
                                             {{role.name}}
                                         </span>
                                     </td>
                                     <td style="text-align: right;">
-                                        <button class="btn btn-orange btn-info" (click)="getDetailFromTable(item, item.id)"><i
+                                        <button class="btn btn-orange btn-info"
+                                            (click)="getDetailFromTable(item, item.id)"><i
                                                 class="fi fi-rr-user-pen"></i></button>
                                         <button class="btn btn-red btn-info" (click)="remove(item.id)"><i
                                                 class="fi fi-rr-trash"></i></button>

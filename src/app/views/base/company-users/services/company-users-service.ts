@@ -6,6 +6,7 @@ import { BaseResponse } from 'src/app/shared/model/BaseResponse';
 import { map } from 'rxjs/operators';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { CompanyUsersModel } from '../models/company-users-model';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,7 @@ export class CompanyUsersService {
   
   constructor(private http: HttpClient) {}
 
-  add(resource: CompanyUsersCreateRequest){
+  add(resource: CompanyUsersModel){
       return this.http
           .post<BaseResponse>(`${this.apiUrl}/User/AddCompanyUser`, resource)
           .pipe(
@@ -26,7 +27,7 @@ export class CompanyUsersService {
           );
     }
 
-     update(resource: CompanyUsersCreateRequest){
+     update(resource: CompanyUsersModel){
       return this.http
           .put<BaseResponse>(`${this.apiUrl}/User/UpdateCompanyUser`, resource)
           .pipe(

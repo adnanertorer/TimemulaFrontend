@@ -14,7 +14,6 @@ declare let alertify: any;
   styleUrls: ['./company-users.component.css'],
 })
 export class CompanyUsersComponent implements OnInit {
-  createRequest: CompanyUsersCreateRequest = null as any;
   companyUserModels: CompanyUsersModel[] = [];
   companyUserModel: CompanyUsersModel | undefined;
   buttonText = Constants.Save;
@@ -28,15 +27,6 @@ export class CompanyUsersComponent implements OnInit {
   constructor(private service: CompanyUsersService) {}
 
   ngOnInit(): void {
-    this.createRequest = {
-      email: '',
-      name: '',
-      password: '',
-      surname: '',
-      isActive: true,
-      phoneNumber: '',
-      passwordAgain: '',
-    };
     this.companyUserModel = {
       email: '',
       name: '',
@@ -45,6 +35,7 @@ export class CompanyUsersComponent implements OnInit {
       phoneNumber: '',
       id: 0,
       password: '',
+      passwordAgain: '',
     };
     this.isDetail = false;
     this.getList();
@@ -78,27 +69,14 @@ export class CompanyUsersComponent implements OnInit {
   }
 
   getDetailFromTable(resource: any, id: number): void {
-    console.log(resource);
     this.companyUserModel = resource;
-    if (this.companyUserModel) {
-
-      this.createRequest = {
-        email: resource.email,
-        name: resource.name,
-        surname: resource.surname,
-        isActive: resource.isActive,
-        phoneNumber: resource.phoneNumber,
-        id: id
-      };
-       console.log('request', this.createRequest);
-      this.buttonText = Constants.Update;
-      this.isDetail = true;
-      window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth',
-      });
-    }
+    this.buttonText = Constants.Update;
+    this.isDetail = true;
+    window.scroll({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
   }
 
   reset(): void {
@@ -108,22 +86,32 @@ export class CompanyUsersComponent implements OnInit {
 
   addCompanyUser(): void {
     if (!this.isDetail) {
-      this.service.add(this.createRequest).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
+      if (this.companyUserModel) {
+        if (
+          this.companyUserModel.password !== this.companyUserModel.passwordAgain
+        ) {
           alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
+          alertify.error('Parolalar eşleşmiyor', 2);
+          return;
         }
-      });
+        this.service.add(this.companyUserModel).subscribe((data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        });
+      }
     } else {
-      console.log(this.createRequest);
-      this.service.update(this.createRequest).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      });
+      if (this.companyUserModel) {
+        this.service.update(this.companyUserModel).subscribe((data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        });
+      }
     }
   }
 }

@@ -6,4 +6,5 @@ export type CompanyUsersModel = {
     isActive: boolean;
     phoneNumber: string;
     password: string;
+    passwordAgain?: string;
 }
