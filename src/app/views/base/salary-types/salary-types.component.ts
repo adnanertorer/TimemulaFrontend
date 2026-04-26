@@ -13,12 +13,12 @@ declare let alertify: any;
   styleUrls: ['./salary-types.component.scss'],
 })
 export class SalaryTypesComponent implements OnInit {
-  salaryType: SalaryType;
+  salaryType: SalaryType | undefined;
   salaryTypes: SalaryType[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   buttonText = Constants.Save;
 
-  @ViewChild('salaryTypePagination') paginator: MatPaginator;
+  @ViewChild('salaryTypePagination') paginator: MatPaginator | undefined;
 
   constructor(private service: SalaryTypeService) {}
 
@@ -61,8 +61,8 @@ export class SalaryTypesComponent implements OnInit {
   }
 
   add(): void {
-    if (this.salaryType.id == 0) {
-      this.service.add(this.salaryType).subscribe(
+    if (this.salaryType!.id == 0) {
+      this.service.add(this.salaryType!).subscribe(
         (data) => {
           if (data.success) {
             this.ngOnInit();
@@ -72,7 +72,7 @@ export class SalaryTypesComponent implements OnInit {
         }
       );
     } else {
-      this.service.update(this.salaryType).subscribe(
+      this.service.update(this.salaryType!).subscribe(
         (data) => {
           if (data.success) {
             this.ngOnInit();
@@ -97,8 +97,10 @@ export class SalaryTypesComponent implements OnInit {
       this.total = response.dynamicClass.count;
       this.pageIndex = response.dynamicClass.index;
 
-      this.paginator.pageIndex = this.pageIndex;
-      this.paginator.length = this.total;
+      if (this.paginator) {
+        this.paginator.pageIndex = this.pageIndex;
+        this.paginator.length = this.total;
+      }
     });
   }
 

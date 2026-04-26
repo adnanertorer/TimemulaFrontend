@@ -213,6 +213,11 @@ export const navItems: INavData[] = [
         url: '/kullanicilar',
         icon: 'icon-basket-loaded'
       },
+      {
+        name: 'Roller',
+        url: '/roller',
+        icon: 'icon-basket-loaded'
+      },
     ],
   },
 ];

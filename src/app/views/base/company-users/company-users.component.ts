@@ -68,7 +68,7 @@ export class CompanyUsersComponent implements OnInit {
     });
   }
 
-  getDetailFromTable(resource: any, id: number): void {
+  getDetailFromTable(resource: any): void {
     this.companyUserModel = resource;
     this.buttonText = Constants.Update;
     this.isDetail = true;
