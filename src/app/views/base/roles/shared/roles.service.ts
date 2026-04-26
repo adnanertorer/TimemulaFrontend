@@ -45,7 +45,7 @@ export class RolesService {
 
   remove(id: number) {
     return this.http
-      .delete<BaseResponse>(`${this.apiUrl}/User/Roles?id=${id.toString()}`, { observe: 'body' })
+      .get<BaseResponse>(`${this.apiUrl}/User/RemoveRole?id=${id.toString()}`, { observe: 'body' })
       .pipe(
         map((x) => {
           return x;
@@ -88,7 +88,7 @@ export class RolesService {
 
   removeRolePermission(roleId: number, permissionId: number) {
     return this.http
-      .delete<BaseResponse>(`${this.apiUrl}/User/RolePermission?roleId=${roleId.toString()}&permissionId=${permissionId.toString()}`, { observe: 'body' })
+      .get<BaseResponse>(`${this.apiUrl}/User/RemoveRolePermission?roleId=${roleId.toString()}&permissionId=${permissionId.toString()}`, { observe: 'body' })
       .pipe(
         map((x) => {
           return x;

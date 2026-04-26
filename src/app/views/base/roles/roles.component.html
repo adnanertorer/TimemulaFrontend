@@ -50,7 +50,7 @@
                                 <tr>
                                     <th>Role</th>
                                     <th>Kod</th>
-                                    <th>Yetkiler</th>
+                                    <!--<th>Yetkiler</th>-->
                                     <th style="text-align: right;">İşlemler</th>
                                 </tr>
                             </thead>
@@ -58,14 +58,14 @@
                                 <tr *ngFor="let item of roles">
                                     <td>{{item.name}}</td>
                                     <td>{{item.code}}</td>
-                                    <td>
+                                   <!--<td>
                                         <span *ngFor="let permission of item.permissions" class="badge badge-info mr-1">
                                             {{permission.name || permission.code}}
                                         </span>
                                         <span *ngIf="!item.permissions || item.permissions.length === 0" class="text-muted">
                                             -
                                         </span>
-                                    </td>
+                                    </td>-->
                                     <td style="text-align: right;">
                                         <button class="btn btn-primary btn-info mr-1"
                                             (click)="openPermissionModal(item)" title="Yetkiler"><i
