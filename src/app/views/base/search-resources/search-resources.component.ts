@@ -12,9 +12,9 @@ declare let alertify: any;
 })
 export class SearchResourcesComponent implements OnInit {
 
-  searchResource: SearchResourceModel;
+  searchResource: SearchResourceModel | undefined;
   list: SearchResourceModel[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   buttonText = 'Kaydet';
   constructor(private service: SearchResourceService) { }
 
@@ -47,8 +47,8 @@ export class SearchResourcesComponent implements OnInit {
   }
 
   add(): void {
-    if (this.searchResource.id == 0) {
-      this.service.add(this.searchResource).subscribe((data) => {
+    if (this.searchResource!.id == 0) {
+      this.service.add(this.searchResource!).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
           alertify.set('notifier', 'position', 'top-right');
@@ -58,7 +58,7 @@ export class SearchResourcesComponent implements OnInit {
         alertify.error(err, 2);
       });
     } else {
-      this.service.update(this.searchResource).subscribe((data) => {
+      this.service.update(this.searchResource!).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
           alertify.set('notifier', 'position', 'top-right');

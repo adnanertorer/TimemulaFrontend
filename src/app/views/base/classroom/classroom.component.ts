@@ -14,16 +14,16 @@ declare let alertify: any;
   styleUrls: ['./classroom.component.scss'],
 })
 export class ClassroomComponent implements OnInit {
-  classroom: ClassroomModel;
+  classroom: ClassroomModel | undefined;
   classrooms: ClassroomModel[] = [];
-  subServiceId: number;
+  subServiceId: number | undefined;
   buttonText = Constants.Save;
 
   total: number = 0;
   pageIndex: number = 0;
   pageSize: number = 50;
 
-  @ViewChild('classroomPaginator') paginator: MatPaginator;
+  @ViewChild('classroomPaginator') paginator: MatPaginator | undefined;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -45,7 +45,7 @@ export class ClassroomComponent implements OnInit {
     this.pageSize = e.pageSize;
     this.getList();
   }
-  
+
   getList() {
     const pageRequest: PageRequest = {
       pageIndex: this.pageIndex,
@@ -56,9 +56,10 @@ export class ClassroomComponent implements OnInit {
     this.service.getList(pageRequest).subscribe((data) => {
       const response = data as PaginateResponse<ClassroomModel>;
       this.classrooms = response.dynamicClass.items as ClassroomModel[];
-
-      this.paginator.pageIndex = this.pageIndex;
-      this.paginator.length = this.total;
+      if (this.paginator) {
+        this.paginator.pageIndex = this.pageIndex;
+        this.paginator.length = this.total;
+      }
     });
   }
 
@@ -78,22 +79,24 @@ export class ClassroomComponent implements OnInit {
   }
 
   add(): void {
-    if (this.classroom.id == 0) {
-      this.service.add(this.classroom).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      });
-    } else {
-      this.service.update(this.classroom).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      });
+    if (this.classroom) {
+      if (this.classroom.id == 0) {
+        this.service.add(this.classroom).subscribe((data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        });
+      } else {
+        this.service.update(this.classroom).subscribe((data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        });
+      }
     }
   }
 

@@ -12,10 +12,10 @@ declare let alertify: any;
 })
 export class CreateCashboxComponent implements OnInit {
 
-  cashBox: CashboxModel;
+  cashBox: CashboxModel | undefined;
   cashBoxList: CashboxModel[] = [];
   buttonText = Constants.Save;
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   isBank: boolean = false;
   cashTypes = CashBoxTypeEnum;
 
@@ -34,7 +34,7 @@ export class CreateCashboxComponent implements OnInit {
     this.getList();
   }
 
-  typeOnChange(source) {
+  typeOnChange(source: string) {
     if(this.cashTypes.Bank == parseInt(source)){
       this.isBank = true;
     }else{
@@ -48,7 +48,7 @@ export class CreateCashboxComponent implements OnInit {
 
   getDetailFromTable(resource: any): void {
     this.cashBox = resource;
-    if(this.cashBox.cashBoxType == this.cashTypes.Bank){
+    if(this.cashBox!.cashBoxType == this.cashTypes.Bank){
       this.isBank = true;
     }else{
       this.isBank = false;
@@ -67,8 +67,8 @@ export class CreateCashboxComponent implements OnInit {
   }
 
   add(): void {
-    if (this.cashBox.id == 0) {
-      this.service.add(this.cashBox).subscribe((data) => {
+    if (this.cashBox!.id == 0) {
+      this.service.add(this.cashBox!).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
           alertify.set('notifier', 'position', 'top-right');
@@ -78,7 +78,7 @@ export class CreateCashboxComponent implements OnInit {
         alertify.error(err, 2);
       });
     } else {
-      this.service.update(this.cashBox).subscribe((data) => {
+      this.service.update(this.cashBox!).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
           alertify.set('notifier', 'position', 'top-right');
