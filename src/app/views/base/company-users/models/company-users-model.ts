@@ -1,3 +1,5 @@
+import { Roles } from "../../roles/shared/roles.model";
+
 export type CompanyUsersModel = {
     id: number;
     email: string;
@@ -7,4 +9,6 @@ export type CompanyUsersModel = {
     phoneNumber: string;
     password: string;
     passwordAgain?: string;
+    roleId?: number;
+    role?: any;
 }

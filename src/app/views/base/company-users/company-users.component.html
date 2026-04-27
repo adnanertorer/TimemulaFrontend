@@ -43,6 +43,12 @@
                                 <input type="password" id="passwordAgain" [(ngModel)]="companyUserModel.passwordAgain"
                                     name="passwordAgain" class="form-control" placeholder="Parola Tekrar">
                             </div>
+                            <div class="col-md-12 col-lg-6">
+                                <label for="roleId">Rol</label>
+                                <select id="roleId" [(ngModel)]="companyUserModel.roleId" name="roleId" class="form-control">
+                                    <option *ngFor="let role of roles" [value]="role.id">{{ role.name }}</option>
+                                </select>
+                            </div>
                             <div class="col-md-12 col-lg-6" style="margin-top: 10px;">
                                 <label for="isActive" style="padding-right: 10px;">Aktif/Pasif</label>
                                 <input type="checkbox" name="isActive" id="isActive"
@@ -92,8 +98,8 @@
                                         <span class="badge badge-success" *ngIf="item.isActive">Aktif</span>
                                         <span class="badge badge-danger" *ngIf="!item.isActive">Pasif</span>
                                     <td>
-                                        <span *ngFor="let role of item.roles" class="badge badge-info mr-1">
-                                            {{role.name}}
+                                        <span class="badge badge-info mr-1">
+                                            {{item.role?.name}}
                                         </span>
                                     </td>
                                     <td style="text-align: right;">

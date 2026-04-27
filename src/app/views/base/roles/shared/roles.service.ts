@@ -7,7 +7,9 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RolesService {
   private readonly apiUrl = `${environment.apiUrl}`;
 

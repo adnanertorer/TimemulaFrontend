@@ -6,6 +6,7 @@ import Constants from 'src/app/shared/tools/constants';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { RolesService } from '../roles/shared/roles.service';
 declare let alertify: any;
 
 @Component({
@@ -21,10 +22,11 @@ export class CompanyUsersComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 50;
   isDetail: boolean = false;
+  roles: any[] = [];
 
   @ViewChild('userPaginator') paginator: MatPaginator | undefined;
 
-  constructor(private service: CompanyUsersService) {}
+  constructor(private service: CompanyUsersService, private roleService: RolesService) {}
 
   ngOnInit(): void {
     this.companyUserModel = {
@@ -36,7 +38,10 @@ export class CompanyUsersComponent implements OnInit {
       id: 0,
       password: '',
       passwordAgain: '',
+      roleId: 0,
+      role: undefined,
     };
+    this.getRoleList();
     this.isDetail = false;
     this.getList();
   }
@@ -82,6 +87,14 @@ export class CompanyUsersComponent implements OnInit {
   reset(): void {
     this.buttonText = Constants.Save;
     this.ngOnInit();
+  }
+
+  getRoleList(): void {
+    this.roleService.getList().subscribe((data) => {
+      if (data.success) {
+        this.roles = data.dynamicClass as any[];
+      }
+    });
   }
 
   addCompanyUser(): void {
