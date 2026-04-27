@@ -23,6 +23,14 @@ export class DefaultLayoutComponent {
     this.sidebarMinimized = e;
   }
 
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
+
+  canAccessAny(permissionCodes: string[]): boolean {
+    return this.authService.hasAnyPermission(permissionCodes);
+  }
+
   logout(){
     this.authService
       .logout().subscribe((data)=>{
