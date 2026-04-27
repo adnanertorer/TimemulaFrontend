@@ -8,6 +8,7 @@ export const environment = {
   mainUrl: 'http://localhost:5000/',
   access_token_name: 'access_token',
   refresh_token_name: 'refresh-token',
+  permission_codes_name: 'permission-codes',
   logout_event_name: 'logout-event',
   user_email: '',
   access_time: 'access_time'

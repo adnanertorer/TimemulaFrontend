@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
-import { map, tap, delay, finalize } from 'rxjs/operators';
+import { map, tap, delay, finalize, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ApplicationUser } from '../model/application-user';
 import { BaseResponse } from '../model/BaseResponse';
@@ -39,6 +39,7 @@ export class AuthService implements OnDestroy {
   private readonly apiUrl = `${environment.apiUrl}`;
   private readonly accessTokenName = `${environment.access_token_name}`;
   private readonly refreshTokeName = `${environment.refresh_token_name}`;
+  private readonly permissionCodesName = `${environment.permission_codes_name}`;
   private readonly logoutEvent = `${environment.logout_event_name}`;
   // tslint:disable-next-line: variable-name
   private readonly access_time = `${environment.access_time}`;
@@ -81,10 +82,16 @@ export class AuthService implements OnDestroy {
             refreshToken: tokenModel.refreshToken,
             password: '',
             fullName: tokenModel.fullName,
+            roles: tokenModel.roles || [],
           });
           this.setLocalStorage(tokenModel);
           this.startTokenTimer();
-          return x;
+          return { response: x, tokenModel: tokenModel };
+        }),
+        switchMap((result) => {
+          return this.setPermissionCodes(result.tokenModel).pipe(
+            map(() => result.response)
+          );
         })
       );
   }
@@ -194,9 +201,15 @@ export class AuthService implements OnDestroy {
             refreshToken: tokenModel.refreshToken,
             password: '',
             fullName: tokenModel.fullName,
+            roles: tokenModel.roles || [],
           });
           this.setLocalStorage(tokenModel);
-          return x;
+          return { response: x, tokenModel: tokenModel };
+        }),
+        switchMap((result) => {
+          return this.setPermissionCodes(result.tokenModel, true).pipe(
+            map(() => result.response)
+          );
         })
       );
   }
@@ -213,8 +226,82 @@ export class AuthService implements OnDestroy {
   public clearLocalStorage() {
     localStorage.removeItem(this.accessTokenName);
     localStorage.removeItem(this.refreshTokeName);
+    localStorage.removeItem(this.permissionCodesName);
     localStorage.removeItem(this.access_time);
     localStorage.setItem(this.logoutEvent, 'logout' + Math.random());
+  }
+
+  public getPermissionCodes(): string[] {
+    const permissionCodes = localStorage.getItem(this.permissionCodesName);
+    if (!permissionCodes) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(permissionCodes) as string[];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  public hasPermission(permissionCode: string): boolean {
+    if (!permissionCode) {
+      return true;
+    }
+
+    return this.getPermissionCodes().indexOf(permissionCode) > -1;
+  }
+
+  public hasAnyPermission(permissionCodes: string[]): boolean {
+    if (!permissionCodes || permissionCodes.length === 0) {
+      return true;
+    }
+
+    const userPermissionCodes = this.getPermissionCodes();
+    return permissionCodes.some((permissionCode) => userPermissionCodes.indexOf(permissionCode) > -1);
+  }
+
+  private setPermissionCodes(tokenModel: TokenModel, keepExistingIfEmpty: boolean = false): Observable<void> {
+    const permissions = this.getPermissionCodesFromToken(tokenModel);
+
+    if (permissions.length > 0) {
+      localStorage.setItem(this.permissionCodesName, JSON.stringify(permissions));
+      return of(null);
+    }
+
+    if (tokenModel.userId) {
+      return this.http
+        .get<BaseResponse>(`${this.apiUrl}/User/UserPermissionList?userId=${tokenModel.userId}`)
+        .pipe(
+          map((response) => {
+            if (response.success) {
+              const permissionCodes = ((response.dynamicClass || []) as any[])
+                .map((permission) => permission.code || permission.Code)
+                .filter((permissionCode, index, permissionCodes) => permissionCode && permissionCodes.indexOf(permissionCode) === index);
+
+              if (permissionCodes.length > 0 || !keepExistingIfEmpty) {
+                localStorage.setItem(this.permissionCodesName, JSON.stringify(permissionCodes));
+              }
+            }
+          })
+        );
+    }
+
+    if (keepExistingIfEmpty && this.getPermissionCodes().length > 0) {
+      return of(null);
+    }
+
+    localStorage.setItem(this.permissionCodesName, JSON.stringify([]));
+    return of(null);
+  }
+
+  private getPermissionCodesFromToken(tokenModel: TokenModel): string[] {
+    const roles = tokenModel.roles || (tokenModel as any).Roles || [];
+    return roles
+      .reduce((items, role) => items.concat(role.permissions || role.Permissions || []), [])
+      .map((permission) => permission.code || permission.Code)
+      .filter((permissionCode, index, permissionCodes) => permissionCode && permissionCodes.indexOf(permissionCode) === index);
   }
 
   private getTokenRemainTime() {

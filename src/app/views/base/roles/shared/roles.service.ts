@@ -65,32 +65,12 @@ export class RolesService {
       );
   }
 
-  getRolePermissions(roleId: number) {
-    return this.http
-      .get<BaseResponse>(`${this.apiUrl}/User/RolePermissionList?id=${roleId.toString()}`, { observe: 'body' })
-      .pipe(
-        map((x) => {
-          return x;
-        }),
-      );
-  }
-
   addRolePermission(roleId: number, permission: Permission) {
     return this.http
       .post<BaseResponse>(`${this.apiUrl}/User/AddPermissionToRole`, {
         roleId: roleId,
         permissionId: permission.id,
       })
-      .pipe(
-        map((x) => {
-          return x;
-        }),
-      );
-  }
-
-  removeRolePermission(roleId: number, permissionId: number) {
-    return this.http
-      .get<BaseResponse>(`${this.apiUrl}/User/RemoveRolePermission?roleId=${roleId.toString()}&permissionId=${permissionId.toString()}`, { observe: 'body' })
       .pipe(
         map((x) => {
           return x;

@@ -57,17 +57,17 @@ export class RolesComponent implements OnInit {
     this.rolesService.getList().subscribe((data) => {
       if (data.success) {
         const response = data.dynamicClass as Roles[];
-        this.roles = response;
+        this.roles = response.map((role) => this.normalizeRolePermissions(role));
       }
     });
   }
 
   openPermissionModal(role: Roles): void {
+    role = this.normalizeRolePermissions(role);
     this.selectedRole = role;
     this.permissionModalOpen = true;
     this.selectedRolePermissionIds = (role.permissions || []).map((permission) => permission.id);
     this.getPermissions();
-    this.getRolePermissions(role.id);
   }
 
   closePermissionModal(): void {
@@ -80,18 +80,6 @@ export class RolesComponent implements OnInit {
     this.rolesService.getPermissions().subscribe((data) => {
       if (data.success) {
         this.permissions = data.dynamicClass as Permission[];
-      }
-    });
-  }
-
-  getRolePermissions(roleId: number): void {
-    this.rolesService.getRolePermissions(roleId).subscribe((data) => {
-      if (data.success) {
-        const rolePermissions = data.dynamicClass as Permission[];
-        this.selectedRolePermissionIds = rolePermissions.map((permission) => permission.id);
-        if (this.selectedRole) {
-          this.selectedRole.permissions = rolePermissions;
-        }
       }
     });
   }
@@ -109,7 +97,9 @@ export class RolesComponent implements OnInit {
     if (checked) {
       this.addPermissionToRole(this.selectedRole, permission);
     } else {
-      this.removePermissionFromRole(this.selectedRole, permission.id);
+      (event.target as HTMLInputElement).checked = true;
+      alertify.set('notifier', 'position', 'top-right');
+      alertify.error('Permission kaldırma endpointi backend tarafında bulunmuyor.', 2);
     }
   }
 
@@ -118,8 +108,16 @@ export class RolesComponent implements OnInit {
       if (data.success) {
         this.selectedRolePermissionIds.push(permission.id);
         role.permissions = role.permissions || [];
+        role.rolePermissions = role.rolePermissions || [];
         if (!role.permissions.some((item) => item.id === permission.id)) {
           role.permissions.push(permission);
+        }
+        if (!role.rolePermissions.some((item) => item.permissionId === permission.id)) {
+          role.rolePermissions.push({
+            roleId: role.id,
+            permissionId: permission.id,
+            permission: permission,
+          });
         }
         alertify.set('notifier', 'position', 'top-right');
         alertify.success(data.clientMessage, 2);
@@ -127,15 +125,12 @@ export class RolesComponent implements OnInit {
     });
   }
 
-  removePermissionFromRole(role: Roles, permissionId: number): void {
-    this.rolesService.removeRolePermission(role.id, permissionId).subscribe((data) => {
-      if (data.success) {
-        this.selectedRolePermissionIds = this.selectedRolePermissionIds.filter((id) => id !== permissionId);
-        role.permissions = (role.permissions || []).filter((permission) => permission.id !== permissionId);
-        alertify.set('notifier', 'position', 'top-right');
-        alertify.success(data.clientMessage, 2);
-      }
-    });
+  normalizeRolePermissions(role: Roles): Roles {
+    role.permissions = role.permissions || (role.rolePermissions || [])
+      .filter((rolePermission) => !!rolePermission.permission)
+      .map((rolePermission) => rolePermission.permission);
+
+    return role;
   }
 
   add(): void {
