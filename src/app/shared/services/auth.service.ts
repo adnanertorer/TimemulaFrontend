@@ -39,6 +39,7 @@ export class AuthService implements OnDestroy {
   private readonly apiUrl = `${environment.apiUrl}`;
   private readonly accessTokenName = `${environment.access_token_name}`;
   private readonly refreshTokeName = `${environment.refresh_token_name}`;
+  private readonly permissionCodesName = `${environment.permission_codes_name}`;
   private readonly logoutEvent = `${environment.logout_event_name}`;
   // tslint:disable-next-line: variable-name
   private readonly access_time = `${environment.access_time}`;
@@ -81,8 +82,10 @@ export class AuthService implements OnDestroy {
             refreshToken: tokenModel.refreshToken,
             password: '',
             fullName: tokenModel.fullName,
+            roles: tokenModel.roles || [],
           });
           this.setLocalStorage(tokenModel);
+          this.setPermissionCodes(tokenModel);
           this.startTokenTimer();
           return x;
         })
@@ -194,8 +197,10 @@ export class AuthService implements OnDestroy {
             refreshToken: tokenModel.refreshToken,
             password: '',
             fullName: tokenModel.fullName,
+            roles: tokenModel.roles || [],
           });
           this.setLocalStorage(tokenModel);
+          this.setPermissionCodes(tokenModel, true);
           return x;
         })
       );
@@ -205,6 +210,7 @@ export class AuthService implements OnDestroy {
     try {
       localStorage.setItem(this.accessTokenName, x.token);
       localStorage.setItem(this.refreshTokeName, x.refreshToken);
+      this.setPermissionCodes(x, true);
     } catch (error) {
       console.error(error);
     }
@@ -213,8 +219,53 @@ export class AuthService implements OnDestroy {
   public clearLocalStorage() {
     localStorage.removeItem(this.accessTokenName);
     localStorage.removeItem(this.refreshTokeName);
+    localStorage.removeItem(this.permissionCodesName);
     localStorage.removeItem(this.access_time);
     localStorage.setItem(this.logoutEvent, 'logout' + Math.random());
+  }
+
+  public getPermissionCodes(): string[] {
+    const permissionCodes = localStorage.getItem(this.permissionCodesName);
+    if (!permissionCodes) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(permissionCodes) as string[];
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  public hasPermission(permissionCode: string): boolean {
+    if (!permissionCode) {
+      return true;
+    }
+
+    return this.getPermissionCodes().indexOf(permissionCode) > -1;
+  }
+
+  public hasAnyPermission(permissionCodes: string[]): boolean {
+    if (!permissionCodes || permissionCodes.length === 0) {
+      return true;
+    }
+
+    const userPermissionCodes = this.getPermissionCodes();
+    return permissionCodes.some((permissionCode) => userPermissionCodes.indexOf(permissionCode) > -1);
+  }
+
+  private setPermissionCodes(tokenModel: TokenModel, keepExistingIfEmpty: boolean = false): void {
+    const permissions = (tokenModel.roles || [])
+      .reduce((items, role) => items.concat(role.permissions || []), [])
+      .map((permission) => permission.code)
+      .filter((permissionCode, index, permissionCodes) => permissionCode && permissionCodes.indexOf(permissionCode) === index);
+
+    if (permissions.length === 0 && keepExistingIfEmpty && this.getPermissionCodes().length > 0) {
+      return;
+    }
+
+    localStorage.setItem(this.permissionCodesName, JSON.stringify(permissions));
   }
 
   private getTokenRemainTime() {

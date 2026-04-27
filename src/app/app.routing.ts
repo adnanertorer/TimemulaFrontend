@@ -79,6 +79,7 @@ export const routes: Routes = [
       title: 'Panel'
     },
     canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
     children: [
       {
         path: 'update-password',
