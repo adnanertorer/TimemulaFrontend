@@ -1,234 +1,241 @@
 <main class="main card">
-	<div class="responsive-wrapper">
+  <div class="responsive-wrapper">
     <div class="content-header">
-			<div class="content-header-intro">
+      <div class="content-header-intro">
         <div class="main-header">
           <h1>Raporlar</h1>
         </div>
-			</div>
-		</div>
-		<div class="content">
-			<div class="content-main">
+      </div>
+    </div>
+    <div class="content">
+      <div class="content-main">
         <h2>Özet Raporlar</h2>
-				<p>Müşteri sayısı, toplam tahsilat bilgileri gibi özet bilgiler sunulur.</p>
-				<div class="card-grid mb-5">
-					<article class="card">
-						<div class="card-header">
-							<div>
-								<span><i class="fi fi-rr-user"></i></span>
-								<h3>{{totalCustomer}}</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Toplam Müşteri</p>
-						</div>
-						<div class="card-footer">
-							<a href="/musteriler">Görüntüle</a>
-						</div>
-					</article>
-					<article class="card">
-						<div class="card-header">
-							<div>
-								<span><i
-                  class=
-                  "fi fi-rr-package"
-                  ></i></span>
-								<h3>{{totalDeptCollect}} TL</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Toplam Tahsilat</p>
-						</div>
-						<div class="card-footer">
-							<a href="/cari-hesaplar/tahsilat-formu.html">Görüntüle</a>
-						</div>
-					</article>
-          <article class="card">
-						<div class="card-header">
-							<div>
-								<span><i class="fi fi-rr-wallet"></i></span>
-								<h3>{{totalPayments}} TL</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Toplam Tedarikçi Ödemesi</p>
-						</div>
-						<div class="card-footer">
-							<a href="/cari-hesaplar/odeme-formu.html">Görüntüle</a>
-						</div>
-					</article>
-          <article class="card">
-						<div class="card-header">
-							<div>
-								<span><i class="fi fi-rr-credit-card-buyer"></i></span>
-								<h3>{{totalSaledPackage}}</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Toplam Satılan Seans</p>
-						</div>
-						<div class="card-footer">
-							<a href="/actual-hareketler/ogrenci-listesi.html">Görüntüle</a>
-						</div>
-					</article>
-          <article class="card">
-						<div class="card-header">
-							<div>
-								<span><i class="fi fi-rr-guide"></i></span>
-								<h3>{{myInteger.result}}</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Bugünkü Müşteri Sayısı</p>
-						</div>
-						<div class="card-footer">
-							<a href="/actual-hareketler/egitmen-listesi.html">Görüntüle</a>
-						</div>
-					</article>
-          <article class="card">
-						<div class="card-header">
-							<div>
-								<span><i class="fi fi-rr-refer-arrow"></i></span>
-								<h3>{{last3Days.result}}</h3>
-							</div>
-						</div>
-						<div class="card-body">
-							<p>Paket Bitmeye Yakın Müşteriler</p>
-						</div>
-						<div class="card-footer">
-							<a href="/genel-rapor.html">Görüntüle</a>
-						</div>
-					</article>
-				</div>
-        <h2>Bugün ve Bu Hafta Raporları</h2>
-				<p>Bugünkü işler/hizmetler ve katılımcı müşterilerin bilgilerini, hafta boyunca planlanan randevuların özetini ve doğum günü olan kişilerin listesini içermektedir.</p>
-        <div class="row mb-5">
-          <div class="col-4">
-            <h4>Bugünkü İşler/Hizmetler ve Müşteriler</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Ortam</th>
-                  <th>Paket</th>
-                  <th>Personel</th>
-                  <th>Müşteri</th>
-                  <th>Tarih ve Saat</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of currentLessonSummaries">
-                  <td>{{item.classromName}}</td>
-                  <td>{{item.subCategoryName}} - {{item.artPackageName}}</td>
-                  <td>{{item.educatorName}}</td>
-                  <td>{{item.name}} {{item.surname}}</td>
-                  <td>{{item.startDate | date: 'dd.MM.yyyy hh:mm'}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-4">
-            <h4>Bu hafta içindeki randevular</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Müşteri</th>
-                  <th>Personel</th>
-                  <th>Randevu Zamanı</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of meetingInWeekList">
-                  <td>{{item.requestByName}}</td>
-                  <td>{{item.staff.name}} {{item.staff.surname}}</td>
-                  <td>{{item.meetingDate | date: 'dd.MM.yyyy hh:mm'}}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-4">
-            <h4>Bu hafta doğum günü olanlar</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Müşteri</th>
-                  <th>Doğum Tarihi</th>
-                  <th>Sms Gönder</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of birthdateInWeekCustomers">
-                  <td>{{item.name}} {{item.surname}}</td>
-                  <td>{{item.birthday | date: 'dd.MM.yyyy'}}</td>
-                  <td><button class="btn btn-success">Sms Gönder</button></td>
-                </tr>
-              </tbody>
-            </table>
+        <p>Müşteri sayısı, toplam tahsilat bilgileri gibi özet bilgiler sunulur.</p>
+        <div class="card-grid mb-5">
+          <article class="card" *ngIf="canAccess('Customer.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-user"></i></span>
+                <h3>{{totalCustomer}}</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Toplam Müşteri</p>
+            </div>
+            <div class="card-footer">
+              <a href="/musteriler">Görüntüle</a>
+            </div>
+          </article>
+          <article class="card" *ngIf="canAccess('CollectionTransaction.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-package"></i></span>
+                <h3>{{totalDeptCollect}} TL</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Toplam Tahsilat</p>
+            </div>
+            <div class="card-footer">
+              <a href="/cari-hesaplar/tahsilat-formu.html">Görüntüle</a>
+            </div>
+          </article>
+          <article class="card" *ngIf="canAccess('AccountTransaction.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-wallet"></i></span>
+                <h3>{{totalPayments}} TL</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Toplam Tedarikçi Ödemesi</p>
+            </div>
+            <div class="card-footer">
+              <a href="/cari-hesaplar/odeme-formu.html">Görüntüle</a>
+            </div>
+          </article>
+          <article class="card" *ngIf="canAccess('AccountTransaction.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-credit-card-buyer"></i></span>
+                <h3>{{totalSaledPackage}}</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Toplam Satılan Seans</p>
+            </div>
+            <div class="card-footer">
+              <a href="/actual-hareketler/ogrenci-listesi.html">Görüntüle</a>
+            </div>
+          </article>
+          <article class="card" *ngIf="canAccess('Customer.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-guide"></i></span>
+                <h3>{{myInteger.result}}</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Bugünkü Müşteri Sayısı</p>
+            </div>
+            <div class="card-footer">
+              <a href="/actual-hareketler/egitmen-listesi.html">Görüntüle</a>
+            </div>
+          </article>
+          <article class="card" *ngIf="canAccess('Customer.List')">
+            <div class="card-header">
+              <div>
+                <span><i class="fi fi-rr-refer-arrow"></i></span>
+                <h3>{{last3Days.result}}</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <p>Paket Bitmeye Yakın Müşteriler</p>
+            </div>
+            <div class="card-footer">
+              <a href="/genel-rapor.html">Görüntüle</a>
+            </div>
+          </article>
+        </div>
+        <div *ngIf="canAccess('Customer.List')">
+          <h2>Bugün ve Bu Hafta Raporları</h2>
+          <p>Bugünkü işler/hizmetler ve katılımcı müşterilerin bilgilerini, hafta boyunca planlanan randevuların özetini
+            ve doğum günü olan kişilerin listesini içermektedir.</p>
+          <div class="row mb-5">
+            <div class="col-4">
+              <h4>Bugünkü İşler/Hizmetler ve Müşteriler</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Ortam</th>
+                    <th>Paket</th>
+                    <th>Personel</th>
+                    <th>Müşteri</th>
+                    <th>Tarih ve Saat</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of currentLessonSummaries">
+                    <td>{{item.classromName}}</td>
+                    <td>{{item.subCategoryName}} - {{item.artPackageName}}</td>
+                    <td>{{item.educatorName}}</td>
+                    <td>{{item.name}} {{item.surname}}</td>
+                    <td>{{item.startDate | date: 'dd.MM.yyyy hh:mm'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-4">
+              <h4>Bu hafta içindeki randevular</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Müşteri</th>
+                    <th>Personel</th>
+                    <th>Randevu Zamanı</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of meetingInWeekList">
+                    <td>{{item.requestByName}}</td>
+                    <td>{{item.staff.name}} {{item.staff.surname}}</td>
+                    <td>{{item.meetingDate | date: 'dd.MM.yyyy hh:mm'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-4">
+              <h4>Bu hafta doğum günü olanlar</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Müşteri</th>
+                    <th>Doğum Tarihi</th>
+                    <th>Sms Gönder</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of birthdateInWeekCustomers">
+                    <td>{{item.name}} {{item.surname}}</td>
+                    <td>{{item.birthday | date: 'dd.MM.yyyy'}}</td>
+                    <td><button class="btn btn-success">Sms Gönder</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+
         <h2>Grafiksel Raporlar</h2>
-				<p>Bu grafiksel rapor, paket satış oranları, müşterilere kazandırılan paket oranları ve en çok paket alan müşterilerin listesi ile ilgili detayları sunmaktadır.</p>
+        <p>Bu grafiksel rapor, paket satış oranları, müşterilere kazandırılan paket oranları ve en çok paket alan
+          müşterilerin listesi ile ilgili detayları sunmaktadır.</p>
         <div class="row justify-content-center mb-5">
-          <div class="col-5">
+          <div class="col-5" *ngIf="canAccess('PackageModule.List')">
             <div id="packages"></div>
           </div>
-          <div class="col-5">
+          <div class="col-5" *ngIf="canAccess('AccountTransaction.List')">
             <div id="earningPackages"></div>
           </div>
-          <div class="col-5 mt-5">
+          <div class="col-5 mt-5" *ngIf="canAccess('PackageModule.List')">
             <div id="totalCustomerPackages"></div>
           </div>
-          <div class="col-5 mt-5">
+          <div class="col-5 mt-5" *ngIf="canAccess('PackageModule.List')">
             <div id="totalCustomerPackages"></div>
           </div>
         </div>
-        <h2>Muhasebesel Raporlar</h2>
-				<p>Bu rapor, toplam cari borç ve alacak bakiyelerinin yanı sıra kasa genel durumuna ilişkin finansal bilgileri içermektedir.</p>
-        <div class="row mb-5">
-          <div class="col-6">
-            <h4>Toplam Cari Borç/Alacak</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Toplam Alacak</th>
-                  <th>Toplam Tahsilat</th>
-                  <th>Kalan Alacak</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{accountsStatus.totalCustomerDept}} TL</td>
-                  <td>{{accountsStatus.totalCompanyDept}} TL</td>
-                  <td>{{accountsStatus.totalCustomerDept-accountsStatus.totalCompanyDept}} TL</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="col-6">
-            <h4>Kasa Genel Durum</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Kasa</th>
-                  <th>Gelir</th>
-                  <th>Gider</th>
-                  <th>Net</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of cashBoxReportModel">
+        <div *ngIf="canAccess('AccountTransaction.List')">
+          <h2>Muhasebesel Raporlar</h2>
+          <p>Bu rapor, toplam cari borç ve alacak bakiyelerinin yanı sıra kasa genel durumuna ilişkin finansal bilgileri
+            içermektedir.</p>
+          <div class="row mb-5">
+            <div class="col-6">
+              <h4>Toplam Cari Borç/Alacak</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Toplam Alacak</th>
+                    <th>Toplam Tahsilat</th>
+                    <th>Kalan Alacak</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{accountsStatus.totalCustomerDept}} TL</td>
+                    <td>{{accountsStatus.totalCompanyDept}} TL</td>
+                    <td>{{accountsStatus.totalCustomerDept-accountsStatus.totalCompanyDept}} TL</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-6">
+              <h4>Kasa Genel Durum</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Kasa</th>
+                    <th>Gelir</th>
+                    <th>Gider</th>
+                    <th>Net</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of cashBoxReportModel">
                     <td>{{item.cashBoxName}} TL</td>
                     <td>{{item.totalIncome}} TL</td>
                     <td>{{item.totalExpence}} TL</td>
                     <td>{{item.totalIncome - item.totalExpence}} TL</td>
-                </tr>
-              </tbody>
-            </table>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
+
         <h2>Müşteri ve Personel Performans Raporları</h2>
-				<p>Bu rapor, aktif paketlere sahip müşterilerin listesi, tek paket alımı yapan müşteriler ve en çok kazanç sağlayan personellerin performans bilgilerini içermektedir.</p>
+        <p>Bu rapor, aktif paketlere sahip müşterilerin listesi, tek paket alımı yapan müşteriler ve en çok kazanç
+          sağlayan personellerin performans bilgilerini içermektedir.</p>
         <div class="row mb-5">
-          <div class="col-6">
+          <div class="col-6" *ngIf="canAccess('Customer.List')">
             <h4>Müşteri Aktif Paket Listesi</h4>
             <table class="table">
               <thead>
@@ -242,16 +249,16 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of actualCustomerLessons">
-                    <td>{{item.customerName}}</td>
-                    <td>{{item.lessonName}}</td>
-                    <td>{{item.packageName}}</td>
-                    <td>{{item.classroom}}</td>
-                    <td>{{item.finishAt}}</td>
+                  <td>{{item.customerName}}</td>
+                  <td>{{item.lessonName}}</td>
+                  <td>{{item.packageName}}</td>
+                  <td>{{item.classroom}}</td>
+                  <td>{{item.finishAt}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="col-3">
+          <div class="col-3" *ngIf="canAccess('AccountTransaction.List')">
             <h4>Tek Paket Alan Müşteriler</h4>
             <table class="table">
               <thead>
@@ -266,7 +273,7 @@
               </tbody>
             </table>
           </div>
-          <div class="col-3">
+          <div class="col-3" *ngIf="canAccess('AccountTransaction.List')">
             <h4>En Çok Kazandıran Personeller</h4>
             <table class="table">
               <thead>
@@ -282,15 +289,17 @@
             </table>
           </div>
         </div>
-        <h2>Takvim</h2>
-				<p>Bu rapor, günlük, haftalık ve aylık olarak düzenlenmiş takvim formatında, ilgili faaliyet ve planların özetini sunmaktadır.</p>
-        <div class="col-lg-12 col-12">
-          <ejs-schedule #scheduleObj width='100%' style="overflow: visible" 
-          height='550px' [selectedDate]='selectedDate'
-[eventSettings]='eventSettings' (eventRendered)="oneventRendered($event)"></ejs-schedule>
+        <div *ngIf="canAccess('Customer.List')">
+          <h2>Takvim</h2>
+          <p>Bu rapor, günlük, haftalık ve aylık olarak düzenlenmiş takvim formatında, ilgili faaliyet ve planların
+            özetini sunmaktadır.</p>
+          <div class="col-lg-12 col-12">
+            <ejs-schedule #scheduleObj width='100%' style="overflow: visible" height='550px'
+              [selectedDate]='selectedDate' [eventSettings]='eventSettings'
+              (eventRendered)="oneventRendered($event)"></ejs-schedule>
+          </div>
         </div>
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </div>
 </main>
-

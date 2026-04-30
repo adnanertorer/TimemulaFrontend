@@ -46,22 +46,22 @@
                 Genel Tanımlar
               </a>
               <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDefinationsLink">
-            <li class="nav-item" *ngIf="canAccess('Customers')">
+            <li class="nav-item" *ngIf="canAccess('Customer')">
               <a class="dropdown-item" routerLink="musteriler">
                 Müşteriler
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccess('Staffs')">
+            <li class="nav-item" *ngIf="canAccess('Staff')">
               <a class="dropdown-item" routerLink="personeller">
                 Personeller
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccess('Categories')">
+            <li class="nav-item" *ngIf="canAccess('Category')">
               <a class="dropdown-item" routerLink="/genel-tanimlar/kategoriler.html">
                 Kategoriler
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccess('SubCategories')">
+            <li class="nav-item" *ngIf="canAccess('SubCategory')">
               <a class="dropdown-item" routerLink="/genel-tanimlar/alt-kategoriler.html">
                 Alt Kategoriler
               </a>
@@ -71,12 +71,12 @@
                 Paketler
               </a>
             </li>
-            <li class="nav-item" *ngIf="canAccess('SearchEngines')">
+            <li class="nav-item" *ngIf="canAccess('SearchEngine')">
               <a class="dropdown-item" routerLink="/genel-tanimlar/arama-motorlari.html">
                 Pazarlama Kanalları
               </a>
             </li>
-            <li class="nav-item active-pro" *ngIf="canAccess('FamilyMembers')">
+            <li class="nav-item active-pro" *ngIf="canAccess('FamilyMember')">
               <a class="dropdown-item" routerLink="/genel-tanimlar/ebeveynler.html">
                 Yakınlık Türleri
               </a>
@@ -89,81 +89,81 @@
         </div>
         </li>
         <li class="nav-item dropdown" routerLinkActive="active"
-          *ngIf="canAccessAny(['Lessons', 'Classrooms', 'LessonClassrooms', 'LessonStaffs'])">
+          *ngIf="canAccessAny(['Lesson', 'Classroom', 'LessonClassroom', 'LessonStaff'])">
           <a class="nav-link" href="#" id="navbarDropdownDefinationsLink" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false">
             Hizmet Tanımları
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownDefinationsLink">
-        <li class="nav-item active-pro" *ngIf="canAccess('Lessons')">
+        <li class="nav-item active-pro" *ngIf="canAccess('Lesson')">
           <a class="dropdown-item" routerLink="/genel-tanimlar/dersler.html">
             Hizmetler
           </a>
         </li>
-        <li class="nav-item active-pro" *ngIf="canAccess('Classrooms')">
+        <li class="nav-item active-pro" *ngIf="canAccess('Classroom')">
           <a class="dropdown-item" routerLink="/genel-tanimlar/derslikler.html">
            Hizmet Ortamı
           </a>
         </li>
-        <li class="nav-item active-pro" *ngIf="canAccess('LessonClassrooms')">
+        <li class="nav-item active-pro" *ngIf="canAccess('LessonClassroom')">
           <a class="dropdown-item" routerLink="/genel-tanimlar/ders-sinif-iliskisi.html">
             Hizmet/Ortam İlişkisi
           </a>
         </li>
-        <li class="nav-item active-pro" *ngIf="canAccess('LessonStaffs')">
+        <li class="nav-item active-pro" *ngIf="canAccess('LessonStaff')">
           <a class="dropdown-item" routerLink="/genel-tanimlar/hizmet-calisan-iliskisi.html">
             Hizmet/Personel İlişkisi
           </a>
         </li>
       </div>
       </li>
-      <li class="nav-item dropdown" *ngIf="canAccessAny(['PackageModule', 'Booking', 'Customers'])">
+      <li class="nav-item dropdown" *ngIf="canAccessAny(['PackageModule', 'Customer'])">
         <a class="nav-link" href="#" id="navbarDropdownCustomerLink" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           Müşteri İşlemleri
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownCustomerLink">
           <a class="dropdown-item" routerLink="/musteri-islemleri/paket-ekle.html" *ngIf="canAccess('PackageModule')">Paket Kaydı</a>
-          <a class="dropdown-item" routerLink="/musteri-islemleri/randevu-girisi.html" *ngIf="canAccess('Booking')">Randevu Kaydı</a>
-          <a class="dropdown-item" routerLink="/actual-hareketler/ogrenci-listesi.html" *ngIf="canAccess('Customers')">Müşteri Listesi</a>
+          <a class="dropdown-item" routerLink="/musteri-islemleri/randevu-girisi.html" *ngIf="canAccess('Customer')">Randevu Kaydı</a>
+          <a class="dropdown-item" routerLink="/actual-hareketler/ogrenci-listesi.html" *ngIf="canAccess('Customer')">Müşteri Listesi</a>
         </div>
       </li>
-      <li class="nav-item dropdown" *ngIf="canAccessAny(['StaffPayments', 'StaffWorkDays', 'StaffLessonList'])">
+      <li class="nav-item dropdown" *ngIf="canAccessAny(['StaffPayment', 'StaffWorkDay', 'StaffLessonList'])">
         <a class="nav-link" href="#" id="navbarDropdownEducatorLink" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           Personel İşlemleri
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownEducatorLink">
-          <a class="dropdown-item" routerLink="/actual-hareketler/egitmen-listesi.html" *ngIf="canAccess('StaffPayments')">Personel Listesi ve
+          <a class="dropdown-item" routerLink="/actual-hareketler/egitmen-listesi.html" *ngIf="canAccess('StaffPayment')">Personel Listesi ve
             Hakedişler</a>
-          <a class="dropdown-item" routerLink="/genel-tanimlar/egitmen-mesaileri.html" *ngIf="canAccess('StaffWorkDays')">Personel Mesaileri</a>
+          <a class="dropdown-item" routerLink="/genel-tanimlar/egitmen-mesaileri.html" *ngIf="canAccess('StaffWorkDay')">Personel Mesaileri</a>
           <a class="dropdown-item" routerLink="/egitmen-islemleri/dersler.html" *ngIf="canAccess('StaffLessonList')">Personel Hizmetleri</a>
         </div>
       </li>
       <li class="nav-item dropdown"
-        *ngIf="canAccessAny(['CashBox', 'CashBoxTransactions', 'AccountTransactions', 'StaffPaymentTransactions', 'CollectionTransactions', 'PaymentForm', 'Suppliers'])">
+        *ngIf="canAccessAny(['CashBox', 'CashBoxTransaction', 'AccountTransaction', 'StaffPaymentTransaction', 'CollectionTransaction', 'PaymentForm', 'Supplier'])">
         <a class="nav-link" href="#" id="navbarDropdownFinancialLink" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           Finansal İşlemler
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownFinancialLink">
           <a class="dropdown-item" routerLink="/finansal-tanimlar/kasa-tanimlari.html" *ngIf="canAccess('CashBox')">Kasa Tanımları</a>
-          <a class="dropdown-item" routerLink="/finansal-tanimlar/kasa-hareketleri.html" *ngIf="canAccess('CashBoxTransactions')">Kasa Hareketleri</a>
-          <a class="dropdown-item" routerLink="/cari-hesaplar/hesap-hareketleri.html" *ngIf="canAccess('AccountTransactions')">Cari Hesap Hareketleri</a>
-          <a class="dropdown-item" routerLink="/finansal-tanimlar/hakedis-hareketleri.html" *ngIf="canAccess('StaffPaymentTransactions')">Hakediş Hareketleri</a>
-          <a class="dropdown-item" routerLink="/cari-hesaplar/tahsilat-formu.html" *ngIf="canAccess('CollectionTransactions')">Tahsilat Formu</a>
+          <a class="dropdown-item" routerLink="/finansal-tanimlar/kasa-hareketleri.html" *ngIf="canAccess('CashBoxTransaction')">Kasa Hareketleri</a>
+          <a class="dropdown-item" routerLink="/cari-hesaplar/hesap-hareketleri.html" *ngIf="canAccess('AccountTransaction')">Cari Hesap Hareketleri</a>
+          <a class="dropdown-item" routerLink="/finansal-tanimlar/hakedis-hareketleri.html" *ngIf="canAccess('StaffPaymentTransaction')">Hakediş Hareketleri</a>
+          <a class="dropdown-item" routerLink="/cari-hesaplar/tahsilat-formu.html" *ngIf="canAccess('CollectionTransaction')">Tahsilat Formu</a>
           <a class="dropdown-item" routerLink="/cari-hesaplar/odeme-formu.html" *ngIf="canAccess('PaymentForm')">Ödeme Formu</a>
-          <a class="dropdown-item" routerLink="/cari-hesaplar/tedarikciler.html" *ngIf="canAccess('Suppliers')">Tedarikçiler</a>
+          <a class="dropdown-item" routerLink="/cari-hesaplar/tedarikciler.html" *ngIf="canAccess('Supplier')">Tedarikçiler</a>
         </div>
       </li>
-      <li class="nav-item dropdown" *ngIf="canAccessAny(['Products', 'ProductTransactions'])">
+      <li class="nav-item dropdown" *ngIf="canAccessAny(['Product', 'ProductTransaction'])">
         <a class="nav-link" href="#" id="navbarDropdownProductLink" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           Ürün Tanım ve Satış İşlemleri
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownProductLink">
-          <a class="dropdown-item" routerLink="/urunler" *ngIf="canAccess('Products')">Ürün Ekle</a>
-          <a class="dropdown-item" routerLink="/urunler-islemleri" *ngIf="canAccess('ProductTransactions')">Ürün İşlemleri</a>
+          <a class="dropdown-item" routerLink="/urunler" *ngIf="canAccess('Product')">Ürün Ekle</a>
+          <a class="dropdown-item" routerLink="/urunler-islemleri" *ngIf="canAccess('ProductTransaction')">Ürün İşlemleri</a>
         </div>
       </li>
       <li class="nav-item dropdown">

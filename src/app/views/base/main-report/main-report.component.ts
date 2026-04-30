@@ -33,6 +33,7 @@ import { LessonAndDatesModel } from 'src/app/shared/model/lesson-and-dates-model
 import { MeetingRequestModel } from 'src/app/shared/model/meeting-request-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { AuthService } from 'src/app/shared';
 declare var ApexCharts: any;
 
 export interface GroupedLessonGraphModel {
@@ -97,6 +98,7 @@ export class MainReportComponent implements OnInit {
     private educatorCostService: EducatorCostService,
     private artPackageService: ArtPackageService,
     private meetingService: MeetingRequestService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -131,6 +133,10 @@ export class MainReportComponent implements OnInit {
     this.getTotalCustomerPackages();
     this.getMeetingInWeek();
     this.getLessonsInWeek();
+  }
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
   }
 
   oneventRendered(args: EventRenderedArgs): void {
