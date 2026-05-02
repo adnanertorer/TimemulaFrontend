@@ -10,7 +10,7 @@ import { ModalService } from '../../shared/services/modal.service';
     encapsulation: ViewEncapsulation.None
 })
 export class ModalComponent implements OnInit, OnDestroy {
-    @Input() id: string;
+    @Input() id: string | undefined;
     private element: any;
 
     constructor(private modalService: ModalService, private el: ElementRef) {
@@ -28,7 +28,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         document.body.appendChild(this.element);
 
         // close modal on background click
-        this.element.addEventListener('click', el => {
+        this.element.addEventListener('click', (el: { target: { className: string; }; }) => {
             if (el.target.className === 'jw-modal') {
                 this.close();
             }
@@ -40,8 +40,10 @@ export class ModalComponent implements OnInit, OnDestroy {
 
     // remove self from modal service when component is destroyed
     ngOnDestroy(): void {
-        this.modalService.remove(this.id);
-        this.element.remove();
+        if (this.id) {
+            this.modalService.remove(this.id);
+            this.element.remove();
+        }
     }
 
     // open modal

@@ -15,8 +15,8 @@ export class ErrorDialogComponent implements OnInit {
   @Input() fade = true;
 
   alerts: Alert[] = [];
-  alertSubscription: Subscription;
-  routeSubscription: Subscription;
+  alertSubscription: Subscription | undefined;
+  routeSubscription: Subscription | undefined;
 
   constructor(private router: Router, private alertService: ErrorDialogService) { }
 
@@ -53,8 +53,12 @@ export class ErrorDialogComponent implements OnInit {
 
   ngOnDestroy() {
     // unsubscribe to avoid memory leaks
-    this.alertSubscription.unsubscribe();
-    this.routeSubscription.unsubscribe();
+    if (this.alertSubscription) {
+      this.alertSubscription.unsubscribe();
+    }
+    if (this.routeSubscription) {
+      this.routeSubscription.unsubscribe();
+    }
   }
 
   removeAlert(alert: Alert) {
@@ -63,12 +67,15 @@ export class ErrorDialogComponent implements OnInit {
 
     if (this.fade) {
       // fade out alert
-      this.alerts.find(x => x === alert).fade = true;
+      const alrt = this.alerts.find(x => x === alert);
+      if (alrt) {
+        alrt.fade = true;
+        // remove alert after faded out
+        setTimeout(() => {
+          this.alerts = this.alerts.filter(x => x !== alert);
+        }, 250);
+      }
 
-      // remove alert after faded out
-      setTimeout(() => {
-        this.alerts = this.alerts.filter(x => x !== alert);
-      }, 250);
     } else {
       // remove alert
       this.alerts = this.alerts.filter(x => x !== alert);

@@ -19,7 +19,7 @@ export class DefaultLayoutComponent {
   public sidebarMinimized = false;
   public navItems = navItems;
 
-  toggleMinimize(e) {
+  toggleMinimize(e: boolean) {
     this.sidebarMinimized = e;
   }
 
