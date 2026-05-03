@@ -9,7 +9,7 @@
               <span class="align-middle"><i class="fi fi-rr-info"></i> Yeni müşteri oluşturma, düzenleme ve var olan
                 müşteri bilgilerini görüntüleyebilirsiniz.</span>
             </div>
-            <div class="col-2">
+            <div class="col-2" *ngIf="canAccess('Customer.Add')">
               <button class="btn btn-primary" *ngIf="isVisibleAddButton" (click)="openNewRecord()"
                 style="float: right;">Yeni Kayıt</button>
               <button class="btn btn-orange" *ngIf="isReset" (click)="resetForm()" style="float: right;">Vazgeç</button>
@@ -299,7 +299,7 @@
         <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
         <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
       </mat-form-field>
-      <div class="mat-elevation-z8">
+      <div class="mat-elevation-z8" *ngIf="canAccess('Customer.List')">
         <table mat-table [dataSource]="dataSource" matSort #customerSort="matSort">
 
           <ng-container matColumnDef="name">
@@ -333,15 +333,15 @@
             <td mat-cell *matCellDef="let row">
               <table class="action-buttons">
                 <tr>
-                  <td><button class="btn btn-orange btn-block" title="Düzenle" (click)="getDetailFromTable(row)"><i
+                  <td><button *ngIf="canAccess('Customer.Detail')" class="btn btn-orange btn-block" title="Düzenle" (click)="getDetailFromTable(row)"><i
                         class="fi fi-rr-user-pen"></i></button></td>
-                  <td><button class="btn btn-primary btn-block" title="Profili Gör" (click)="getDetail(row.id)"><i
+                  <td><button *ngIf="canAccess('Customer.Detail')" class="btn btn-primary btn-block" title="Profili Gör" (click)="getDetail(row.id)"><i
                         class="fi fi-rr-clipboard-user"></i></button></td>
-                  <td><button class="btn btn-primary btn-block" title="Satın Alımlar" (click)="getServices(row.id)"><i
+                  <td><button *ngIf="canAccess('Customer.Detail')" class="btn btn-primary btn-block" title="Satın Alımlar" (click)="getServices(row.id)"><i
                         class="fi fi-rr-shopping-basket"></i></button></td>
-                  <td><button class="btn btn-primary btn-block" title="Sağlık Bilgileri" (click)="getHealts(row.id)"><i
+                  <td><button *ngIf="canAccess('Customer.Detail')" class="btn btn-primary btn-block" title="Sağlık Bilgileri" (click)="getHealts(row.id)"><i
                         class="fi fi-rr-heart-health-muscle"></i></button></td>
-                  <td><button class="btn btn-red btn-block" title="Sil" (click)="remove(row.id)"><i
+                  <td><button *ngIf="canAccess('Customer.Delete')" class="btn btn-red btn-block" title="Sil" (click)="remove(row.id)"><i
                         class="fi fi-rr-trash"></i></button></td>
                 </tr>
               </table>
