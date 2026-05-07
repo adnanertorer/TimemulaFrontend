@@ -53,8 +53,8 @@ export interface SubDataModel {
 })
 export class MainReportComponent implements OnInit {
   @ViewChild('scheduleObj')
-  public scheduleObj: ScheduleComponent;
-  public eventSettings: EventSettingsModel;
+  public scheduleObj: ScheduleComponent | undefined;
+  public eventSettings: EventSettingsModel | undefined;
   public selectedDate: Date = new Date();
 
   total: number = 0;
@@ -65,8 +65,8 @@ export class MainReportComponent implements OnInit {
   totalPayments: number = 0;
   totalCustomer: number = 0;
   totalSaledPackage: number = 0;
-  myInteger: MyInteger;
-  last3Days: MyInteger;
+  myInteger: MyInteger | undefined;
+  last3Days: MyInteger | undefined;
   saledPackageCount: VPackageCountModel[] = [];
   currentLessonSummaries: VActualCustomerLessonModel[] = [];
   packageData: any;
@@ -77,9 +77,9 @@ export class MainReportComponent implements OnInit {
   cashBoxReportModel: CashBoxGeneralReportModel[] = [];
   cashBoxNames: string[] = [];
   actualCustomerLessons: ActualCustomerLessonResourceModel[] = [];
-  accountsStatus: AccountsStatusModel;
+  accountsStatus: AccountsStatusModel | undefined;
   customerLessonTotalList: CustomerLessonTotalModel[] = [];
-  earningEducator: EarningEducatorModel;
+  earningEducator: EarningEducatorModel | undefined;
   earningPackageList: VEarningPackageModel[] = [];
   totalCustomerPackageList: TotalCustomerPackageModel[] = [];
   birthdateInWeekCustomers: Customer[] = [];
@@ -141,7 +141,7 @@ export class MainReportComponent implements OnInit {
 
   oneventRendered(args: EventRenderedArgs): void {
     let categoryColor: string = args.data.categoryColor as string;
-    if (!args.element || !categoryColor) {
+    if (!args.element || !categoryColor || !this.scheduleObj) {
       return;
     }
     if (this.scheduleObj.currentView === 'Agenda') {
@@ -331,12 +331,15 @@ export class MainReportComponent implements OnInit {
           ],
         };
         if (this.saledPackageCount.length > 0) {
-          document.querySelector('#packages').innerHTML = '';
-          var team = new ApexCharts(
-            document.querySelector('#packages'),
-            this.packageData,
-          );
-          team.render();
+          const packagesElement = document.querySelector('#packages');
+          if (packagesElement) {
+            packagesElement.innerHTML = '';
+            var team = new ApexCharts(
+              packagesElement,
+              this.packageData,
+            );
+            team.render();
+          }
         }
       }
     });
@@ -457,12 +460,12 @@ export class MainReportComponent implements OnInit {
           ],
         };
         if (totalPackage.length > 0) {
-          document.querySelector('#totalCustomerPackages').innerHTML = '';
-          var team = new ApexCharts(
-            document.querySelector('#totalCustomerPackages'),
-            this.totalCustomerPackageData,
-          );
-          team.render();
+          const element = document.querySelector('#totalCustomerPackages');
+          if (element) {
+            element.innerHTML = '';
+            var team = new ApexCharts(element, this.totalCustomerPackageData);
+            team.render();
+          }
         }
       }
     });
@@ -540,12 +543,12 @@ export class MainReportComponent implements OnInit {
           ],
         };
         if (this.earningPackageList.length > 0) {
-          document.querySelector('#earningPackages').innerHTML = '';
-          var team = new ApexCharts(
-            document.querySelector('#earningPackages'),
-            this.earningPackageData,
-          );
-          team.render();
+          const element = document.querySelector('#earningPackages');
+          if (element) {
+            element.innerHTML = '';
+            var team = new ApexCharts(element, this.earningPackageData);
+            team.render();
+          }
         }
       }
     });

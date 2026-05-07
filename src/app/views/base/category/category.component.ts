@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app';
 import { CategoryModel } from 'src/app/shared/model/category-model';
 import { CategoryService } from 'src/app/shared/services/category.service';
 import Constants from 'src/app/shared/tools/constants';
@@ -11,12 +12,12 @@ declare let alertify: any;
 })
 export class CategoryComponent implements OnInit {
 
-  category: CategoryModel;
+  category: CategoryModel | undefined;
   categories: CategoryModel[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   buttonText = Constants.Save;
 
-  constructor(private service: CategoryService) { }
+  constructor(private service: CategoryService, private authService: AuthService) { }
 
   ngOnInit() {
     this.category = {
@@ -27,6 +28,10 @@ export class CategoryComponent implements OnInit {
     };
 
     this.getList();
+  }
+
+    canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
   }
 
   getList() {
@@ -56,7 +61,7 @@ export class CategoryComponent implements OnInit {
   }
 
   add(): void {
-    if (this.category.id == 0) {
+    if (this.category && this.category.id == 0) {
       this.service.add(this.category).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
@@ -66,7 +71,7 @@ export class CategoryComponent implements OnInit {
       }, (err) => {
         alertify.error(err, 2);
       });
-    } else {
+    } else if (this.category) {
       this.service.update(this.category).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
