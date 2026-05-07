@@ -53,7 +53,7 @@ export class PackageClassroomComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
-   canAccess(permissionCode: string): boolean {
+  canAccess(permissionCode: string): boolean {
     return this.authService.hasPermission(permissionCode);
   }
 
@@ -168,10 +168,9 @@ export class PackageClassroomComponent implements OnInit {
     });
   }
 
-
   getDetailFromTable(resource: any): void {
     this.packageClassroom = resource;
-    if(!this.packageClassroom) return;
+    if (!this.packageClassroom) return;
     this.packageClassroom.categoryId = resource.lesson.category.id;
     const request: SubCategoryWithCategoryIdPaginationRequest = {
       pageRequest: {
