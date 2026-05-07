@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app';
 import { ArtPackageModel } from 'src/app/shared/model/art-package-model';
 import { CategoryModel } from 'src/app/shared/model/category-model';
-import { LessonModel } from 'src/app/shared/model/lesson-model';
 import { ParticipantModel } from 'src/app/shared/model/participant-model';
 import { ParticipationModel } from 'src/app/shared/model/participation-model';
 import { SubCategoryModel } from 'src/app/shared/model/sub-category-model';
@@ -48,17 +48,17 @@ export class ArtPackageComponent implements OnInit {
   ];
   dataSource = new MatTableDataSource<any>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
-  artPackage: ArtPackageModel;
+  artPackage: ArtPackageModel | undefined;
   artPackages: VArtPackageModel[] = [];
   subCategories: SubCategoryModel[] = [];
   categories: CategoryModel[] = [];
   participantTypes: ParticipationModel[] = [];
   participants: ParticipantModel[] = [];
   lessons: VLessons[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> = [];
   buttonText = Constants.Save;
   isGroup: boolean = false;
   pageIndex: number = 0;
@@ -72,7 +72,12 @@ export class ArtPackageComponent implements OnInit {
     private participantTypeService: ParticipantTypeService,
     private participantService: ParticipantService,
     private lessonService: LessonService,
+    private authService: AuthService,
   ) {}
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.artPackage = {
@@ -109,8 +114,10 @@ export class ArtPackageComponent implements OnInit {
         this.total = response.dynamicClass.count;
         this.pageIndex = response.dynamicClass.index;
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
     this.getCategories();
@@ -119,9 +126,11 @@ export class ArtPackageComponent implements OnInit {
   }
 
   onChangeSeancePrice(event: any): void {
-    const seancePrice = (event.target as HTMLInputElement).value;
-    var price = parseFloat(seancePrice) * this.artPackage.seanceCount;
-    this.artPackage.seancePrice = price;
+    if (this.artPackage) {
+      const seancePrice = (event.target as HTMLInputElement).value;
+      var price = parseFloat(seancePrice) * this.artPackage.seanceCount;
+      this.artPackage.seancePrice = price;
+    }
   }
 
   applyFilter(event: Event) {
@@ -146,21 +155,23 @@ export class ArtPackageComponent implements OnInit {
         this.dataSource.data = this.artPackages;
         this.total = response.dynamicClass.count;
         this.pageIndex = response.dynamicClass.index;
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
 
-  categoryOnChange(id) {
-    this.getSubCategories(this.artPackage.categoryId);
+  categoryOnChange(id: any) {
+    this.getSubCategories(this.artPackage?.categoryId || 0);
   }
 
-  subCategoryOnChange(id) {
-    this.getLessons(this.artPackage.categoryId, this.artPackage.subCategoryId);
+  subCategoryOnChange(id: any) {
+    this.getLessons(this.artPackage?.categoryId || 0, this.artPackage?.subCategoryId || 0);
   }
 
-  participantOnChange(id) {
+  participantOnChange(id: any) {
     if (id == participantEnum.group) {
       this.isGroup = true;
     } else if (id == participantEnum.closedGroup) {
@@ -272,10 +283,10 @@ export class ArtPackageComponent implements OnInit {
             const response = data as PaginateResponse<SubCategoryModel>;
             this.subCategories = response.dynamicClass
               .items as SubCategoryModel[];
-            this.artPackage.subCategoryId = this.artPackage.subCategoryId;
+            this.artPackage!.subCategoryId = this.artPackage!.subCategoryId;
             const pageRequest: LessonWithCategoriesPaginationRequest = {
-              categoryId: this.artPackage.categoryId,
-              subCategoryId: this.artPackage.subCategoryId,
+              categoryId: this.artPackage!.categoryId,
+              subCategoryId: this.artPackage!.subCategoryId ?? 0,
               pageRequest: {
                 pageIndex: 0,
                 pageSize: 1000,
@@ -283,7 +294,7 @@ export class ArtPackageComponent implements OnInit {
               },
             };
             this.lessonService.getByCategory(pageRequest).subscribe((data) => {
-              if (data.success) {
+              if (data.success && this.artPackage) {
                 const response = data as PaginateResponse<any>;
                 this.lessons = response.dynamicClass.items as VLessons[];
                 this.artPackage.lessonId = this.artPackage.lessonId;
@@ -310,11 +321,14 @@ export class ArtPackageComponent implements OnInit {
   }
 
   add(): void {
+    if(!this.artPackage) return;
+    if(!this.artPackage.subCategoryId) return;
+    if(!this.artPackage.categoryId) return;
     this.artPackage.categoryId = parseInt(
-      this.artPackage.categoryId.toString(),
+      this.artPackage.categoryId.toString()
     );
     this.artPackage.subCategoryId = parseInt(
-      this.artPackage.subCategoryId.toString(),
+      this.artPackage.subCategoryId.toString()
     );
     this.artPackage.discount = this.artPackage.discount
       ? parseFloat(this.artPackage.discount.toString())
