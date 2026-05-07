@@ -49,7 +49,7 @@ export class PackageClassroomService {
 
   update(resource: PackageClassroomModel){
     return this.http
-        .put<BaseResponse>(`${this.apiUrl}/PackageClassroom/Update`, resource)
+        .post<BaseResponse>(`${this.apiUrl}/PackageClassroom/Update`, resource)
         .pipe(
             map((x)=> {
                 return x;
