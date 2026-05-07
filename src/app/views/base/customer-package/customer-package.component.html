@@ -15,7 +15,7 @@
             </ul>
           </span>
         </div>
-        <div class="card-body">
+        <div class="card-body" *ngIf="canAccess('PackageModule.Add')">
           <form action="" method="post" class="form-horizontal">
             <input type="hidden" name="id" id="id" [(ngModel)]="customerLesson.id">
             <div class="form-group row" style="display: none;">
@@ -198,7 +198,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="canAccess('PackageModule.List')">
     <div class="col-md-12">
       <div class="card">
       <div class="col-md-12">
@@ -217,8 +217,8 @@
               <tr *ngFor="let item of pageOfItems">
                 <td>{{item.title}}</td>
                 <td>
-                  <button class="btn btn-orange" *ngIf="!item.status" (click)="openDetail(item.classroomId)" title="Programı Göster"><i class="fi fi-rr-calendar-clock"></i></button>
-                  <button *ngIf="!item.status" class="btn btn-primary" (click)="add()" title="Kaydet"><i class="fi fi-rr-calendar-check"></i></button>
+                  <button *ngIf="canAccess('PackageModule.Detail') && !item.status" class="btn btn-orange" (click)="openDetail(item.classroomId)" title="Programı Göster"><i class="fi fi-rr-calendar-clock"></i></button>
+                  <button *ngIf="canAccess('PackageModule.Add') && !item.status" class="btn btn-primary" (click)="add()" title="Kaydet"><i class="fi fi-rr-calendar-check"></i></button>
                 </td>
               </tr>
               <tr *ngIf="filterDetailResponses.length>0">

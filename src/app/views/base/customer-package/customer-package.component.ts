@@ -50,6 +50,7 @@ import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 import { SubCategoryWithCategoryIdPaginationRequest } from 'src/app/shared/requests/subcategory_with_categoryid_pagination';
 import { LessonWithCategoriesPaginationRequest } from 'src/app/shared/requests/lesson_with_categories_pagination_request';
 import { PageRequestLessonById } from 'src/app/shared/requests/page_request_lesson_by_id';
+import { AuthService } from 'src/app';
 declare let alertify: any;
 
 export interface dayOf {
@@ -72,21 +73,21 @@ WebGLContextEvent;
 })
 export class CustomerPackageComponent implements OnInit {
   @ViewChild('date')
-  public Date: DatePickerComponent;
+  public Date: DatePickerComponent | undefined;
   public dateValue: Date = new Date();
   isShowDetail: boolean = false;
 
-  dayAndHours: DayAndHoursModel;
+  dayAndHours: DayAndHoursModel | undefined;
   selectedDays: DayAndHoursModel[] = [];
-  criteriaModel: SellPackageCriteriaModel;
-  customerLessonTempResource: CustomerLessonTempResourceModel;
+  criteriaModel: SellPackageCriteriaModel | undefined;
+  customerLessonTempResource: CustomerLessonTempResourceModel | undefined;
 
   public month: number = new Date().getMonth();
   public fullYear: number = new Date().getFullYear();
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct;
+  startDateModel: NgbDateStruct | undefined;
 
   time: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
   timeLast: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
@@ -94,39 +95,35 @@ export class CustomerPackageComponent implements OnInit {
   minuteStep = 15;
   secondStep = 30;
 
-  //customerLesson: CustomerLesson;
-  customerLesson: CustomerLessonsTemp;
-  dayOfI: dayOf;
-  criteria: CriteriaFilterModel;
-  //customerLessons: CustomerLesson[];
-  customerLessons: CustomerLessonsTemp[];
+  customerLesson: CustomerLessonsTemp | undefined;
+  dayOfI: dayOf | undefined;
+  criteria: CriteriaFilterModel | undefined;
+  customerLessons: CustomerLessonsTemp[] | undefined;
   customers: Customer[] = [];
   classrooms: ClassroomModel[] = [];
   lessons: LessonModel[] = [];
   artPackages: ArtPackageModel[] = [];
-  selectedPackage: ArtPackageModel;
+  selectedPackage: ArtPackageModel | undefined;
   lessonEducators: LessonEducatorModel[] = [];
   categories: CategoryModel[] = [];
   subCategories: SubCategoryModel[] = [];
   filterResponses: FilterResponseModel[] = [];
   filterDetailResponses: FilterResponseModel[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> = [];
   buttonText = Constants.Save;
   selectedCategoryId: number = 0;
   selectedSubCategoryId: number = 0;
   closedGroup: number = participantEnum.closedGroup;
   personCount: number = 0;
-  //selectedDays: dayOf[] = [];
-  dayList: daysEnum;
+  dayList: daysEnum | undefined;
   groupedList: GroupedListModel[] = [];
   showDetail: boolean = false;
   selectedCustomerId: number = 0;
-  //accountingTransaction: AccountingTransactionModel;
-  accountingTransaction: AccountTransactionTempModel;
+  accountingTransaction: AccountTransactionTempModel | undefined;
   selectedUnicKey: string = '';
   manuelPrice: boolean = false;
   authorized_price: number = 0;
-  customerDayModel: CustomerDayModel;
+  customerDayModel: CustomerDayModel | undefined;
   educatorDayHours: EducatorDaysHoursModel[] = [];
 
   public weekDays: daysEnum[] = [
@@ -152,7 +149,7 @@ export class CustomerPackageComponent implements OnInit {
   public customerFilterCtrl: UntypedFormControl = new UntypedFormControl();
   public filteredCustomers: ReplaySubject<Customer[]> = new ReplaySubject(1);
 
-  @ViewChild('singleSelect', { static: true }) singleSelect: MatSelect;
+  @ViewChild('singleSelect', { static: true }) singleSelect: MatSelect | undefined;
 
   protected _onDestroy = new Subject();
 
@@ -169,7 +166,12 @@ export class CustomerPackageComponent implements OnInit {
     private accountingService: AccountingTransactionService,
     private tempService: CustomerLessonsTempService,
     private educatorDayHourService: EducatorDaysHoursService,
+    private authService: AuthService,
   ) {}
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.customerLesson = {
@@ -256,22 +258,28 @@ export class CustomerPackageComponent implements OnInit {
   }
 
   onDateChange() {
-    this.dateValue = this.Date.value;
+    if (this.Date) {
+      this.dateValue = this.Date.value;
+    }
   }
 
   onStartDateSelection(date: NgbDate) {
-    this.criteria.startDate =
-      date.day.toLocaleString() +
-      '/' +
-      date.month.toLocaleString() +
-      '/' +
-      date.year.toLocaleString().replace('.', '');
+    if (this.criteria) {
+      this.criteria.startDate =
+        date.day.toLocaleString() +
+        '/' +
+        date.month.toLocaleString() +
+        '/' +
+        date.year.toLocaleString().replace('.', '');
+    }
   }
 
   onStartTimeSelection(time: NgbTime) {
-    const timeStr =
-      time.hour.toLocaleString() + ':' + time.minute.toLocaleString();
-    this.criteria.startDate = this.criteria.startDate + ' ' + timeStr;
+    if (this.criteria) {
+      const timeStr =
+        time.hour.toLocaleString() + ':' + time.minute.toLocaleString();
+      this.criteria.startDate = this.criteria.startDate + ' ' + timeStr;
+    }
   }
 
   getEducatorDayHours(id: number) {
@@ -295,10 +303,14 @@ export class CustomerPackageComponent implements OnInit {
       element.dayFinishTime = finisDateTime;
       element.dayStartTime = startDateTime;
     });
-    this.criteriaModel.dayAndHourList = this.selectedDays;
-    this.criteriaModel.lessonId = this.customerLesson.lessonId;
-    this.criteriaModel.packageId = this.customerLesson.artPackageId;
-    this.criteriaModel.educatorId = this.customerLesson.educatorId;
+    if (this.criteriaModel) {
+      this.criteriaModel.dayAndHourList = this.selectedDays;
+      this.criteriaModel.lessonId = this.customerLesson?.lessonId!;
+      this.criteriaModel.packageId = this.customerLesson?.artPackageId!;
+      this.criteriaModel.educatorId = this.customerLesson?.educatorId!;
+    } else {
+      return;
+    }
     this.criteriaModel.startTime = new Date(
       this.dateValue.getFullYear(),
       this.dateValue.getMonth(),
@@ -365,8 +377,10 @@ export class CustomerPackageComponent implements OnInit {
     this.filteredCustomers
       .pipe(take(1), takeUntil(this._onDestroy))
       .subscribe(() => {
-        this.singleSelect.compareWith = (a: Customer, b: Customer) =>
-          a && b && a.id === b.id;
+        if (this.singleSelect) {
+          this.singleSelect.compareWith = (a: Customer, b: Customer) =>
+            a && b && a.id === b.id;
+        }
       });
   }
 
@@ -381,28 +395,29 @@ export class CustomerPackageComponent implements OnInit {
     this.filterDetailResponses.forEach((element) => {
       this.selectedUnicKey = element.unicKey;
       this.customerLesson = {
-        artPackageId: parseInt(this.criteriaModel.packageId.toString()),
+        artPackageId: parseInt(this.criteriaModel?.packageId.toString() || '0'),
         categoryId: parseInt(this.selectedCategoryId.toString()),
         classroomId: parseInt(element.classroomId.toString()),
         createdAt: new Date(),
         createdBy: 0,
-        // customerId: parseInt(this.selectedCustomerId.toString()),
         finishDate: element.lessonFinish,
         id: 0,
         isDone: false,
-        lessonId: parseInt(this.criteriaModel.lessonId.toString()),
+        lessonId: parseInt(this.criteriaModel?.lessonId.toString() || '0'),
         startDate: element.lessonStart,
         subCategoryId: parseInt(this.selectedSubCategoryId.toString()),
-        educatorId: parseInt(this.customerLesson.educatorId.toString()),
+        educatorId: parseInt(this.customerLesson!.educatorId!.toString()),
         unicStrId: element.unicKey,
         unicKey: element.unicKey,
       };
 
-      this.customerLessons.push(this.customerLesson);
+      if (this.customerLesson && this.customerLessons) {
+        this.customerLessons.push(this.customerLesson);
+      }
     });
   }
 
-  categoryOnChange(id) {
+  categoryOnChange(id: string) {
     this.selectedCategoryId = parseInt(id);
     this.getSubCategories(this.selectedCategoryId);
   }
@@ -435,16 +450,6 @@ export class CustomerPackageComponent implements OnInit {
     } else {
       alert(this.dayLabels[day.dayIndex] + ' zaten seçilmiş');
     }
-    /*if(!this.selectedDays.includes(day)){
-      if(parseInt(id)!==-1){
-        this.selectedDays.push(day);
-      }
-      
-    }else{
-      if(parseInt(id)!==-1){
-        alert(this.dayLabels[day.dayIndex]+' zaten seçilmiş');
-      }
-    }*/
   }
 
   removeDayFromList(id: string) {
@@ -625,15 +630,15 @@ export class CustomerPackageComponent implements OnInit {
 
   add(): void {
     if (this.isShowDetail) {
-      if (this.customerLesson.id == 0) {
-        this.tempService.addRange(this.customerLessons).subscribe(
+      if (this.customerLesson && this.customerLesson.id == 0) {
+        this.tempService.addRange(this.customerLessons!).subscribe(
           (data) => {
             if (data.success) {
               const lessons = data.dynamicClass as CustomerLessonsTemp[];
 
               alertify.set('notifier', 'position', 'top-right');
               alertify.success(data.clientMessage, 2);
-              let price = this.selectedPackage.seancePrice;
+              let price = this.selectedPackage!.seancePrice;
               if (this.authorized_price != 0) {
                 price = this.authorized_price;
               }
@@ -649,7 +654,7 @@ export class CustomerPackageComponent implements OnInit {
                 unicKey: lessons[0].unicStrId,
                 personType: PersonTypeEnum.Customer,
               };
-              const days = [];
+              const days: number[] = [];
 
               this.selectedDays.forEach((element) => {
                 if (!days.includes(element.day)) {
