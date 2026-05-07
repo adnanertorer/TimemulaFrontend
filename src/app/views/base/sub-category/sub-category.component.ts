@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app';
 import { CategoryModel } from 'src/app/shared/model/category-model';
 import { SubCategoryModel } from 'src/app/shared/model/sub-category-model';
 import { VSubCategory } from 'src/app/shared/model/v-sub-category';
@@ -14,13 +15,13 @@ declare let alertify: any;
 })
 export class SubCategoryComponent implements OnInit {
 
-  subCategory: SubCategoryModel;
+  subCategory: SubCategoryModel | undefined;
   subCategories: SubCategoryModel[] = [];
   categories: CategoryModel[] = [];
-  categoryId: number;
-  pageOfItems: Array<any>;
+  categoryId: number | undefined;
+  pageOfItems: Array<any> = [];
   buttonText = Constants.Save;
-  constructor(private service: SubCategoryService, private categoryService: CategoryService) { }
+  constructor(private service: SubCategoryService, private categoryService: CategoryService, private authService: AuthService) { }
 
   ngOnInit() {
     this.subCategory = {
@@ -32,6 +33,10 @@ export class SubCategoryComponent implements OnInit {
 
     this.getCategoryList();
     this.getList();
+  }
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
   }
 
   getCategoryList() {
@@ -74,7 +79,7 @@ export class SubCategoryComponent implements OnInit {
   }
 
   add(): void {
-    if (this.subCategory.id == 0) {
+    if (this.subCategory && this.subCategory.id == 0) {
       this.service.add(this.subCategory).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
@@ -84,7 +89,7 @@ export class SubCategoryComponent implements OnInit {
       }, (err) => {
         alertify.error(err, 2);
       });
-    } else {
+    } else if (this.subCategory) {
       this.service.update(this.subCategory).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();

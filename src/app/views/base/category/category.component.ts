@@ -8,29 +8,31 @@ declare let alertify: any;
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
-  styleUrls: ['./category.component.css']
+  styleUrls: ['./category.component.css'],
 })
 export class CategoryComponent implements OnInit {
-
   category: CategoryModel | undefined;
   categories: CategoryModel[] = [];
   pageOfItems: Array<any> | undefined;
   buttonText = Constants.Save;
 
-  constructor(private service: CategoryService, private authService: AuthService) { }
+  constructor(
+    private service: CategoryService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
     this.category = {
       categoryName: '',
       createdAt: new Date(),
       createdBy: 0,
-      id: 0
+      id: 0,
     };
 
     this.getList();
   }
 
-    canAccess(permissionCode: string): boolean {
+  canAccess(permissionCode: string): boolean {
     return this.authService.hasPermission(permissionCode);
   }
 
@@ -38,7 +40,7 @@ export class CategoryComponent implements OnInit {
     this.service.getList().subscribe((data) => {
       this.categories = data.dynamicClass as CategoryModel[];
       this.pageOfItems = this.categories;
-    })
+    });
   }
 
   onChangePage(pageOfItems: any[]): void {
@@ -51,7 +53,7 @@ export class CategoryComponent implements OnInit {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -62,35 +64,42 @@ export class CategoryComponent implements OnInit {
 
   add(): void {
     if (this.category && this.category.id == 0) {
-      this.service.add(this.category).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
+      this.service.add(this.category).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
     } else if (this.category) {
-      this.service.update(this.category).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
+      this.service.update(this.category).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
     }
   }
 
   remove(id: number): void {
-    const approve = confirm('Kategori silmek üzeresiniz, devam etmek istiyor musunuz?');
-    if(approve)
-      this.approveRemove(id);
+    const approve = confirm(
+      'Kategori silmek üzeresiniz, devam etmek istiyor musunuz?',
+    );
+    if (approve) this.approveRemove(id);
   }
 
- approveRemove = (id: number) =>{
+  approveRemove = (id: number) => {
     this.service.remove(id).subscribe((data) => {
       if (data.success) {
         this.ngOnInit();
@@ -100,5 +109,5 @@ export class CategoryComponent implements OnInit {
         alert(data.clientMessage);
       }
     });
-  }
+  };
 }
