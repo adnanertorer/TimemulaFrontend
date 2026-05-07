@@ -75,7 +75,7 @@ export class ArtPackageComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
-   canAccess(permissionCode: string): boolean {
+  canAccess(permissionCode: string): boolean {
     return this.authService.hasPermission(permissionCode);
   }
 
@@ -168,7 +168,10 @@ export class ArtPackageComponent implements OnInit {
   }
 
   subCategoryOnChange(id: any) {
-    this.getLessons(this.artPackage?.categoryId || 0, this.artPackage?.subCategoryId || 0);
+    this.getLessons(
+      this.artPackage?.categoryId || 0,
+      this.artPackage?.subCategoryId || 0,
+    );
   }
 
   participantOnChange(id: any) {
@@ -321,14 +324,14 @@ export class ArtPackageComponent implements OnInit {
   }
 
   add(): void {
-    if(!this.artPackage) return;
-    if(!this.artPackage.subCategoryId) return;
-    if(!this.artPackage.categoryId) return;
+    if (!this.artPackage) return;
+    if (!this.artPackage.subCategoryId) return;
+    if (!this.artPackage.categoryId) return;
     this.artPackage.categoryId = parseInt(
-      this.artPackage.categoryId.toString()
+      this.artPackage.categoryId.toString(),
     );
     this.artPackage.subCategoryId = parseInt(
-      this.artPackage.subCategoryId.toString()
+      this.artPackage.subCategoryId.toString(),
     );
     this.artPackage.discount = this.artPackage.discount
       ? parseFloat(this.artPackage.discount.toString())
@@ -347,25 +350,21 @@ export class ArtPackageComponent implements OnInit {
       ? parseInt(this.artPackage.lessonId.toString(), 10)
       : 0;
     if (this.artPackage.id == 0) {
-      this.service.add(this.artPackage).subscribe(
-        (data) => {
-          if (data.success) {
-            this.ngOnInit();
-            alertify.set('notifier', 'position', 'top-right');
-            alertify.success(data.clientMessage, 2);
-          }
+      this.service.add(this.artPackage).subscribe((data) => {
+        if (data.success) {
+          this.ngOnInit();
+          alertify.set('notifier', 'position', 'top-right');
+          alertify.success(data.clientMessage, 2);
         }
-      );
+      });
     } else {
-      this.service.update(this.artPackage).subscribe(
-        (data) => {
-          if (data.success) {
-            this.ngOnInit();
-            alertify.set('notifier', 'position', 'top-right');
-            alertify.success(data.clientMessage, 2);
-          }
+      this.service.update(this.artPackage).subscribe((data) => {
+        if (data.success) {
+          this.ngOnInit();
+          alertify.set('notifier', 'position', 'top-right');
+          alertify.success(data.clientMessage, 2);
         }
-      );
+      });
     }
   }
 
