@@ -4,8 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerComponent } from '@syncfusion/ej2-angular-calendars';
+import { AuthService } from 'src/app';
 import { MeetingRequestModel } from 'src/app/shared/model/meeting-request-model';
-import { SelectItemModel } from 'src/app/shared/model/select-item-model';
 import { StaffModel } from 'src/app/shared/model/staff-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
@@ -19,13 +19,13 @@ declare let alertify: any;
   styleUrls: ['./meeting-request.component.css']
 })
 export class MeetingRequestComponent implements OnInit {
-  model: MeetingRequestModel;
+  model: MeetingRequestModel | undefined;
   list: MeetingRequestModel[] = [];
   staffList: StaffModel[] = [];
   displayedColumns: string[] = ['requestByName', 'meetingDate', 'title', 'requestDescription', 'createdAt', 'name', 'isDone', 'id'];
   dataSource = new MatTableDataSource<MeetingRequestModel>()
-  @ViewChild('meetingPaginator') paginator: MatPaginator;
-  @ViewChild('meetingSort') sort: MatSort;
+  @ViewChild('meetingPaginator') paginator: MatPaginator | undefined;
+  @ViewChild('meetingSort') sort: MatSort | undefined;
   buttonText: string = '';
   isVisibleCancelButton = false;
 
@@ -34,7 +34,7 @@ export class MeetingRequestComponent implements OnInit {
   pageSize: number = 50;
 
   @ViewChild('date')
-  public Date: DatePickerComponent;
+  public Date: DatePickerComponent | undefined;
   
   public dateValue: Date = new Date();
   public month: number = new Date().getMonth();
@@ -48,7 +48,11 @@ export class MeetingRequestComponent implements OnInit {
   minuteStep = 15;
   secondStep = 30;
 
-  constructor(private service: MeetingRequestService, private staffService: StaffService) { }
+  constructor(private service: MeetingRequestService, private staffService: StaffService, private authService: AuthService) { }
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.buttonText = 'Kaydet';
@@ -77,7 +81,9 @@ export class MeetingRequestComponent implements OnInit {
   }
 
   onDateChange(){
-    this.dateValue = this.Date.value;
+    if (this.Date) {
+      this.dateValue = this.Date.value;
+    }
   }
 
   reset(){
@@ -103,8 +109,10 @@ export class MeetingRequestComponent implements OnInit {
         const response = data as PaginateResponse<MeetingRequestModel>;
         this.list = response.dynamicClass.items as MeetingRequestModel[];
         this.dataSource.data = this.list;
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     })
   }
@@ -118,26 +126,28 @@ export class MeetingRequestComponent implements OnInit {
   }
 
   addOrUpdate(){
-    if(this.model.id == 0){
+    if(this.model && this.model.id == 0){
       this.add();
-    }else{
+    }else if(this.model){
       this.update();
     }
   }
 
   add(){
-    this.model.relationStaff = parseInt(this.model.relationStaff.toString());
-    this.model.meetingDate = new Date(this.dateValue.getFullYear(), this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
-    this.service.add(this.model).subscribe((data)=>{
-      if(data.success){
-        alertify.set('notifier', 'position', 'top-right');
-        alertify.success('Randevu kaydedildi', 2);
-        this.ngOnInit();
-      }else{
-        alertify.error('notifier', 'position', 'top-right');
-        alertify.success(data.clientMessage, 2); 
-      }
-    })
+    if (this.model) {
+      this.model.relationStaff = parseInt(this.model.relationStaff.toString());
+      this.model.meetingDate = new Date(this.dateValue.getFullYear(), this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
+      this.service.add(this.model).subscribe((data)=>{
+        if(data.success){
+          alertify.set('notifier', 'position', 'top-right');
+          alertify.success('Randevu kaydedildi', 2);
+          this.ngOnInit();
+        }else{
+          alertify.error('notifier', 'position', 'top-right');
+          alertify.success(data.clientMessage, 2); 
+        }
+      })
+    }
   }
 
   remove(id: number){
@@ -154,18 +164,20 @@ export class MeetingRequestComponent implements OnInit {
   }
 
   update(){
-    this.model.meetingDate = new Date(this.dateValue.getFullYear(), 
-    this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
-    this.service.update(this.model).subscribe((data)=>{
-      if(data.success){
-        alertify.set('notifier', 'position', 'top-right');
-        alertify.success('Randevu güncellendi', 2);
-        this.ngOnInit();
-      }else{
-        alertify.error('notifier', 'position', 'top-right');
-        alertify.success(data.clientMessage, 2); 
-      }
-    })
+    if (this.model) {
+      this.model.meetingDate = new Date(this.dateValue.getFullYear(), 
+      this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
+      this.service.update(this.model).subscribe((data)=>{
+        if(data.success){
+          alertify.set('notifier', 'position', 'top-right');
+          alertify.success('Randevu güncellendi', 2);
+          this.ngOnInit();
+        }else{
+          alertify.error('notifier', 'position', 'top-right');
+          alertify.success(data.clientMessage, 2); 
+        }
+      })
+    }
   }
 
    onPage(e: PageEvent) {

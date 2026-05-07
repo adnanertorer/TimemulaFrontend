@@ -149,7 +149,9 @@ export class CustomerPackageComponent implements OnInit {
   public customerFilterCtrl: UntypedFormControl = new UntypedFormControl();
   public filteredCustomers: ReplaySubject<Customer[]> = new ReplaySubject(1);
 
-  @ViewChild('singleSelect', { static: true }) singleSelect: MatSelect | undefined;
+  @ViewChild('singleSelect', { static: true }) singleSelect:
+    | MatSelect
+    | undefined;
 
   protected _onDestroy = new Subject();
 
@@ -169,7 +171,7 @@ export class CustomerPackageComponent implements OnInit {
     private authService: AuthService,
   ) {}
 
-   canAccess(permissionCode: string): boolean {
+  canAccess(permissionCode: string): boolean {
     return this.authService.hasPermission(permissionCode);
   }
 
