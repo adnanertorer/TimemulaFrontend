@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app';
 import { SupplierModel } from 'src/app/shared/model/supplier-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
@@ -14,16 +15,23 @@ declare let alertify: any;
 })
 export class SupplierComponent implements OnInit {
   buttonText = Constants.Save;
-  supplier: SupplierModel;
+  supplier: SupplierModel | undefined;
   supplierList: SupplierModel[] = [];
 
   total: number = 0;
   pageIndex: number = 0;
   pageSize: number = 50;
 
-  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator | undefined;
 
-  constructor(private service: SupplierService) {}
+  constructor(
+    private service: SupplierService,
+    private authService: AuthService,
+  ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.supplier = {
@@ -61,26 +69,24 @@ export class SupplierComponent implements OnInit {
   }
 
   add(): void {
-    if (this.supplier.id == 0) {
-      this.service.add(this.supplier).subscribe(
-        (data) => {
-          if (data.success) {
-            this.ngOnInit();
-            alertify.set('notifier', 'position', 'top-right');
-            alertify.success(data.clientMessage, 2);
-          }
+    if (this.supplier && this.supplier.id == 0) {
+      this.service.add(this.supplier).subscribe((data) => {
+        if (data.success) {
+          this.ngOnInit();
+          alertify.set('notifier', 'position', 'top-right');
+          alertify.success(data.clientMessage, 2);
         }
-      );
+      });
     } else {
-      this.service.update(this.supplier).subscribe(
-        (data) => {
+      if (this.supplier) {
+        this.service.update(this.supplier).subscribe((data) => {
           if (data.success) {
             this.ngOnInit();
             alertify.set('notifier', 'position', 'top-right');
             alertify.success(data.clientMessage, 2);
           }
-        }
-      );
+        });
+      }
     }
   }
 
@@ -95,8 +101,10 @@ export class SupplierComponent implements OnInit {
       const response = data as PaginateResponse<any>;
       this.supplierList = response.dynamicClass.items as SupplierModel[];
 
-      this.paginator.pageIndex = this.pageIndex;
-      this.paginator.length = this.total;
+      if (this.paginator) {
+        this.paginator.pageIndex = this.pageIndex;
+        this.paginator.length = this.total;
+      }
     });
   }
 
