@@ -9,11 +9,11 @@
             <i class="fi fi-rr-info"></i>
             Var olan paketleri görüntüleyebilir veya yeni paket oluşturabilirsiniz. <br>
             <ul>
-              <li><a href="/musteri-islemleri/paket-ekle.html">Paket oluştur</a></li>
+              <li *ngIf="canAccess('Packages.Add')"><a href="/musteri-islemleri/paket-ekle.html">Paket oluştur</a></li>
             </ul>
           </span>
         </div>
-        <div class="card-body">
+        <div class="card-body" *ngIf="canAccess('Packages.List')">
           <table class="table table-sm">
             <thead>
               <tr>
@@ -33,15 +33,13 @@
                 <td>{{item.minStartDate | date: 'dd/M/yyyy H:mm'}}</td>
                 <td>{{item.maxFinishDate | date: 'dd/M/yyyy H:mm'}}</td>
                 <td>
-                  
-                  <button (click)="openList(item.unicStrId)" class="btn btn-sm btn-primary"><i class="fi fi-rr-eye"></i></button>
-                  
+                  <button (click)="openList(item.unicStrId)" class="btn btn-sm btn-primary"><i class="fi fi-rr-eye"></i></button>             
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="card-footer pb-0 pt-3">
+        <div class="card-footer pb-0 pt-3" *ngIf="canAccess('Packages.List')">
           <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
         [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
       </div>
