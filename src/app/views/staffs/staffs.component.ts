@@ -11,6 +11,7 @@ import { StaffService } from '../../shared/services/staff.service';
 import Constants from 'src/app/shared/tools/constants';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { AuthService } from 'src/app';
 
 @Component({
   selector: 'app-staffs',
@@ -18,11 +19,11 @@ import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
   styleUrls: ['./staffs.component.scss'],
 })
 export class StaffsComponent implements OnInit, Qrud {
-  staff: StaffModel;
+  staff: StaffModel | undefined;
   staffList: StaffModel[] = [];
   staffTypes: StaffType[] = [];
   salaryTypes: SalaryType[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   buttonText = Constants.Save;
   branches: Branch[] = [];
 
@@ -31,7 +32,12 @@ export class StaffsComponent implements OnInit, Qrud {
     private staffTypeService: StaffTypeService,
     private salaryTypeService: SalaryTypeService,
     private branchService: BranchService,
+    private authService: AuthService
   ) {}
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   getList(): void {
     this.service.getList().subscribe((data) => {
@@ -69,22 +75,24 @@ export class StaffsComponent implements OnInit, Qrud {
   }
 
   add(): void {
-    if (this.staff.id == 0) {
+    if (this.staff && this.staff.id == 0) {
       this.staff.identityNumber = this.staff.identityNumber.toString();
       this.service.add(this.staff).subscribe((data) => {
         if (data.success) {
-          this.ngOnInit();
+          this.getList();
         }
       });
     } else {
-      this.staff.identityNumber = this.staff.identityNumber.toString();
-      this.service.update(this.staff).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-        }
-      });
+      if (this.staff) {
+        this.staff.identityNumber = this.staff.identityNumber.toString();
+        this.service.update(this.staff).subscribe((data) => {
+          if (data.success) {
+            this.getList();
+          }
+        });
+      }
     }
-  }
+    }
 
   remove(id: number): void {
     this.service.remove(id).subscribe((data) => {
@@ -105,7 +113,7 @@ export class StaffsComponent implements OnInit, Qrud {
       callenderOrder: 0,
       createdBy: 0,
       email: '',
-      workFinishDateTime: null,
+      workFinishDateTime: undefined,
       workStarDateTime: new Date(),
       gsm: '',
       id: 0,
@@ -114,7 +122,7 @@ export class StaffsComponent implements OnInit, Qrud {
       salaryTypeId: 0,
       staffTypeId: 0,
       surname: '',
-      birthDate: null,
+      birthDate: undefined,
       branchId: 0,
       isTeacher: false,
       salaryAmount: 0,

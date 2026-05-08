@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12" *ngIf="canAccess('StaffPaymentTransaction.List')">
   <div class="card">
     <div class="col-md-12">
       <div class="card-header" style="margin-top: 5px;">
@@ -76,7 +76,7 @@
   <mat-label>Sonuçlar içinde aramak için tıklayın </mat-label>
   <input matInput (keyup)="applyFilterCosts($event)" placeholder="Herhangi bir kelime yazınız..." #input>
 </mat-form-field>
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8" *ngIf="canAccess('StaffPaymentTransaction.List')">
   <table mat-table [dataSource]="costDataSource" matSort #costSort="matSort">
 
     <ng-container matColumnDef="name">
@@ -124,9 +124,9 @@
     </tr>
   </table>
 
-  <app-generic-paginator #paginatorCosts [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize"
+  <app-generic-paginator *ngIf="canAccess('StaffPaymentTransaction.List')" #paginatorCosts [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize"
     [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
-  <div class="card-header">
+  <div class="card-header" *ngIf="canAccess('StaffPaymentTransaction.List')">
     <h5 class="font-weight-bold">Toplam Ödeme</h5>
     <span class="align-middle">
       {{totalCost}} TL <br>

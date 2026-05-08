@@ -1,4 +1,4 @@
-<div class="animated fadeIn">
+<div class="animated fadeIn" *ngIf="canAccess('Supplier.Add')">
   <div class="row">
     <div class="col-md-12">
       <div class="card">
@@ -37,7 +37,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="canAccess('Supplier.List')">
   <div class="col-md-12">
     <div class="card">
       <div class="col-md-12">
@@ -64,14 +64,14 @@
                 <td>{{item.address}}</td>
                 <td>{{item.isActive ? 'Evet' : 'Hayır'}}</td>
                 <td>
-                  <button class="btn btn-orange btn-info"(click)="getDetailFromTable(item)" ><i class="fi fi-rr-user-pen"></i></button>
-                <button class="btn btn-red btn-info" (click)="remove(item.id)"><i class="fi fi-rr-trash"></i></button>
+                  <button *ngIf="canAccess('Supplier.Detail')" class="btn btn-orange btn-info"(click)="getDetailFromTable(item)" ><i class="fi fi-rr-user-pen"></i></button>
+                <button *ngIf="canAccess('Supplier.Delete')" class="btn btn-red btn-info" (click)="remove(item.id)"><i class="fi fi-rr-trash"></i></button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <div class="card-footer pb-0 pt-3">
+        <div class="card-footer pb-0 pt-3" *ngIf="canAccess('Supplier.List')">
           <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
         [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
 

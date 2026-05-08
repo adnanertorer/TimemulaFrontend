@@ -23,6 +23,7 @@ import { Customer } from '../../shared/model/customer';
 import { CustomerService } from '../../shared/services/customer.service';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { AuthService } from 'src/app/shared';
 
 @Component({
   selector: 'app-customer',
@@ -31,7 +32,7 @@ import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 })
 export class CustomerComponent implements OnInit {
   @ViewChild('date')
-  public Date: DatePickerComponent;
+  public Date: DatePickerComponent | undefined;
   public dateValue: Date = new Date();
 
   public month: number = new Date().getMonth();
@@ -39,17 +40,17 @@ export class CustomerComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct;
+  startDateModel: NgbDateStruct | undefined;
 
-  customer: Customer;
+  customer: Customer | undefined;
   customerList: any[] = [];
   bloodGroups: BloodGroupModel[] = [];
   searchServices: SearchResourceModel[] = [];
   parentTypes: ParentTypeModel[] = [];
   genders: GenderModel[] = [];
   buttonText = 'Kaydet';
-  form: UntypedFormGroup;
-  customerFilter: CustomerFilter;
+  form: UntypedFormGroup | undefined;
+  customerFilter: CustomerFilter | undefined;
   isNewRecord: boolean = false;
   isVisibleAddButton = true;
   isReset = false;
@@ -63,8 +64,8 @@ export class CustomerComponent implements OnInit {
     'id',
   ];
   dataSource = new MatTableDataSource<Customer>();
-  @ViewChild('customerPaginator') paginator: MatPaginator;
-  @ViewChild('customerSort') sort: MatSort;
+  @ViewChild('customerPaginator') paginator: MatPaginator | undefined;
+  @ViewChild('customerSort') sort: MatSort | undefined;
 
   total: number = 0;
   pageIndex: number = 0;
@@ -76,6 +77,7 @@ export class CustomerComponent implements OnInit {
     private serviceSearch: SearchResourceService,
     private parentTypeService: ParentTypeService,
     private router: Router,
+    private authService: AuthService
   ) {}
 
   // tslint:disable-next-line: typedef
@@ -223,7 +225,9 @@ export class CustomerComponent implements OnInit {
   }
 
   onDateChange() {
-    this.dateValue = this.Date.value;
+    if (this.Date) {
+      this.dateValue = this.Date.value;
+    }
   }
 
   applyFilter(event: Event) {
@@ -234,17 +238,17 @@ export class CustomerComponent implements OnInit {
     }
   }
 
-  getDetail(val) {
+  getDetail(val: any) {
     this.router.navigate([]).then((result) => {
       window.open(`musteriler/detay/${val}`, '_self');
     });
   }
 
-  getServices(val) {
+  getServices(val: any) {
     this.router.navigate(['musteri-hizmetleri/paketler.html/', val]);
   }
 
-  getHealts(val) {
+  getHealts(val: any) {
     this.router.navigate([
       'genel-tanimlar/musteri-saglik-bilgileri.html/',
       val,
@@ -261,6 +265,7 @@ export class CustomerComponent implements OnInit {
     if (!pickerInput || pickerInput === '') {
       return 'Lütfen bir tarih seçiniz';
     }
+    return '';
   }
 
   getGenders() {
@@ -322,21 +327,25 @@ export class CustomerComponent implements OnInit {
         this.pageIndex = response.dynamicClass.index;
         this.dataSource.data = this.customerList;
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
 
   getWithFilter() {
-    this.service.getListWithFilter(this.customerFilter).subscribe((data) => {
-      if (data.success) {
-        this.customerList = data.dynamicClass as any[];
-        this.dataSource.data = this.customerList;
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      }
-    });
+    if (this.customerFilter) {
+      this.service.getListWithFilter(this.customerFilter).subscribe((data) => {
+        if (data.success) {
+          this.customerList = data.dynamicClass as any[];
+          this.dataSource.data = this.customerList;
+          this.dataSource.paginator = this.paginator || null;
+          this.dataSource.sort = this.sort || null;
+        }
+      });
+    }
   }
 
   resetForm() {
@@ -359,24 +368,28 @@ export class CustomerComponent implements OnInit {
     });
   }
 
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
+
   add(): void {
     console.log(this.customer);
-    if (this.customer.id === 0) {
+    if (this.customer && this.customer.id === 0) {
       // tslint:disable-next-line: radix
       this.customer.bloodGroupId =
         this.customer.bloodGroupId != undefined
           ? parseInt(this.customer.bloodGroupId.toString())
-          : null;
+          : undefined;
       // tslint:disable-next-line: radix
       this.customer.parentTypeId =
         this.customer.parentTypeId != undefined
           ? parseInt(this.customer.parentTypeId.toString())
-          : null;
+          : undefined;
       // tslint:disable-next-line: radix
       this.customer.searchResourceId =
         this.customer.searchResourceId != undefined
           ? parseInt(this.customer.searchResourceId.toString())
-          : null;
+          : undefined;
       this.customer.parentIdentity = this.customer.parentIdentity.toString();
       this.customer.birthDate = new Date(
         this.dateValue.getFullYear(),
@@ -400,7 +413,7 @@ export class CustomerComponent implements OnInit {
           alert(err);
         },
       );
-    } else {
+    } else if (this.customer) {
       this.service.update(this.customer).subscribe((data) => {
         if (data.success) {
           alert(data.clientMessage);
@@ -428,7 +441,7 @@ export class CustomerComponent implements OnInit {
     this.ngOnInit();
   }
 
-  parseDate(dateString: string): Date {
+  parseDate(dateString: string): Date | null {
     if (dateString) {
       return new Date(dateString);
     }

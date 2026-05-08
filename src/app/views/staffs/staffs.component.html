@@ -1,7 +1,7 @@
 <div class="animated fadeIn">
   <div class="row">
     <div class="col-md-12">
-      <div class="card">
+      <div class="card"  *ngIf="canAccess('Staff.Add')" >
         <div class="card-header">
           <h5 class="font-weight-bold">Personel Kayıt Formu</h5>
           <span class="align-middle"><i class="fi fi-rr-info"></i> Yeni personel veya mevcut personeli
@@ -116,7 +116,7 @@
 </div>
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
+    <div class="card" *ngIf="canAccess('Staff.List')">
       <div class="col-md-12">
         <div class="card-header">
           <h5 class="font-weight-bold">Personel Listesi</h5>
@@ -147,11 +147,11 @@
                 <td class="action-buttons">
               <tr>
                 <td>
-                  <button class="btn btn-orange btn-block" (click)="getDetailFromTable(item)" title="Düzenle"><i
+                  <button *ngIf="canAccess('Staff.Detail')" class="btn btn-orange btn-block" (click)="getDetailFromTable(item)" title="Düzenle"><i
                       class="fi fi-rr-user-pen"></i></button>
                 </td>
                 <td>
-                  <button class="btn btn-red btn-block" (click)="remove(item.id)" title="Sil"><i
+                  <button *ngIf="canAccess('Staff.Delete')" class="btn btn-red btn-block" (click)="remove(item.id)" title="Sil"><i
                       class="fi fi-rr-trash"></i></button>
                 </td>
               </tr>

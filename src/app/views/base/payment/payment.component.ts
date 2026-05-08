@@ -9,7 +9,6 @@ import { PaymentDialogData } from 'src/app/shared/model/payment-dialog-data';
 import { PaymentFilterModel } from 'src/app/shared/model/payment-filter-model';
 import { PaymentModel } from 'src/app/shared/model/payment-model';
 import { VCurrentBalanceModel } from 'src/app/shared/model/v-current-balance-model';
-import { AccountingTransactionService } from 'src/app/shared/services/accounting-transaction.service';
 import { CashboxService } from 'src/app/shared/services/cashbox.service';
 import { PaymentService } from 'src/app/shared/services/payment.service';
 import { GeneralPaymentSubComponent } from '../general-payment-sub/general-payment-sub.component';
@@ -17,6 +16,7 @@ import { PaymentSubComponent } from '../payment-sub/payment-sub.component';
 import Constants from 'src/app/shared/tools/constants';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
+import { AuthService } from 'src/app';
 declare let alertify: any;
 
 @Component({
@@ -25,7 +25,7 @@ declare let alertify: any;
   styleUrls: ['./payment.component.css'],
 })
 export class PaymentComponent implements OnInit {
-  filter: PaymentFilterModel;
+  filter: PaymentFilterModel | undefined;
   transactionList: VCurrentBalanceModel[] = [];
 
   total: number = 0;
@@ -33,9 +33,9 @@ export class PaymentComponent implements OnInit {
   pageSize: number = 50;
 
   @ViewChild('date')
-  public Date: DatePickerComponent;
+  public Date: DatePickerComponent | undefined;
   @ViewChild('endDate')
-  public EndDate: DatePickerComponent;
+  public EndDate: DatePickerComponent | undefined;
 
   public dateValue: Date = new Date();
   public endDateValue: Date = new Date();
@@ -72,13 +72,13 @@ export class PaymentComponent implements OnInit {
   cashBoxList: CashboxModel[] = [];
   cashBoxListFilter: CashboxModel[] = [];
   buttonText = Constants.Save;
-  pageOfItems: Array<any>;
-  pageOfItemTransactions: Array<any>;
+  pageOfItems: Array<any> = [];
+  pageOfItemTransactions: Array<any> = [];
   isCollection: boolean = false;
   strcurrentAccount: string = '';
   strDept: number = 0;
   totalPayment: number = 0;
-  modalData: PaymentDialogData;
+  modalData: PaymentDialogData | undefined;
 
   displayColums: string[] = [
     'companyName',
@@ -88,22 +88,27 @@ export class PaymentComponent implements OnInit {
     'description',
     'id',
   ];
-  dataSource: MatTableDataSource<PaymentModel>;
+  dataSource: MatTableDataSource<PaymentModel> | undefined;
 
-  @ViewChild('paginatorPayment') paginator: MatPaginator;
-  @ViewChild('paymentSort') sort: MatSort;
+  @ViewChild('paginatorPayment') paginator: MatPaginator | undefined;
+  @ViewChild('paymentSort') sort: MatSort | undefined;
 
   constructor(
     private service: PaymentService,
     private cashBoxService: CashboxService,
     public dialog: MatDialog,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.filter = {
       cashBoxId: 0,
-      endDate: null,
-      startDate: null,
+      endDate: undefined,
+      startDate: undefined,
     };
 
     this.modalData = {
@@ -139,22 +144,22 @@ export class PaymentComponent implements OnInit {
   }
 
   onDateChange() {
-    this.dateValue = this.Date.value;
+    this.dateValue = this.Date?.value ?? new Date();
   }
 
   onEndDateChange() {
-    this.endDateValue = this.EndDate.value;
+    this.endDateValue = this.EndDate?.value ?? new Date();
   }
 
   applyFilterCosts(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.dataSource!.filter = filterValue.trim().toLowerCase();
     this.totalPayment = 0;
-    this.dataSource.filteredData.forEach((element) => {
+    this.dataSource!.filteredData.forEach((element) => {
       this.totalPayment += element.paymentAmount;
     });
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+    if (this.dataSource!.paginator) {
+      this.dataSource!.paginator.firstPage();
     }
   }
 
@@ -252,12 +257,15 @@ export class PaymentComponent implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource(this.paymentList);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator ?? null;
+      this.dataSource.sort = this.sort ?? null;
     });
   }
 
   getWithFilter() {
+    if (!this.filter) {
+      return;
+    }
     this.filter.startDate = this.dateValue;
     this.filter.endDate = this.endDateValue;
     this.service.getListByFilter(this.filter).subscribe((data) => {
@@ -267,8 +275,8 @@ export class PaymentComponent implements OnInit {
       });
 
       this.dataSource = new MatTableDataSource(this.paymentList);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator ?? null;
+      this.dataSource.sort = this.sort ?? null;
     });
   }
 

@@ -1,13 +1,13 @@
 <div class="col-md-12">
   <div class="card">
     <div class="col-md-12">
-      <div class="card-header">
+      <div class="card-header" *ngIf="canAccess('PaymentForm.Add')">
         <h5 class="font-weight-bold">Ödeme Formu Yönetimi</h5>
         <span class="align-middle">
           <button class="btn btn-primary" (click)="openGeneralDialog()">Ödeme Girişi Oluştur</button>
         </span>
       </div>
-      <div class="card-body">
+      <div class="card-body" *ngIf="canAccess('PaymentForm.List')">
         <div class="form-group row">
           <div class="col-md-2">
             <label for="transactionTypeId">Kasa</label>
@@ -33,7 +33,7 @@
     </div>
   </div>
 </div>
-<div class="card-header">
+<div class="card-header" *ngIf="canAccess('PaymentForm.List')">
   <h5 class="font-weight-bold">Ödeme Listesi</h5>
   <span class="align-middle">
     <h6>Listenin Genel Özeti</h6>
@@ -44,7 +44,7 @@
   <mat-label>Sonuçlar içinde aramak için tıklayınız</mat-label>
   <input matInput (keyup)="applyFilterCosts($event)" placeholder="Herhangi bir kelime yazınız..." #input>
 </mat-form-field>
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8" *ngIf="canAccess('PaymentForm.List')">
   <table mat-table [dataSource]="dataSource" matSort #costSort="matSort">
 
     <ng-container matColumnDef="companyName">
@@ -75,7 +75,7 @@
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> İşlemler </th>
       <td mat-cell *matCellDef="let row">
-        <button class="btn btn-orange" value="Detay"><i class="fi fi-rr-user-pen"></i></button>  
+        <button *ngIf="canAccess('PaymentForm.Detail')" class="btn btn-orange" value="Detay"><i class="fi fi-rr-user-pen"></i></button>  
       </td>
     </ng-container>
 
@@ -87,7 +87,7 @@
     </tr>
   </table>
 
-  <mat-paginator #paginatorCosts [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator *ngIf="canAccess('PaymentForm.List')" #paginatorCosts [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 
 
   

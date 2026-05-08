@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="row">
+  <div class="row" *ngIf="canAccess('LessonClassroom.Add')">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
@@ -86,7 +86,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <div class="row" *ngIf="canAccess('LessonClassroom.List')">
     <div class="col-md-12">
       <div class="card">
         <div class="col-md-12">
@@ -117,9 +117,9 @@
                   <td>{{item.priority}}</td>
                   <td>{{item.createdAt | date: 'dd/M/yyyy hh:mm'}}</td>
                   <td style="text-align: right;">
-                    <button class="btn btn-orange btn-info" (click)="getDetailFromTable(item)"><i
+                    <button *ngIf="canAccess('LessonClassroom.Detail')" class="btn btn-orange btn-info" (click)="getDetailFromTable(item)"><i
                         class="fi fi-rr-user-pen"></i></button>
-                    <button class="btn btn-red btn-info" (click)="remove(item.id)"><i
+                    <button *ngIf="canAccess('LessonClassroom.Delete')" class="btn btn-red btn-info" (click)="remove(item.id)"><i
                         class="fi fi-rr-trash"></i></button>
                   </td>
                 </tr>
@@ -127,7 +127,7 @@
             </table>
           </div>
           <div class="card-footer pb-0 pt-3">
-            <app-generic-paginator #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
+            <app-generic-paginator *ngIf="canAccess('LessonClassroom.List')" #paginator [length]="total" [pageIndex]="pageIndex" [pageSize]="pageSize" 
         [pageSizeOptions]="[10, 25, 50, 75, 100, 150]" (pageChange)="onPage($event)"></app-generic-paginator>
           </div>
         </div><!--/.col-->

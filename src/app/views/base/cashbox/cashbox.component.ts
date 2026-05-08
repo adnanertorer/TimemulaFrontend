@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app';
 import { CashboxModel } from 'src/app/shared/model/cashbox-model';
 import { CashboxService } from 'src/app/shared/services/cashbox.service';
 import Constants from 'src/app/shared/tools/constants';
@@ -8,36 +9,42 @@ declare let alertify: any;
 @Component({
   selector: 'app-cashbox',
   templateUrl: './cashbox.component.html',
-  styleUrls: ['./cashbox.component.css']
+  styleUrls: ['./cashbox.component.css'],
 })
 export class CashboxComponent implements OnInit {
-
-  cashBox: CashboxModel;
+  cashBox: CashboxModel | undefined;
   cashBoxList: CashboxModel[] = [];
   buttonText = Constants.Save;
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> = [];
   isBank: boolean = false;
   cashTypes = CashBoxTypeEnum;
 
-  constructor(private service: CashboxService) { }
+  constructor(
+    private service: CashboxService,
+    private authService: AuthService,
+  ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.cashBox = {
       bankAccountNumber: '',
       cashBoxName: '',
       cashBoxType: 0,
-      createdAt: new Date,
+      createdAt: new Date(),
       createdBy: 0,
       iban: '',
-      id: 0
-    }
+      id: 0,
+    };
     this.getList();
   }
 
-  typeOnChange(source) {
-    if(this.cashTypes.Bank == parseInt(source)){
+  typeOnChange(source: string) {
+    if (this.cashTypes.Bank == parseInt(source)) {
       this.isBank = true;
-    }else{
+    } else {
       this.isBank = false;
     }
   }
@@ -48,16 +55,16 @@ export class CashboxComponent implements OnInit {
 
   getDetailFromTable(resource: any): void {
     this.cashBox = resource;
-    if(this.cashBox.cashBoxType == this.cashTypes.Bank){
+    if (this.cashBox && this.cashBox.cashBoxType == this.cashTypes.Bank) {
       this.isBank = true;
-    }else{
+    } else {
       this.isBank = false;
     }
     this.buttonText = Constants.Update;
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -67,26 +74,32 @@ export class CashboxComponent implements OnInit {
   }
 
   add(): void {
-    if (this.cashBox.id == 0) {
-      this.service.add(this.cashBox).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
-    } else {
-      this.service.update(this.cashBox).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
+    if (this.cashBox && this.cashBox.id == 0) {
+      this.service.add(this.cashBox).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
+    } else if (this.cashBox) {
+      this.service.update(this.cashBox).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
     }
   }
 
@@ -94,7 +107,6 @@ export class CashboxComponent implements OnInit {
     this.service.getList().subscribe((data) => {
       this.cashBoxList = data.dynamicClass as CashboxModel[];
       this.pageOfItems = this.cashBoxList;
-    })
+    });
   }
-
 }

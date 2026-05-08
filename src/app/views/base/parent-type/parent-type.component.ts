@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app';
 import { ParentTypeModel } from 'src/app/shared/model/parent-type-model';
 import { QueryParamaterListModel } from 'src/app/shared/model/query-paramater-list-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
@@ -14,13 +15,18 @@ declare let alertify: any;
 })
 export class ParentTypeComponent implements OnInit {
 
-  parentType: ParentTypeModel;
+  parentType: ParentTypeModel | undefined;
   list: ParentTypeModel[] = [];
-  form: UntypedFormGroup;
-  pageOfItems: Array<any>;
+  form: UntypedFormGroup | undefined;
+  pageOfItems: Array<any> = [];
   buttonText = 'Kaydet';
-  queryParameter: QueryParamaterListModel;
-  constructor(private service: ParentTypeService) { }
+  queryParameter: QueryParamaterListModel | undefined;
+
+  constructor(private service: ParentTypeService, private authService: AuthService) { }
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.queryParameter = {
@@ -62,7 +68,7 @@ export class ParentTypeComponent implements OnInit {
   }
 
   add(): void {
-    if (this.parentType.id == 0) {
+    if (this.parentType && this.parentType.id == 0) {
       this.service.add(this.parentType).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();
@@ -72,7 +78,7 @@ export class ParentTypeComponent implements OnInit {
       }, (err) => {
         alertify.error(err, 2);
       });
-    } else {
+    } else if (this.parentType) {
       this.service.update(this.parentType).subscribe((data) => {
         if (data.success) {
           this.ngOnInit();

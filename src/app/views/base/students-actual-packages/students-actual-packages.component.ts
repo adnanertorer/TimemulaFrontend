@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app';
 import { Customer } from 'src/app/shared/model/customer';
 import { VCustomerMainModel } from 'src/app/shared/model/v-customer-main-model';
 import { PageRequestWithCustomerId } from 'src/app/shared/requests/page-request-with-customer-id';
@@ -16,7 +17,7 @@ import Constants from 'src/app/shared/tools/constants';
 })
 export class StudentsActualPackagesComponent implements OnInit {
   list: VCustomerMainModel[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> = [];
   buttonText = Constants.Save;
   name: string = '';
   surname: string = '';
@@ -26,14 +27,19 @@ export class StudentsActualPackagesComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 50;
 
-  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator | undefined;
 
   constructor(
     private service: CustomerLessonService,
     private activatedRoute: ActivatedRoute,
     private customerService: CustomerService,
     private router: Router,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
@@ -73,8 +79,10 @@ export class StudentsActualPackagesComponent implements OnInit {
         const response = data as PaginateResponse<any>;
         this.list = response.dynamicClass.items as VCustomerMainModel[];
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }

@@ -21,6 +21,7 @@ import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PageEvent } from '@angular/material/paginator';
 import { PageRequestWithDebtCollectionFilter } from 'src/app/shared/requests/page-request-with-debtcollection-filter';
+import { AuthService } from 'src/app';
 
 @Component({
   selector: 'app-dept-collection',
@@ -36,8 +37,8 @@ export class DeptCollectionComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 50;
 
-  startDate: Date = null;
-  endDate: Date = null;
+  startDate: Date | undefined = undefined;
+  endDate: Date | undefined = undefined;
 
   public minDate: Date = new Date(1900, 1, 1);
   public maxDate: Date = new Date(2999, 12, 31);
@@ -61,13 +62,13 @@ export class DeptCollectionComponent implements OnInit {
   cashBoxes: CashboxModel[] = [];
   customers: Customer[] = [];
   buttonText = Constants.Save;
-  pageOfItemTransactions: Array<any>;
+  pageOfItemTransactions: Array<any> = [];
   isCollection: boolean = false;
   strcurrentAccount: string = '';
   strDept: number = 0;
   totalCollection: number = 0;
-  modalData: DeptCollectionDialogData;
-  filter: DeptCollectionFilterModel;
+  modalData: DeptCollectionDialogData | undefined;
+  filter: DeptCollectionFilterModel | undefined;
 
   constructor(
     private accontingService: AccountingTransactionService,
@@ -76,7 +77,12 @@ export class DeptCollectionComponent implements OnInit {
     public dialog: MatDialog,
     private router: Router,
     private customerService: CustomerService,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.modalData = {
@@ -88,8 +94,8 @@ export class DeptCollectionComponent implements OnInit {
     this.filter = {
       cashBoxId: 0,
       customerId: 0,
-      endDate: null,
-      startDate: null,
+      endDate: undefined,
+      startDate: undefined,
     };
 
     this.getAccountsGeneral();
@@ -147,8 +153,8 @@ export class DeptCollectionComponent implements OnInit {
       filter: {
         cashBoxId: this.cashBoxId,
         customerId: this.customerId,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.startDate ?? new Date(),
+        endDate: this.endDate ?? new Date(),
       },
     };
 

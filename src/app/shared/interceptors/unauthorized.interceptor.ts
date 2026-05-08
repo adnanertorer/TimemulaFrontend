@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { ErrorDialogService } from 'src/app/views/error/Error-Dialog/error-dialog.service';
+import { isArray } from 'rxjs/internal-compatibility';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
@@ -24,7 +25,7 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private router: Router,
     private errorService: ErrorDialogService,
-  ) {}
+  ) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -52,7 +53,24 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
               this.errorService.error(errorMessage, this.options);
               return throwError(errorMessage);
             }
+
+            const errors = error.errors as Record<string, string[]>;
+            if (errors) {
+              Object.entries(errors).forEach(([field, messages]) => {
+                messages.forEach(msg => {
+                  errorMessage += '<p>' + messages + '</p>';
+                });
+              });
+              this.errorService.error(errorMessage, this.options);
+              return throwError(errorMessage);
+            }
           }
+
+        }
+
+        if (err.status === 403) {
+          this.errorService.error('Bu modül için yetkiniz bulunmamaktadır.', this.options);
+          return throwError('Server Error');
         }
 
         if (err.status === 500) {

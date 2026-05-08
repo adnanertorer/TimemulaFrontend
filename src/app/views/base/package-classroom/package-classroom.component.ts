@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app';
 import { ArtPackageModel } from 'src/app/shared/model/art-package-model';
 import { CategoryModel } from 'src/app/shared/model/category-model';
 import { ClassroomModel } from 'src/app/shared/model/classroom-model';
@@ -25,7 +26,7 @@ declare let alertify: any;
   styleUrls: ['./package-classroom.component.css'],
 })
 export class PackageClassroomComponent implements OnInit {
-  packageClassroom: PackageClassroomModel;
+  packageClassroom: PackageClassroomModel | undefined;
   list: PackageClassroomModel[] = [];
   categories: CategoryModel[] = [];
   subCategories: SubCategoryModel[] = [];
@@ -37,7 +38,7 @@ export class PackageClassroomComponent implements OnInit {
   closedGroup: number = participantEnum.closedGroup;
   lessons: VLessons[] = [];
 
-  @ViewChild('paginator') paginator: MatPaginator;
+  @ViewChild('paginator') paginator: MatPaginator | undefined;
 
   total: number = 0;
   pageIndex: number = 0;
@@ -49,7 +50,12 @@ export class PackageClassroomComponent implements OnInit {
     private subCategoryService: SubCategoryService,
     private classroomService: ClassroomService,
     private lessonService: LessonService,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.packageClassroom = {
@@ -86,19 +92,20 @@ export class PackageClassroomComponent implements OnInit {
       if (data.success) {
         const response = data as PaginateResponse<any>;
         this.list = response.dynamicClass.items as PackageClassroomModel[];
-        
-         this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
 
-  categoryOnChange(id) {
+  categoryOnChange(id: string) {
     this.selectedCategoryId = parseInt(id);
     this.getSubCategories(this.selectedCategoryId);
   }
 
-  subCategoryOnChange(id) {
+  subCategoryOnChange(id: string) {
     this.selectedSubCategoryId = parseInt(id);
     this.getLessons(this.selectedCategoryId, this.selectedSubCategoryId);
   }
@@ -161,10 +168,9 @@ export class PackageClassroomComponent implements OnInit {
     });
   }
 
-
   getDetailFromTable(resource: any): void {
-    console.log(resource);
     this.packageClassroom = resource;
+    if (!this.packageClassroom) return;
     this.packageClassroom.categoryId = resource.lesson.category.id;
     const request: SubCategoryWithCategoryIdPaginationRequest = {
       pageRequest: {
@@ -175,7 +181,7 @@ export class PackageClassroomComponent implements OnInit {
       categoryId: this.packageClassroom.categoryId,
     };
     this.subCategoryService.getList(request).subscribe((data) => {
-      if (data.success) {
+      if (data.success && this.packageClassroom) {
         const response = data as PaginateResponse<SubCategoryModel>;
         this.subCategories = response.dynamicClass.items as SubCategoryModel[];
         this.packageClassroom.subCategoryId = resource.lesson.subCategory.id;
@@ -189,7 +195,7 @@ export class PackageClassroomComponent implements OnInit {
           },
         };
         this.lessonService.getByCategory(pageRequest).subscribe((data) => {
-          if (data.success) {
+          if (data.success && this.packageClassroom) {
             const response = data as PaginateResponse<any>;
             this.lessons = response.dynamicClass.items as VLessons[];
             this.packageClassroom.lessonId = resource.lesson.id;
@@ -212,6 +218,7 @@ export class PackageClassroomComponent implements OnInit {
   }
 
   add(): void {
+    if (!this.packageClassroom) return;
     this.packageClassroom.classroomId = parseInt(
       this.packageClassroom.classroomId.toString(),
     );

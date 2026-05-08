@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app';
 import { CategoryModel } from 'src/app/shared/model/category-model';
 import { LessonModel } from 'src/app/shared/model/lesson-model';
 import { SubCategoryModel } from 'src/app/shared/model/sub-category-model';
@@ -25,17 +26,17 @@ declare let alertify: any;
   styleUrls: ['./lesson.component.css'],
 })
 export class LessonComponent implements OnInit {
-  lesson: LessonModel;
+  lesson: LessonModel | undefined;
   lessons: LessonModel[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> = [];
   buttonText = 'Kaydet';
   categories: CategoryModel[] = [];
   subCategories: SubCategoryModel[] = [];
   filesTemp: any;
-  public message: String;
-  public progress: number;
+  public message: String = "";
+  public progress: number = 0;
   fileToUpload: any = [];
-  isFileExist: boolean;
+  isFileExist: boolean = false;
 
   total: number = 0;
   pageIndex: number = 0;
@@ -45,14 +46,19 @@ export class LessonComponent implements OnInit {
   private readonly apiUrl = `${environment.apiUrl}`;
   @Output() public onUploadFinished = new EventEmitter();
 
-  @ViewChild('lessonPaginator') paginator: MatPaginator;
+  @ViewChild('lessonPaginator') paginator: MatPaginator | undefined;
 
   constructor(
     private service: LessonService,
     private categoryService: CategoryService,
     private subCategoryService: SubCategoryService,
     private http: HttpClient,
+    private authService: AuthService,
   ) {}
+
+   canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.isFileExist = false;
@@ -96,13 +102,15 @@ export class LessonComponent implements OnInit {
         this.total = response.dynamicClass.count;
         this.pageIndex = response.dynamicClass.index;
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
 
-  categoryOnChange(id) {
+  categoryOnChange(id: string) {
     this.getSubCategories(parseInt(id));
   }
 
@@ -172,7 +180,7 @@ export class LessonComponent implements OnInit {
     this.ngOnInit();
   }
 
-  public uploadFile = (files) => {
+  public uploadFile = (files: string | any[]) => {
     if (files.length === 0) {
       return;
     }
@@ -188,6 +196,7 @@ export class LessonComponent implements OnInit {
   };
 
   add(): void {
+    if(!this.lesson) return;
     this.lesson.categoryId = parseInt(this.lesson.categoryId.toString());
     this.lesson.subCategoryId = parseInt(this.lesson.subCategoryId.toString());
     if (this.lesson.id == 0) {
@@ -208,7 +217,7 @@ export class LessonComponent implements OnInit {
         })
         .subscribe((event) => {
           if (event.type === HttpEventType.UploadProgress) {
-            this.progress = Math.round((100 * event.loaded) / event.total);
+            this.progress = Math.round((100 * event.loaded) / (event.total || 1));
           } else if (event.type === HttpEventType.Response) {
             this.message = 'Yükleme tamamlandı';
             this.onUploadFinished.emit(event.body);
@@ -234,7 +243,7 @@ export class LessonComponent implements OnInit {
         })
         .subscribe((event) => {
           if (event.type === HttpEventType.UploadProgress) {
-            this.progress = Math.round((100 * event.loaded) / event.total);
+            this.progress = Math.round((100 * event.loaded) / (event.total || 1));
           } else if (event.type === HttpEventType.Response) {
             this.message = 'Yükleme tamamlandı';
             this.onUploadFinished.emit(event.body);

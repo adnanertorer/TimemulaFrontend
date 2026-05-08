@@ -6,6 +6,7 @@ import Constants from 'src/app/shared/tools/constants';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { AuthService } from 'src/app';
 declare let alertify: any;
 
 @Component({
@@ -26,8 +27,8 @@ export class ClassroomComponent implements OnInit {
   @ViewChild('classroomPaginator') paginator: MatPaginator | undefined;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private service: ClassroomService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -38,6 +39,10 @@ export class ClassroomComponent implements OnInit {
       quta: 0,
     };
     this.getList();
+  }
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
   }
 
   onPage(e: PageEvent) {

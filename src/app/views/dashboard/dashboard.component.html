@@ -22,7 +22,7 @@
 		<div class="content">
 			<div class="content-main">
 				<div class="card-grid">
-					<article class="card">
+					<article class="card" *ngIf="canAccess('PackageModule')">
 						<div class="card-header">
 							<div>
 								<span><i class="fi fi-rr-legal"></i></span>
@@ -36,7 +36,7 @@
 							<a href="/musteri-islemleri/paket-ekle.html">Görüntüle</a>
 						</div>
 					</article>
-					<article class="card">
+					<article class="card" *ngIf="canAccess('PackageModule')">
 						<div class="card-header">
 							<div>
 								<span><i class="fi fi-rr-calendar-check"></i></span>
@@ -51,7 +51,7 @@
 							<a href="/actual-hareketler/ogrenci-listesi.html">Görüntüle</a>
 						</div>
 					</article>
-					<article class="card">
+					<article class="card" *ngIf="canAccess('AccountTransaction')">
 						<div class="card-header">
 							<div>
 								<span><i class="fi fi-rr-wallet"></i></span>
@@ -65,7 +65,7 @@
 							<a href="/cari-hesaplar/tahsilat-formu.html">Görüntüle</a>
 						</div>
 					</article>
-					<article class="card">
+					<article class="card" *ngIf="canAccess('LessonStaff')">
 						<div class="card-header">
 							<div>
 								<span><i class="fi fi-rr-invite"></i></span>
@@ -79,7 +79,7 @@
 							<a href="/egitmen-islemleri/dersler.html">Görüntüle</a>
 						</div>
 					</article>
-					<article class="card">
+					<article class="card" *ngIf="canAccess('StaffPayment')">
 						<div class="card-header">
 							<div>
 								<span><i class="fi fi-rr-credit-card-buyer"></i></span>

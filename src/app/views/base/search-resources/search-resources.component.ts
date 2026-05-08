@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'src/app';
 import { SearchResourceModel } from 'src/app/shared/model/search-resource-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
@@ -8,23 +9,29 @@ declare let alertify: any;
 @Component({
   selector: 'app-search-resources',
   templateUrl: './search-resources.component.html',
-  styleUrls: ['./search-resources.component.css']
+  styleUrls: ['./search-resources.component.css'],
 })
 export class SearchResourcesComponent implements OnInit {
-
   searchResource: SearchResourceModel | undefined;
   list: SearchResourceModel[] = [];
   pageOfItems: Array<any> | undefined;
   buttonText = 'Kaydet';
-  constructor(private service: SearchResourceService) { }
+  constructor(
+    private service: SearchResourceService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
     this.searchResource = {
       createdBy: 0,
       id: 0,
-      searchResourceName: ''
+      searchResourceName: '',
     };
     this.getList();
+  }
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
   }
 
   onChangePage(pageOfItems: any[]): void {
@@ -37,7 +44,7 @@ export class SearchResourcesComponent implements OnInit {
     window.scroll({
       top: 0,
       left: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     });
   }
 
@@ -48,25 +55,31 @@ export class SearchResourcesComponent implements OnInit {
 
   add(): void {
     if (this.searchResource!.id == 0) {
-      this.service.add(this.searchResource!).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
+      this.service.add(this.searchResource!).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
     } else {
-      this.service.update(this.searchResource!).subscribe((data) => {
-        if (data.success) {
-          this.ngOnInit();
-          alertify.set('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2);
-        }
-      }, (err) => {
-        alertify.error(err, 2);
-      });
+      this.service.update(this.searchResource!).subscribe(
+        (data) => {
+          if (data.success) {
+            this.ngOnInit();
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success(data.clientMessage, 2);
+          }
+        },
+        (err) => {
+          alertify.error(err, 2);
+        },
+      );
     }
   }
 
@@ -74,17 +87,19 @@ export class SearchResourcesComponent implements OnInit {
     const pageRequest: PageRequest = {
       pageIndex: 0,
       pageSize: 50,
-      isAllItems: false
+      isAllItems: false,
     };
     this.service.getList(pageRequest).subscribe((data) => {
       const response = data as PaginateResponse<SearchResourceModel>;
       this.list = response.dynamicClass.items;
       this.pageOfItems = this.list;
-    })
+    });
   }
 
   remove(id: number): void {
-    const approve = confirm('Arama motoru silmek üzeresiniz, devam etmek istiyor musunuz?');
+    const approve = confirm(
+      'Arama motoru silmek üzeresiniz, devam etmek istiyor musunuz?',
+    );
     if (approve) {
       this.service.remove(id).subscribe((data) => {
         if (data.success) {
@@ -97,5 +112,4 @@ export class SearchResourcesComponent implements OnInit {
       });
     }
   }
-
 }
