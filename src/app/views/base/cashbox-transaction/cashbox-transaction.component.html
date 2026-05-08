@@ -1,6 +1,6 @@
 <div class="animated fadeIn">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" *ngIf="canAccess('CashBoxTransaction.List')">
       <div class="card">
         <div class="col-md-12">
           <div class="card-header" style="margin-top: 5px;">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-12">
+    <div class="col-md-12" *ngIf="canAccess('CashBoxTransaction.List')">
       <div class="card">
         <div class="card-header">
           <h5 class="font-weight-bold">Kasa Hareketleri Listesi</h5>
@@ -79,7 +79,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="card-footer pb-0 pt-3">
+                <div class="card-footer pb-0 pt-3" *ngIf="canAccess('CashBoxTransaction.List')">
                   <jw-pagination [items]="list" (changePage)="onChangePage($event)"></jw-pagination>
                 </div>
               </div><!--/.col-->
