@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { AuthService } from 'src/app';
 import { ArtPackageModel } from 'src/app/shared/model/art-package-model';
 import { CashboxModel } from 'src/app/shared/model/cashbox-model';
 import { CategoryModel } from 'src/app/shared/model/category-model';
@@ -56,16 +57,16 @@ export class EducatorPriceListComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 50;
 
-  startDate: Date = null;
-  endDate: Date = null;
+  startDate: Date | undefined = undefined;
+  endDate: Date | undefined = undefined;
 
   public minDate: Date = new Date(1900, 1, 1);
   public maxDate: Date = new Date(2999, 12, 31);
 
   costDataSource = new MatTableDataSource<VEducatorCost>();
 
-  @ViewChild('paginatorCosts') paginator: MatPaginator;
-  @ViewChild('costSort') sort: MatSort;
+  @ViewChild('paginatorCosts') paginator: MatPaginator | undefined;
+  @ViewChild('costSort') sort: MatSort | undefined;
 
   totalCost: number = 0;
 
@@ -81,7 +82,12 @@ export class EducatorPriceListComponent implements OnInit {
     private lessonService: LessonService,
     private categoryService: CategoryService,
     private subCategoryService: SubCategoryService,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.getList();
@@ -111,8 +117,10 @@ export class EducatorPriceListComponent implements OnInit {
         });
 
         this.costDataSource.data = this.costList;
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
@@ -158,16 +166,16 @@ export class EducatorPriceListComponent implements OnInit {
     });
   }
 
-  lessonOnChange(id) {
+  lessonOnChange(id: string) {
     this.getPackages(parseInt(id));
   }
 
-  categoryOnChange(id) {
+  categoryOnChange(id: string) {
     this.selectedCategoryId = parseInt(id);
     this.getSubCategories(this.selectedCategoryId);
   }
 
-  subCategoryOnChange(id) {
+  subCategoryOnChange(id: string) {
     this.selectedSubCategoryId = parseInt(id);
     this.getLessons(this.selectedCategoryId, this.selectedSubCategoryId);
   }
@@ -229,8 +237,8 @@ export class EducatorPriceListComponent implements OnInit {
         categoryId: this.selectedCategoryId,
         subCategoryId: this.selectedSubCategoryId,
         packageId: this.packageId,
-        startDate: this.startDate,
-        endDate: this.endDate,
+        startDate: this.startDate ?? new Date(),
+        endDate: this.endDate ?? new Date(),
       },
     };
     this.educatorCostService.getListByFilter(request).subscribe((data) => {
@@ -243,8 +251,10 @@ export class EducatorPriceListComponent implements OnInit {
         });
         this.costDataSource.data = this.costList;
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
