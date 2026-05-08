@@ -47,7 +47,7 @@
     <ng-container matColumnDef="gender">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> İşlemler </th>
       <td mat-cell *matCellDef="let row">
-        <button *ngIf="canAccess('Packages.Add')" (click)="getPackages(row.id)" class="btn btn-primary" value="Paketler">Paketler</button>
+       <!-- <button *ngIf="canAccess('Packages.Add')" (click)="getPackages(row.id)" class="btn btn-primary" value="Paketler">Paketler</button>-->
         <button *ngIf="canAccess('StaffPaymentTransaction.Add')" (click)="getPreparePrice(row.id)" class="btn btn-orange" style="margin-left: 5px;" value="Hakedişler">Hakedişler</button>   
       </td>
     </ng-container>

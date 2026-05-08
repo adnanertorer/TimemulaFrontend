@@ -8,9 +8,9 @@
             <i class="fi fi-rr-info"></i>
             Paket oluşturmadan önce dilerseniz üst kategori, alt kategori, hizmet oluşturabilirsiniz. <br>
             <ul>
-              <li><a href="/genel-tanimlar/kategoriler.html">Üst kategori oluştur</a></li>
-              <li><a href="/genel-tanimlar/alt-kategoriler.html">Alt kategori oluştur</a></li>
-              <li><a href="/genel-tanimlar/dersler.html">Hizmet oluştur</a></li>
+              <li *ngIf="canAccess('Category.Add')"><a href="/genel-tanimlar/kategoriler.html">Üst kategori oluştur</a></li>
+              <li *ngIf="canAccess('SubCategory.Add')"><a href="/genel-tanimlar/alt-kategoriler.html">Alt kategori oluştur</a></li>
+              <li *ngIf="canAccess('Lesson.Add')"><a href="/genel-tanimlar/dersler.html">Hizmet oluştur</a></li>
             </ul>
           </span>
         </div>
@@ -42,7 +42,7 @@
               <div class="col-md-6 col-lg-4">
                  <label>Paket Adı</label>
                 <input type="text" name="artPackageName" class="form-control" id="artPackageName"
-                [(ngModel)]="artPackage.lessonPackageName" placeholder="Paket Adı">
+                [(ngModel)]="artPackage.artPackageName" placeholder="Paket Adı">
               </div>
               <div class="col-md-6 col-lg-4">
                  <label>Seans Sayısı</label>

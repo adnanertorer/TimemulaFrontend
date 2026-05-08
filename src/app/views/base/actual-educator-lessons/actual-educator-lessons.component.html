@@ -5,8 +5,8 @@
       <i class="fi fi-rr-info"></i>
         Müşteri ve paket oluşturabilirsiniz. Mevcut olanları görüntüleyebilirsiniz. <br>
       <ul>
-        <li><a href="/musteriler">Müşteri oluştur</a></li>
-        <li><a href="/musteri-islemleri/paket-ekle.html">Paket Oluştur</a></li>
+        <li *ngIf="canAccess('Customer.Add')"><a href="/musteriler">Müşteri oluştur</a></li>
+        <li *ngIf="canAccess('Packages.Add')"><a href="/musteri-islemleri/paket-ekle.html">Paket Oluştur</a></li>
 
       </ul>
     </span>
@@ -16,7 +16,7 @@
   <mat-label>Sonuçlar içinde aramak için tıklayın</mat-label>
   <input matInput (keyup)="applyFilter($event)" placeholder="Herhangi bir kelime yazınız..." #input>
 </mat-form-field>
-<div class="mat-elevation-z8">
+<div class="mat-elevation-z8" *ngIf="canAccess('LessonStaff.List')">
   <table mat-table [dataSource]="dataSource" matSort>
 
     <ng-container matColumnDef="lessonName">
@@ -59,6 +59,6 @@
     </tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator *ngIf="canAccess('LessonStaff.List')" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
 </div>
 
