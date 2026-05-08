@@ -3,6 +3,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app';
 import { Customer } from 'src/app/shared/model/customer';
 import { FilterAccountingModel } from 'src/app/shared/model/filter-accounting-model';
 import { SupplierModel } from 'src/app/shared/model/supplier-model';
@@ -27,16 +28,16 @@ export interface tempCustomer {
 export class AccountTransactionsComponent implements OnInit {
   list: VAccountTrancation[] = [];
   tempDataList: tempCustomer[] = [];
-  tempData: tempCustomer;
-  filter: FilterAccountingModel;
+  tempData: tempCustomer | undefined;
+  filter: FilterAccountingModel | undefined;
   customers: Customer[] = [];
   supliers: SupplierModel[] = [];
 
   customerId: number = 0;
   customerType: number = 0;
   transactionTypeId: number = 0;
-  startTime: Date = null;
-  finishTime: Date = null;
+  startTime: Date | undefined = undefined;
+  finishTime: Date | undefined = undefined;
 
   public minDate: Date = new Date(1900, 1, 1);
   public maxDate: Date = new Date(2999, 12, 31);
@@ -48,11 +49,11 @@ export class AccountTransactionsComponent implements OnInit {
     'debt',
     'claim',
     'balance',
-    'id'
+    'id',
   ];
   dataSource = new MatTableDataSource<VAccountTrancation>();
-  @ViewChild('accountPaginator') paginator: MatPaginator;
-  @ViewChild('accountSort') sort: MatSort;
+  @ViewChild('accountPaginator') paginator: MatPaginator | undefined;
+  @ViewChild('accountSort') sort: MatSort | undefined;
 
   totalDebt: number = 0;
   totalClaim: number = 0;
@@ -67,15 +68,20 @@ export class AccountTransactionsComponent implements OnInit {
     private customerService: CustomerService,
     private supplierService: SupplierService,
     private router: Router,
+    private authService: AuthService,
   ) {}
+
+  canAccess(permissionCode: string): boolean {
+    return this.authService.hasPermission(permissionCode);
+  }
 
   ngOnInit() {
     this.filter = {
       customerId: 0,
       customerType: 0,
       transactionTypeId: 0,
-      finishTime: null,
-      startTime: null,
+      finishTime: undefined,
+      startTime: undefined,
     };
     const request: PageRequest = {
       pageIndex: 0,
@@ -93,13 +99,15 @@ export class AccountTransactionsComponent implements OnInit {
         this.totalNet = this.totalDebt - this.totalClaim;
         this.dataSource.data = this.list;
 
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
- 
-  accountAddjustment(id: number){
+
+  accountAddjustment(id: number) {
     this.service.addjustment(id).subscribe((data) => {
       if (data.success) {
         console.log('adjustment', data);
@@ -107,11 +115,11 @@ export class AccountTransactionsComponent implements OnInit {
       }
     });
   }
-  startDateChange(date: any){
+  startDateChange(date: any) {
     this.startTime = date;
   }
 
-  endDateChange(date: any){
+  endDateChange(date: any) {
     this.finishTime = date;
   }
 
@@ -138,7 +146,7 @@ export class AccountTransactionsComponent implements OnInit {
   }
 
   onChangeCustomerType(event: Event) {
-    const v = +((event.target as HTMLSelectElement).value);
+    const v = +(event.target as HTMLSelectElement).value;
     this.customerType = v;
     if (this.filter) {
       this.filter.customerType = v;
@@ -181,8 +189,8 @@ export class AccountTransactionsComponent implements OnInit {
         customerId: this.customerId,
         customerType: this.customerType,
         transactionTypeId: this.transactionTypeId,
-        startTime: this.startTime,
-        finishTime: this.finishTime,
+        startTime: this.startTime ?? new Date(),
+        finishTime: this.finishTime ?? new Date(),
       },
       pageRequest: {
         pageIndex: this.pageIndex,
@@ -200,9 +208,10 @@ export class AccountTransactionsComponent implements OnInit {
         });
         this.totalNet = this.totalDebt - this.totalClaim;
         this.dataSource.data = this.list;
-
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
@@ -218,8 +227,10 @@ export class AccountTransactionsComponent implements OnInit {
         const response = data as PaginateResponse<any>;
         this.list = response.dynamicClass.items as VAccountTrancation[];
         this.dataSource.data = this.list;
-        this.paginator.pageIndex = this.pageIndex;
-        this.paginator.length = this.total;
+        if (this.paginator) {
+          this.paginator.pageIndex = this.pageIndex;
+          this.paginator.length = this.total;
+        }
       }
     });
   }
