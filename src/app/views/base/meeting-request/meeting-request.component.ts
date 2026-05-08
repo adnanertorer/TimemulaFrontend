@@ -16,14 +16,23 @@ declare let alertify: any;
 @Component({
   selector: 'app-meeting-request',
   templateUrl: './meeting-request.component.html',
-  styleUrls: ['./meeting-request.component.css']
+  styleUrls: ['./meeting-request.component.css'],
 })
 export class MeetingRequestComponent implements OnInit {
   model: MeetingRequestModel | undefined;
   list: MeetingRequestModel[] = [];
   staffList: StaffModel[] = [];
-  displayedColumns: string[] = ['requestByName', 'meetingDate', 'title', 'requestDescription', 'createdAt', 'name', 'isDone', 'id'];
-  dataSource = new MatTableDataSource<MeetingRequestModel>()
+  displayedColumns: string[] = [
+    'requestByName',
+    'meetingDate',
+    'title',
+    'requestDescription',
+    'createdAt',
+    'name',
+    'isDone',
+    'id',
+  ];
+  dataSource = new MatTableDataSource<MeetingRequestModel>();
   @ViewChild('meetingPaginator') paginator: MatPaginator | undefined;
   @ViewChild('meetingSort') sort: MatSort | undefined;
   buttonText: string = '';
@@ -35,22 +44,26 @@ export class MeetingRequestComponent implements OnInit {
 
   @ViewChild('date')
   public Date: DatePickerComponent | undefined;
-  
+
   public dateValue: Date = new Date();
   public month: number = new Date().getMonth();
   public fullYear: number = new Date().getFullYear();
-  public minDate: Date = new Date(this.fullYear, this.month , 7);
+  public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  time: NgbTimeStruct = {hour: 13, minute: 30, second: 0};
-  timeLast: NgbTimeStruct = {hour: 13, minute: 30, second: 0};
+  time: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
+  timeLast: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
 
-  constructor(private service: MeetingRequestService, private staffService: StaffService, private authService: AuthService) { }
+  constructor(
+    private service: MeetingRequestService,
+    private staffService: StaffService,
+    private authService: AuthService,
+  ) {}
 
-   canAccess(permissionCode: string): boolean {
+  canAccess(permissionCode: string): boolean {
     return this.authService.hasPermission(permissionCode);
   }
 
@@ -66,27 +79,27 @@ export class MeetingRequestComponent implements OnInit {
       requestByName: '',
       requestDescription: '',
       title: '',
-      relationStaff: 0
+      relationStaff: 0,
     };
     this.getList();
     this.getAdminList();
   }
 
-  getAdminList(){
-    this.staffService.getList().subscribe((data)=>{
-      if(data.success){
+  getAdminList() {
+    this.staffService.getList().subscribe((data) => {
+      if (data.success) {
         this.staffList = data.dynamicClass as StaffModel[];
       }
-    })
+    });
   }
 
-  onDateChange(){
+  onDateChange() {
     if (this.Date) {
       this.dateValue = this.Date.value;
     }
   }
 
-  reset(){
+  reset() {
     this.ngOnInit();
   }
 
@@ -98,14 +111,14 @@ export class MeetingRequestComponent implements OnInit {
     }
   }
 
-  getList(){
+  getList() {
     const pageRequest: PageRequest = {
       pageIndex: this.pageIndex,
       pageSize: this.pageSize,
       isAllItems: false,
     };
-    this.service.getList(pageRequest).subscribe((data)=>{
-      if(data.success){
+    this.service.getList(pageRequest).subscribe((data) => {
+      if (data.success) {
         const response = data as PaginateResponse<MeetingRequestModel>;
         this.list = response.dynamicClass.items as MeetingRequestModel[];
         this.dataSource.data = this.list;
@@ -114,76 +127,94 @@ export class MeetingRequestComponent implements OnInit {
           this.paginator.length = this.total;
         }
       }
-    })
+    });
   }
 
-  getDetail(resource: MeetingRequestModel){
+  getDetail(resource: MeetingRequestModel) {
     this.model = resource;
     this.isVisibleCancelButton = true;
     this.buttonText = 'Güncelle';
     this.dateValue = new Date(resource.meetingDate);
-    this.time = {hour: new Date(resource.meetingDate).getHours(), minute: new Date(resource.meetingDate).getMinutes(), second: 0};
+    this.time = {
+      hour: new Date(resource.meetingDate).getHours(),
+      minute: new Date(resource.meetingDate).getMinutes(),
+      second: 0,
+    };
   }
 
-  addOrUpdate(){
-    if(this.model && this.model.id == 0){
+  addOrUpdate() {
+    if (this.model && this.model.id == 0) {
       this.add();
-    }else if(this.model){
+    } else if (this.model) {
       this.update();
     }
   }
 
-  add(){
+  add() {
     if (this.model) {
       this.model.relationStaff = parseInt(this.model.relationStaff.toString());
-      this.model.meetingDate = new Date(this.dateValue.getFullYear(), this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
-      this.service.add(this.model).subscribe((data)=>{
-        if(data.success){
+      this.model.meetingDate = new Date(
+        this.dateValue.getFullYear(),
+        this.dateValue.getMonth(),
+        this.dateValue.getDate(),
+        this.time.hour,
+        this.time.minute,
+        0,
+        0,
+      );
+      this.service.add(this.model).subscribe((data) => {
+        if (data.success) {
           alertify.set('notifier', 'position', 'top-right');
           alertify.success('Randevu kaydedildi', 2);
           this.ngOnInit();
-        }else{
+        } else {
           alertify.error('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2); 
+          alertify.success(data.clientMessage, 2);
         }
-      })
+      });
     }
   }
 
-  remove(id: number){
-    this.service.remove(id).subscribe((data)=>{
-      if(data.success){
+  remove(id: number) {
+    this.service.remove(id).subscribe((data) => {
+      if (data.success) {
         alertify.set('notifier', 'position', 'top-right');
         alertify.success('Randevu silindi', 2);
         this.ngOnInit();
-      }else{
+      } else {
         alertify.error('notifier', 'position', 'top-right');
-        alertify.success(data.clientMessage, 2); 
+        alertify.success(data.clientMessage, 2);
       }
-    })
+    });
   }
 
-  update(){
+  update() {
     if (this.model) {
-      this.model.meetingDate = new Date(this.dateValue.getFullYear(), 
-      this.dateValue.getMonth(), this.dateValue.getDate(),this.time.hour, this.time.minute, 0, 0);
-      this.service.update(this.model).subscribe((data)=>{
-        if(data.success){
+      this.model.meetingDate = new Date(
+        this.dateValue.getFullYear(),
+        this.dateValue.getMonth(),
+        this.dateValue.getDate(),
+        this.time.hour,
+        this.time.minute,
+        0,
+        0,
+      );
+      this.service.update(this.model).subscribe((data) => {
+        if (data.success) {
           alertify.set('notifier', 'position', 'top-right');
           alertify.success('Randevu güncellendi', 2);
           this.ngOnInit();
-        }else{
+        } else {
           alertify.error('notifier', 'position', 'top-right');
-          alertify.success(data.clientMessage, 2); 
+          alertify.success(data.clientMessage, 2);
         }
-      })
+      });
     }
   }
 
-   onPage(e: PageEvent) {
+  onPage(e: PageEvent) {
     this.pageIndex = e.pageIndex;
     this.pageSize = e.pageSize;
     this.getList();
   }
-
 }
