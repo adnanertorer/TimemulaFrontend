@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <div class="row">
+  <div class="row" *ngIf="canAccess('CashBox.Add')">
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
@@ -37,7 +37,7 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row" *ngIf="canAccess('CashBox.List')">
   <div class="col-md-12">
     <div class="card">
       <div class="col-md-12">
@@ -62,15 +62,15 @@
               <td>{{item.iban}}</td>
               <td>{{item.bankAccountNumber}}</td>
               <td style="text-align: right;">
-                <button class="btn btn-primary" (click)="getDetailFromTable(item)" value="Detay"><i class="fi fi-rr-eye"></i></button>  
-                <button class="btn btn-red" (click)="remove(item.id)" value="Sil"><i class="fi fi-rr-trash"></i></button>  
+                <button *ngIf="canAccess('CashBox.Detail')" class="btn btn-primary" (click)="getDetailFromTable(item)" value="Detay"><i class="fi fi-rr-eye"></i></button>  
+                <button *ngIf="canAccess('CashBox.Delete')" class="btn btn-red" (click)="remove(item.id)" value="Sil"><i class="fi fi-rr-trash"></i></button>  
               </td>
             </tr>
             </tbody>
           </table>
         </div>
         <div class="card-footer pb-0 pt-3">
-          <jw-pagination [items]="cashBoxList" (changePage)="onChangePage($event)"></jw-pagination>
+          <jw-pagination *ngIf="canAccess('CashBox.List')" [items]="cashBoxList" (changePage)="onChangePage($event)"></jw-pagination>
       </div>
       </div><!--/.col-->
     </div><!--/.row-->
