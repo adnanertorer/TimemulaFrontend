@@ -89,6 +89,7 @@ export class AuthGuard implements CanActivate, CanActivateChild{
             { path: 'cari-hesaplar/tedarikciler.html', permission: 'Supplier' },
             { path: 'urunler', permission: 'Product' },
             { path: 'urunler-islemleri', permission: 'ProductTransaction' },
+             { path: 'kullanicilar', permission: 'User' },
         ];
 
         const routePermission = routePermissions.find((item) => path === item.path || path.indexOf(item.path + '/') === 0);
