@@ -1,33 +1,41 @@
-<section class="row d-flex" style="margin: 0;">
-    <div class="col-lg-6">
-        <img src="../../../assets/img/timemula_randevu.jpg" style="width: 88%;" alt="">
+<section class="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(47,107,255,0.13),transparent_34%),linear-gradient(135deg,#f7f9fc_0%,#edf3f8_52%,#f8fbf9_100%)] px-4 py-8 sm:px-5 sm:py-10">
+  <div class="mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[460px] flex-col justify-center">
+    <div class="mb-6 flex items-center gap-3">
+      <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-900 text-[22px] font-extrabold text-white shadow-[0_12px_28px_rgba(20,49,95,0.20)]">T</span>
+      <span class="text-[22px] font-extrabold text-[#18304f]">Timemula</span>
     </div>
-    <div class="col-lg-6 flex-center flex-column" style="height: 100vh;">
-        <h3 class="mb-8">Timemula Uygulamasına Giriş Yap 👋</h3>
-        <div class="mb-24">
-            <label for="email" class="form-label mb-8 h6">Email</label>
-            <div class="position-relative">
-                <input type="email" class="form-control" name="email" id="email" [(ngModel)]="user.email" required>
-                <span class="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex"><i
-                        class="ph ph-user"></i></span>
-            </div>
+
+    <div class="rounded-[18px] border border-slate-300/50 bg-white/90 p-6 shadow-auth backdrop-blur md:p-9">
+      <div class="mb-7">
+        <p class="mb-2 text-xs font-extrabold uppercase text-brand-500">Hesabınıza giriş yapın</p>
+        <h1 class="mb-3 text-[32px] font-extrabold leading-tight text-[#12233f]">Hoş geldiniz</h1>
+        <p class="m-0 text-[15px] leading-6 text-ink-500">Randevularınızı, müşterilerinizi ve finansal akışınızı yönetmeye devam edin.</p>
+      </div>
+
+      <div class="grid gap-[18px]">
+        <div>
+          <label for="email" class="mb-2 block text-[13px] font-bold text-ink-700">Email</label>
+          <input type="email" class="form-control h-12 rounded-[10px]" name="email" id="email" [(ngModel)]="user.email"
+            required autocomplete="email" placeholder="ornek@timemula.com">
         </div>
-        <div class="mb-24">
-            <label for="current-password" class="form-label mb-8 h6">Parola</label>
-            <div class="position-relative">
-                <input type="password" class="form-control" name="password" id="password" [(ngModel)]="user.password"
-                    required>
-                <span
-                    class="toggle-password position-absolute top-50 inset-inline-end-0 me-16 translate-middle-y ph ph-eye-slash"
-                    id="#current-password"></span>
-                <span class="position-absolute top-50 translate-middle-y ms-16 text-gray-600 d-flex"><i
-                        class="ph ph-lock"></i></span>
-            </div>
+
+        <div>
+          <label for="password" class="mb-2 block text-[13px] font-bold text-ink-700">Parola</label>
+          <input type="password" class="form-control h-12 rounded-[10px]" name="password" id="password"
+            [(ngModel)]="user.password" required autocomplete="current-password" placeholder="Parolanız">
         </div>
-        <button type="button" (click)="login()" class="btn btn-small btn-info">Giriş Yap</button>
-        <p class="mt-32 text-gray-600 text-center">Üyeliğiniz yok mu? <a (click)="register()"
-                class="text-main-600 hover-text-decoration-underline">Şimdi üye ol</a></p>
-        <p class="text-gray-600 text-center">Parolanızı mı unuttunuz? <a (click)="goResetPassword()"
-                class="text-main-600 hover-text-decoration-underline">Buraya Tıklayın</a></p>
+
+        <p class="m-0 rounded-[10px] border border-rose-200 bg-rose-50 px-3 py-2 text-[13px] text-rose-800" *ngIf="returnClientMessage">{{ returnClientMessage }}</p>
+
+        <button type="button" (click)="login()" class="btn mt-1 h-12 w-full rounded-[10px] border-brand-900 bg-brand-900 text-[15px] font-extrabold text-white shadow-[0_14px_28px_rgba(20,49,95,0.22)] hover:border-brand-500 hover:bg-brand-500">
+          Giriş Yap
+        </button>
+      </div>
+
+      <div class="mt-6 grid gap-2 text-center text-sm text-ink-500">
+        <p class="m-0">Üyeliğiniz yok mu? <a (click)="register()" class="cursor-pointer font-extrabold text-brand-500">Şimdi üye ol</a></p>
+        <p class="m-0">Parolanızı mı unuttunuz? <a (click)="goResetPassword()" class="cursor-pointer font-extrabold text-brand-500">Buraya tıklayın</a></p>
+      </div>
     </div>
+  </div>
 </section>

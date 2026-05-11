@@ -47,7 +47,8 @@
               "node_modules/@syncfusion/ej2-navigations/styles/material.css",
               "node_modules/@syncfusion/ej2-angular-schedule/styles/material.css",
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/assets/css/apexcharts-styles.css"
+              "src/assets/css/apexcharts-styles.css",
+              "src/styles/app-modern.css"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -158,7 +159,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/styles/app-modern.css"
             ],
             "scripts": []
           }

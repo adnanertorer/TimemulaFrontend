@@ -94,6 +94,11 @@ export class CustomerPackageComponent implements OnInit {
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
+  public timeOptions: string[] = Array.from({ length: 96 }, (_, index) => {
+    const hour = Math.floor(index / 4);
+    const minute = (index % 4) * 15;
+    return `${('0' + hour).slice(-2)}:${('0' + minute).slice(-2)}`;
+  });
 
   customerLesson: CustomerLessonsTemp | undefined;
   dayOfI: dayOf | undefined;
@@ -111,6 +116,7 @@ export class CustomerPackageComponent implements OnInit {
   filterDetailResponses: FilterResponseModel[] = [];
   pageOfItems: Array<any> = [];
   buttonText = Constants.Save;
+  showResultModal: boolean = false;
   selectedCategoryId: number = 0;
   selectedSubCategoryId: number = 0;
   closedGroup: number = participantEnum.closedGroup;
@@ -293,6 +299,7 @@ export class CustomerPackageComponent implements OnInit {
   }
 
   sendCriteria() {
+    this.showResultModal = false;
     this.filterDetailResponses = [];
     this.groupedList = [];
     this.selectedDays.forEach((element) => {
@@ -367,8 +374,14 @@ export class CustomerPackageComponent implements OnInit {
               }
             });
           }
+          this.pageOfItems = this.groupedList.slice(0, 10);
+          this.showResultModal = true;
         }
       });
+  }
+
+  closeResultModal(): void {
+    this.showResultModal = false;
   }
 
   ngAfterViewInit() {
@@ -687,6 +700,7 @@ export class CustomerPackageComponent implements OnInit {
                   if (data.success) {
                     this.groupedList = [];
                     this.filterDetailResponses = [];
+                    this.closeResultModal();
                     this.router.navigate(['musteriler']);
                   }
                 });
