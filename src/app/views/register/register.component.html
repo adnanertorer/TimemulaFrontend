@@ -1,94 +1,128 @@
-<section class="row d-flex" style="margin: 0;">
-  <div class="col-lg-6">
-    <img src="../../../assets/img/timemula_randevu.jpg" style="width: 88%;" alt="">
-  </div>
-  <div class="col-lg-6 flex-center flex-column" style="height: 100vh;">
-    <h3 class="mb-8">Timemula Uygulamasına Üye Ol 👋</h3>
-    <form [formGroup]="registerForm" (ngSubmit)="register()">
-      <div class="row">
-        <div class="col-md-6 contents">
-          <div class="col-md-12">
-            <p class="font-weight-bold text-left sub-title">Kurumsal</p>
-            <div class="form-group">
-              <label for="companyName">Firma Adı*</label>
+<main class="register-page">
+  <section class="register-shell">
+    <aside class="register-intro" aria-label="Timemula hesap bilgisi">
+      <a class="brand-mark" routerLink="/login" aria-label="Timemula giriş sayfasına dön">
+        <span class="brand-symbol">T</span>
+        <span>timemula</span>
+      </a>
+
+      <div class="intro-copy">
+        <p class="eyebrow">Yeni kurum hesabı</p>
+        <h1>Ekibinizi, hizmetlerinizi ve randevularınızı tek panelde yönetin.</h1>
+        <p>
+          Kurum hesabınızı oluşturduktan sonra müşteri, personel, hizmet ve paket kayıtlarını adım adım tamamlayabilirsiniz.
+        </p>
+      </div>
+
+      <div class="intro-metrics" aria-label="Kayıt sonrası adımlar">
+        <div>
+          <strong>01</strong>
+          <span>Kurum bilgileri</span>
+        </div>
+        <div>
+          <strong>02</strong>
+          <span>Yönetici hesabı</span>
+        </div>
+        <div>
+          <strong>03</strong>
+          <span>Hızlı başlangıç</span>
+        </div>
+      </div>
+    </aside>
+
+    <section class="register-card" aria-labelledby="register-title">
+      <div class="register-heading">
+        <p class="eyebrow">Hesap oluştur</p>
+        <h2 id="register-title">Timemula'ya üye olun</h2>
+        <p>Bilgileri doldurun, kurum panelinizi hemen hazırlayalım.</p>
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="register()" class="register-form">
+        <div class="form-section">
+          <div class="section-title">
+            <span>Kurumsal</span>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>Firma adı*</span>
               <input type="text" class="form-control" formControlName="companyName" id="companyName"
-                placeholder="Firma adını yazınız" autocomplete="companyName" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">Firma Adresi*</label>
-              <input type="text" class="form-control" formControlName="companyAddress" id="formControlName"
-                placeholder="Firma adresini yazınız" autocomplete="companyAddress" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">Firma Telefon*</label>
+                placeholder="Firma adını yazınız" autocomplete="organization" required>
+            </label>
+
+            <label class="field">
+              <span>Firma telefonu*</span>
               <input type="tel" class="form-control" formControlName="companyPhone" id="companyPhone"
-                placeholder="Firma telefonunu yazınız" autocomplete="companyPhone" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">il*</label>
-              <select type="text" class="form-control" formControlName="cityId" id="cityId" (change)="cityOnChange($event.target.value)">
+                placeholder="5XXXXXXXXX" autocomplete="tel" required>
+            </label>
+
+            <label class="field field-full">
+              <span>Firma adresi*</span>
+              <input type="text" class="form-control" formControlName="companyAddress" id="companyAddress"
+                placeholder="Firma adresini yazınız" autocomplete="street-address" required>
+            </label>
+
+            <label class="field">
+              <span>İl*</span>
+              <select class="form-control" formControlName="cityId" id="cityId" (change)="cityOnChange($event.target.value)">
                 <option value="0">Seçiniz</option>
                 <option *ngFor="let item of cities" value="{{item.id}}">{{item.name}}</option>
               </select>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">ilçe*</label>
-              <select type="text" class="form-control" formControlName="districtId" id="districtId">
+            </label>
+
+            <label class="field">
+              <span>İlçe*</span>
+              <select class="form-control" formControlName="districtId" id="districtId">
                 <option value="0">Seçiniz</option>
                 <option *ngFor="let item of districts" value="{{item.id}}">{{item.name}}</option>
               </select>
-            </div>
+            </label>
           </div>
         </div>
-        <div class="col-md-6 contents">
-          <div class="col-md-12">
-            <p class="font-weight-bold text-left sub-title">Kişisel</p>
-            <div class="form-group">
-              <label for="name">Adınız*</label>
+
+        <div class="form-section">
+          <div class="section-title">
+            <span>Yönetici</span>
+          </div>
+
+          <div class="field-grid">
+            <label class="field">
+              <span>Adınız*</span>
               <input type="text" class="form-control" formControlName="name" id="name" placeholder="Adınızı yazınız"
-                autocomplete="name" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="name">Soyadınız*</label>
+                autocomplete="given-name" required>
+            </label>
+
+            <label class="field">
+              <span>Soyadınız*</span>
               <input type="text" class="form-control" formControlName="surname" id="surname"
-                placeholder="Soyadınızı yazınız" autocomplete="surname" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">E-Posta Adresiniz*</label>
+                placeholder="Soyadınızı yazınız" autocomplete="family-name" required>
+            </label>
+
+            <label class="field field-full">
+              <span>E-posta adresiniz*</span>
               <input type="email" class="form-control" formControlName="email" id="email"
-                placeholder="E-Posta adresinizi yazınız" autocomplete="email" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">Parolanız*</label>
-              <input type="password" class="form-control" formControlName="password" id="password" required>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <div class="form-group">
-              <label for="companyPhone">Tekrar Parolanız*</label>
-              <input type="password" class="form-control" formControlName="passwordAgain" id="passwordAgain" required>
-            </div>
+                placeholder="ornek@firma.com" autocomplete="email" required>
+            </label>
+
+            <label class="field">
+              <span>Parolanız*</span>
+              <input type="password" class="form-control" formControlName="password" id="password"
+                autocomplete="new-password" required>
+            </label>
+
+            <label class="field">
+              <span>Tekrar parolanız*</span>
+              <input type="password" class="form-control" formControlName="passwordAgain" id="passwordAgain"
+                autocomplete="new-password" required>
+            </label>
           </div>
         </div>
-        <div class="col-md-12 pd-10">
-          <button type="submit" class="btn-sm btn-block btn-info">Hesap Oluştur</button>
-          <p class="mt-32 text-gray-600 text-center">Hesabınız var mı? <a (click)="login()"  class="text-main-600 hover-text-decoration-underline">Giriş Yap</a></p>
+
+        <div class="form-actions">
+          <button type="submit" class="register-submit">Hesap oluştur</button>
+          <p>Hesabınız var mı? <a (click)="login()">Giriş yap</a></p>
         </div>
-      </div>
-    </form>
-  </div>
-</section>
+      </form>
+    </section>
+  </section>
+</main>

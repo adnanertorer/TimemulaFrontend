@@ -76,7 +76,7 @@ export class StepsService {
   }
 
   isFirstStep(): boolean {
-    return this.currentStep$.value.stepIndex === 0;
+    return this.currentStep$.value.stepIndex === 1;
   }
 
   update(stepNumber: number) {

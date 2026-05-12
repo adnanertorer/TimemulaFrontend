@@ -20,6 +20,7 @@ export class RegisterWizardStepsComponent implements OnInit {
 
   ngOnInit() {
     this.steps = this.stepsService.getSteps();
+    this.currentStep = this.stepsService.getCurrentStep();
     /*this.stepsService.getList().subscribe((data)=>{
       this.setupStepList = data.dynamicClass as SetupStepModel[];
       this.steps.subscribe((stepList)=>{

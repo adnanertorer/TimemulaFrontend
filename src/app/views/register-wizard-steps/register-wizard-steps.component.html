@@ -1,5 +1,15 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-<div class="container" style="text-align: center;padding: 10px;color: darkblue;">
-  <h5>TIMEMULA KURULUM</h5>
-</div>
+<nav class="wizard-steps" aria-label="Kurulum adımları">
+  <button
+    type="button"
+    *ngFor="let step of steps | async"
+    class="wizard-step"
+    [class.is-current]="step.stepIndex === (currentStep | async)?.stepIndex"
+    [class.is-complete]="step.isComplete"
+    (click)="onStepClick(step)">
+    <span class="step-index">{{ step.stepIndex }}</span>
+    <span class="step-copy">
+      <strong>{{ step.stepName }}</strong>
+      <small>{{ step.isComplete ? 'Tamamlandı' : 'Bekliyor' }}</small>
+    </span>
+  </button>
+</nav>

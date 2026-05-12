@@ -1,47 +1,74 @@
-<div class="form-page-container" style="margin: 0;">
-  <div class="row" style="margin: 0;">
-    <div class="col-md-4">
-        <img src="../../../assets/img/timemula_randevu.jpg" alt="" style="width: 100%;">
-      <app-register-wizard-steps></app-register-wizard-steps>
-    </div>
-    <div class="col-md-8">
-      <div class="step-page-container">
-        <div class="form-step">
-            <ng-container [ngSwitch]="(currentStep | async)?.stepIndex">
-                <ng-container *ngSwitchCase="'1'">
-                    <app-step-template [step]="(currentStep | async)"></app-step-template>
-                </ng-container>
-                <ng-container *ngSwitchCase="'2'">
-                  <app-step-template [step]="(currentStep | async)"></app-step-template>
-                </ng-container>
-                <ng-container *ngSwitchCase="'3'">
-                  <app-step-template [step]="(currentStep | async)"></app-step-template>
-                </ng-container>
-              <ng-container *ngSwitchCase="'4'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'5'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'6'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'7'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'8'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-              <ng-container *ngSwitchCase="'9'">
-                <app-step-template [step]="(currentStep | async)"></app-step-template>
-              </ng-container>
-            </ng-container>
+<main class="setup-page">
+  <section class="setup-shell">
+    <aside class="setup-sidebar">
+      <div class="setup-brand">
+        <span class="brand-symbol">T</span>
+        <div>
+          <strong>Timemula Kurulum</strong>
+          <span>Başlangıç sihirbazı</span>
         </div>
       </div>
-      <button (click)="onPreviousStep()" class="btn btn-sm btn-danger" style="float: left;">Önceki Adım</button>
-      <button (click)="onNextStep()" class="btn btn-sm btn-success" style="float: right;">
-        {{ showButtonLabel() }}
-      </button>
-    </div>
-  </div>
-</div>
+
+      <div class="setup-intro">
+        <p class="eyebrow">Kurulum akışı</p>
+        <h1>İşletme panelinizi birkaç adımda hazır hale getirin.</h1>
+        <p>Her adımı tamamladıkça sonraki yapılandırmaya geçebilir, ihtiyaç duyduğunuz tanımları aynı ekranda oluşturabilirsiniz.</p>
+      </div>
+
+      <app-register-wizard-steps></app-register-wizard-steps>
+    </aside>
+
+    <section class="setup-content">
+      <header class="setup-content-header">
+        <div>
+          <p class="eyebrow">Aktif adım</p>
+          <h2>{{ (currentStep | async)?.stepName }}</h2>
+        </div>
+        <span class="step-pill">{{ (currentStep | async)?.stepIndex }} / 9</span>
+      </header>
+
+      <div class="step-page-container">
+        <div class="form-step">
+          <ng-container [ngSwitch]="(currentStep | async)?.stepIndex">
+            <ng-container *ngSwitchCase="1">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="2">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="3">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="4">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="5">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="6">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="7">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="8">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="9">
+              <app-step-template [step]="(currentStep | async)"></app-step-template>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <footer class="setup-actions">
+        <button type="button" (click)="onPreviousStep()" class="btn-previous">
+          Önceki adım
+        </button>
+        <button type="button" (click)="onNextStep()" class="btn-next">
+          {{ showButtonLabel() }}
+        </button>
+      </footer>
+    </section>
+  </section>
+</main>
