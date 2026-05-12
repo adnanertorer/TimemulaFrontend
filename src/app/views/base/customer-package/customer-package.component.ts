@@ -19,12 +19,7 @@ import {
   PersonTypeEnum,
   TransactionTypeEnum,
 } from 'src/environments/environment';
-import {
-  NgbDate,
-  NgbDateStruct,
-  NgbTimeStruct,
-} from '@ng-bootstrap/ng-bootstrap';
-import { NgbTime } from '@ng-bootstrap/ng-bootstrap/timepicker/ngb-time';
+import { DateStruct, TimeStruct } from 'src/app/shared/model/date-time-struct';
 import { FilterResponseModel } from 'src/app/shared/model/filter-response-model';
 import { UntypedFormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
@@ -87,10 +82,10 @@ export class CustomerPackageComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct | undefined;
+  startDateModel: DateStruct | undefined;
 
-  time: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
-  timeLast: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
+  time: TimeStruct = { hour: 13, minute: 30, second: 0 };
+  timeLast: TimeStruct = { hour: 13, minute: 30, second: 0 };
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
@@ -271,7 +266,7 @@ export class CustomerPackageComponent implements OnInit {
     }
   }
 
-  onStartDateSelection(date: NgbDate) {
+  onStartDateSelection(date: DateStruct) {
     if (this.criteria) {
       this.criteria.startDate =
         date.day.toLocaleString() +
@@ -282,7 +277,7 @@ export class CustomerPackageComponent implements OnInit {
     }
   }
 
-  onStartTimeSelection(time: NgbTime) {
+  onStartTimeSelection(time: TimeStruct) {
     if (this.criteria) {
       const timeStr =
         time.hour.toLocaleString() + ':' + time.minute.toLocaleString();

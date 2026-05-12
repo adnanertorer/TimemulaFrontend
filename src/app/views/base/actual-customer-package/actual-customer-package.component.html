@@ -68,13 +68,13 @@
               </div>
               <div class="col-md-3">
                 <label class="col-md-6 col-form-label" for="time">Başlama Saati Seçiniz</label>
-                <ngb-timepicker [(ngModel)]="time" [seconds]="true" [hourStep]="hourStep" [minuteStep]="minuteStep"
-                  [secondStep]="secondStep" name="time"></ngb-timepicker>
+                <input type="time" class="form-control" name="time" [ngModel]="formatTime(time)"
+                  (ngModelChange)="updateTime($event, 'time')" step="900">
               </div>
               <div class="col-md-3">
                 <label class="col-md-6 col-form-label" for="timeLast">Bitiş Saati Seçiniz</label>
-                <ngb-timepicker [(ngModel)]="timeLast" [seconds]="true" [hourStep]="hourStep" [minuteStep]="minuteStep"
-                  [secondStep]="secondStep" name="timeLast"></ngb-timepicker>
+                <input type="time" class="form-control" name="timeLast" [ngModel]="formatTime(timeLast)"
+                  (ngModelChange)="updateTime($event, 'timeLast')" step="900">
               </div>
             </div>
             <div class="card-footer" style="text-align: right;">

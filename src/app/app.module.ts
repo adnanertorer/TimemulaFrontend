@@ -34,17 +34,16 @@ import { AppRoutingModule } from './app.routing';
 import { MyMaterialModule } from './material.module';
 import { ScheduleAllModule } from '@syncfusion/ej2-angular-schedule';
 
-import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { ConfirmationDialogService } from './shared/tools/confirmation-dialog/confirmation-dialog.service';
+import { ConfirmationDialogComponent } from './shared/tools/confirmation-dialog/confirmation-dialog.component';
 import { DefaultLayoutComponent } from './containers/default-layout';
 import { CustomerService } from './shared/services/customer.service';
 import {
   AgendaService, DayService, MonthAgendaService, MonthService, TimelineMonthService,
   TimelineViewsService, WeekService, WorkWeekService
 } from '@syncfusion/ej2-angular-schedule';
-import { NgbModalModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CollectionSubComponent } from './views/base/collection-sub/collection-sub.component';
 import { PaymentSubComponent } from './views/base/payment-sub/payment-sub.component';
 import { EducatorLessonCostModalComponent } from './views/base/educator-lesson-cost-modal/educator-lesson-cost-modal.component';
@@ -105,16 +104,14 @@ import { DatePickerComponent } from './shared/components/date-picker-component/d
     AccountTransactionsByCustomerComponent,
     ForgotPasswordComponent,
     ResetPasswordComponent,
-    UpdatePasswordComponent
-    //ConfirmationDialogComponent,
+    UpdatePasswordComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FormsModule,
-    NgbModule,
-    NgbModalModule,
     FlatpickrModule,
     HttpClientModule,
     ScheduleAllModule,
@@ -128,7 +125,6 @@ import { DatePickerComponent } from './shared/components/date-picker-component/d
     AppHeaderModule,
     AppSidebarModule,
     PerfectScrollbarModule,
-    TabsModule.forRoot(),
     ChartsModule,
     IconModule,
     ModalModule,

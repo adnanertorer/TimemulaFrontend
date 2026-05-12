@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerComponent } from '@syncfusion/ej2-angular-calendars';
 import { AuthService } from 'src/app';
 import { MeetingRequestModel } from 'src/app/shared/model/meeting-request-model';
@@ -10,6 +9,7 @@ import { StaffModel } from 'src/app/shared/model/staff-model';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 import { MeetingRequestService } from 'src/app/shared/services/meeting-request.service';
+import { TimeStruct } from 'src/app/shared/model/date-time-struct';
 import { StaffService } from 'src/app/shared/services/staff.service';
 declare let alertify: any;
 
@@ -51,8 +51,8 @@ export class MeetingRequestComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  time: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
-  timeLast: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
+  time: TimeStruct = { hour: 13, minute: 30, second: 0 };
+  timeLast: TimeStruct = { hour: 13, minute: 30, second: 0 };
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
@@ -97,6 +97,15 @@ export class MeetingRequestComponent implements OnInit {
     if (this.Date) {
       this.dateValue = this.Date.value;
     }
+  }
+
+  formatTime(time: TimeStruct): string {
+    return `${('0' + time.hour).slice(-2)}:${('0' + time.minute).slice(-2)}`;
+  }
+
+  updateTime(value: string): void {
+    const [hour, minute] = value.split(':').map((item) => parseInt(item, 10));
+    this.time = { hour: hour || 0, minute: minute || 0, second: 0 };
   }
 
   reset() {

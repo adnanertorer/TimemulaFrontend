@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerComponent } from '@syncfusion/ej2-angular-calendars';
 import { CustomerInstallmentModel } from 'src/app/shared/model/customer-installment-model';
 import { InstallmentResultModel } from 'src/app/shared/model/installment-result-model';
@@ -8,6 +7,7 @@ import { VCurrentBalanceModel } from 'src/app/shared/model/v-current-balance-mod
 import { VGeneralCustomerBalanceModel } from 'src/app/shared/model/v-general-customer-balance-model';
 import { AccountingTransactionService } from 'src/app/shared/services/accounting-transaction.service';
 import { CustomerInstallmentService } from 'src/app/shared/services/customer-installment.service';
+import { DateStruct } from 'src/app/shared/model/date-time-struct';
 declare let alertify: any;
 
 @Component({
@@ -34,7 +34,7 @@ export class CustomerPaymentPlanComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month , 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct;
+  startDateModel: DateStruct;
   //selectedRelationId: string = '';
   
   constructor(private accontingService: AccountingTransactionService,
