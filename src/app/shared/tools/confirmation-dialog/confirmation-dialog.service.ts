@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
-
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
 
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 
 @Injectable()
 export class ConfirmationDialogService {
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private dialog: MatDialog) { }
 
   public confirm(
     title: string,
     message: string,
     btnOkText: string = 'Evet',
-    btnCancelText: string = 'Hayır',
+    btnCancelText: string = 'Hayir',
     dialogSize: 'sm'|'lg' = 'sm'): Promise<boolean> {
-    const modalRef = this.modalService.open(ConfirmationDialogComponent, { size: dialogSize });
-    modalRef.componentInstance.title = title;
-    modalRef.componentInstance.message = message;
-    modalRef.componentInstance.btnOkText = btnOkText;
-    modalRef.componentInstance.btnCancelText = btnCancelText;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: dialogSize === 'lg' ? '640px' : '420px',
+      data: { title, message, btnOkText, btnCancelText },
+    });
 
-    return modalRef.result;
+    return dialogRef.afterClosed().toPromise();
   }
 
 }

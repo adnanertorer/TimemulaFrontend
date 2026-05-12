@@ -1,5 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+
+interface ConfirmationDialogData {
+  title: string;
+  message: string;
+  btnOkText: string;
+  btnCancelText: string;
+}
 
 @Component({
   selector: 'app-confirmation-dialog',
@@ -7,26 +14,34 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ConfirmationDialogComponent implements OnInit {
 
-  @Input() title: string;
-  @Input() message: string;
-  @Input() btnOkText: string;
-  @Input() btnCancelText: string;
+  title: string;
+  message: string;
+  btnOkText: string;
+  btnCancelText: string;
 
-  constructor(private activeModal: NgbActiveModal) { }
+  constructor(
+    private dialogRef: MatDialogRef<ConfirmationDialogComponent, boolean>,
+    @Inject(MAT_DIALOG_DATA) data: ConfirmationDialogData,
+  ) {
+    this.title = data.title;
+    this.message = data.message;
+    this.btnOkText = data.btnOkText;
+    this.btnCancelText = data.btnCancelText;
+  }
 
   ngOnInit() {
   }
 
   public decline() {
-    this.activeModal.close(false);
+    this.dialogRef.close(false);
   }
 
   public accept() {
-    this.activeModal.close(true);
+    this.dialogRef.close(true);
   }
 
   public dismiss() {
-    this.activeModal.dismiss();
+    this.dialogRef.close(false);
   }
 
 }

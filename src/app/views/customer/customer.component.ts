@@ -9,7 +9,6 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerComponent } from '@syncfusion/ej2-angular-calendars';
 import { BloodGroupModel } from 'src/app/shared/model/blood-group-model';
 import { CustomerFilter } from 'src/app/shared/model/customer-filter';
@@ -24,6 +23,7 @@ import { CustomerService } from '../../shared/services/customer.service';
 import { PageRequest } from 'src/app/shared/requests/page.request';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
 import { AuthService } from 'src/app/shared';
+import { DateStruct } from 'src/app/shared/model/date-time-struct';
 
 @Component({
   selector: 'app-customer',
@@ -40,7 +40,7 @@ export class CustomerComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct | undefined;
+  startDateModel: DateStruct | undefined;
 
   customer: Customer | undefined;
   customerList: any[] = [];

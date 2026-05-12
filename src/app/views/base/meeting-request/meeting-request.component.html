@@ -33,8 +33,8 @@
                 [value]=dateValue></ejs-datepicker>
               </div>
               <div class="col-md-12 col-lg-4">
-                <ngb-timepicker [(ngModel)]="time" [seconds]="true"
-                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="time" [spinners] = "false"></ngb-timepicker>
+                <input type="time" class="form-control" name="time" [ngModel]="formatTime(time)"
+                (ngModelChange)="updateTime($event)" step="900">
               </div>
               <div class="col-md-12 col-lg-4">
                 <input type="checkbox" name="isDone" id="isDone"

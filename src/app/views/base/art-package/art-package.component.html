@@ -17,83 +17,83 @@
         <div class="card-body">
           <form action="" method="post" class="form-horizontal">
             <input type="hidden" name="id" id="id" [(ngModel)]="artPackage.id">
-            <div class="form-group row">
-              <div class="col-md-6 col-lg-4">
+            <div class="package-form-grid">
+              <div class="min-w-0">
                 <label>Kategori</label>
                 <select name="categoryId" id="categoryId" (change)="categoryOnChange($event.target.value)" [(ngModel)]="artPackage.categoryId" class="form-control">
                   <option value="0">Kategori Seçiniz</option>
                   <option value="{{item.id}}" *ngFor="let item of categories">{{item.categoryName}}</option>
                 </select>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Alt Kategori</label>
                 <select name="subCategoryId" id="subCategoryId" (change)="subCategoryOnChange($event.target.value)" [(ngModel)]="artPackage.subCategoryId" class="form-control">
                   <option value="0">Alt Kategori Seçiniz</option>
                   <option value="{{item.id}}" *ngFor="let item of subCategories">{{item.subCategoryName}}</option>
                 </select>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Hizmet</label>
                 <select name="lessonId" id="lessonId" [(ngModel)]="artPackage.lessonId" class="form-control">
                   <option value="0">Hizmet Seçiniz</option>
                   <option value="{{item.id}}" *ngFor="let item of lessons">{{item.lessonName}}</option>
                 </select>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Paket Adı</label>
                 <input type="text" name="artPackageName" class="form-control" id="artPackageName"
                 [(ngModel)]="artPackage.artPackageName" placeholder="Paket Adı">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Seans Sayısı</label>
                 <input type="number" name="seanceCount" class="form-control" id="seanceCount"
                 [(ngModel)]="artPackage.seanceCount" placeholder="Seans Sayısı">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Seans Süresi (dk)</label>
                 <input type="number" name="duration" class="form-control" id="duration"
                 [(ngModel)]="artPackage.duration" placeholder="Seansın Süresi (dk)">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Seans Ücreti</label>
                 <input type="number" name="unitPrice" class="form-control" id="unitPrice" (change)="onChangeSeancePrice($event)"
                 [(ngModel)]="artPackage.unitPrice" placeholder="Seans Ücreti">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Paket Fiyatı</label>
                 <input type="number" name="seancePrice" class="form-control" id="seancePrice"
                 [(ngModel)]="artPackage.seancePrice" placeholder="Paket Fiyatı(TL)">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>İndirim (%)</label>
                 <input type="number" name="discount" class="form-control" id="discount"
                 [(ngModel)]="artPackage.discount" placeholder="İndirim (%)">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Katılımcı TÜrü</label>
                 <select name="participantTypeId" id="participantTypeId" [(ngModel)]="artPackage.participantTypeId" class="form-control">
                   <option value="0">Katılımcı Türünü Seçiniz</option>
                   <option *ngFor="let item of participantTypes" value="{{item.id}}">{{item.participantTypeName}}</option>,
                 </select>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Katılım Türü</label>
                 <select name="participantId" id="participantId" (change)="participantOnChange($event.target.value)" [(ngModel)]="artPackage.participantId" class="form-control">
                   <option value="0">Katılım Türünü Seçiniz</option>
                   <option *ngFor="let item of participants" value="{{item.id}}">{{item.participantName}}</option>,
                 </select>
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Maksimum Kapasite</label>
                 <input type="number" name="maxCapacity" class="form-control" id="maxCapacity"
                 [(ngModel)]="artPackage.maxCapacity" placeholder="Maksimum Kapasite">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Açıklama</label>
                 <input type="text" name="description" class="form-control" id="description"
                 [(ngModel)]="artPackage.description" placeholder="Paket Açıklaması">
               </div>
-              <div class="col-md-6 col-lg-4">
+              <div class="min-w-0">
                  <label>Aktif/Pasif</label>
                 <input type="checkbox" name="isActive" id="isActive"
                 [(ngModel)]="artPackage.isActive"> Aktif

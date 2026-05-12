@@ -614,7 +614,6 @@
   }();
 
   // Measure width of scrollbar
-  // https://github.com/twbs/bootstrap/blob/master/js/modal.js#L279-L286
   var measureScrollbar = function measureScrollbar() {
     var supportsTouch = 'ontouchstart' in window || navigator.msMaxTouchPoints;
     if (supportsTouch) {

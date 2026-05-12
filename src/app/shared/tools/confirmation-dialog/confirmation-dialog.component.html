@@ -1,13 +1,15 @@
-<div class="modal-header">
-    <h4 class="modal-title">{{ title }}</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismiss()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      {{ message }}
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="decline()">{{ btnCancelText }}</button>
-      <button type="button" class="btn btn-primary" (click)="accept()">{{ btnOkText }}</button>
-    </div>
+<div class="border-b border-slate-200 px-5 py-4">
+  <div class="flex items-center justify-between gap-4">
+    <h4 class="m-0 text-lg font-extrabold text-slate-900">{{ title }}</h4>
+    <button type="button" class="text-xl leading-none text-slate-500 hover:text-slate-900" aria-label="Close" (click)="dismiss()">
+      &times;
+    </button>
+  </div>
+</div>
+<div class="px-5 py-4 text-sm text-slate-600">
+  {{ message }}
+</div>
+<div class="flex justify-end gap-2 border-t border-slate-200 px-5 py-4">
+  <button type="button" class="rounded-md bg-red-600 px-4 py-2 text-sm font-bold text-white hover:bg-red-700" (click)="decline()">{{ btnCancelText }}</button>
+  <button type="button" class="rounded-md bg-brand-900 px-4 py-2 text-sm font-bold text-white hover:bg-brand-600" (click)="accept()">{{ btnOkText }}</button>
+</div>

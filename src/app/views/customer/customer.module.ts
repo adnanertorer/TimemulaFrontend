@@ -5,7 +5,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomerRouterModule } from './customer-router.module';
 import { MyMaterialModule } from 'src/app/material.module';
 import { DatePickerModule } from '@syncfusion/ej2-angular-calendars';
-import { NgbDatepickerModule, NgbTimepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.module';
 
 @NgModule({
@@ -16,8 +15,6 @@ import { PaginatorModule } from 'src/app/shared/components/paginator/paginator.m
     ReactiveFormsModule,
     MyMaterialModule,
     DatePickerModule,
-    NgbTimepickerModule,
-    NgbDatepickerModule,
     PaginatorModule
 ],
   declarations: [CustomerComponent]

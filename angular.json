@@ -27,8 +27,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/css/material-dashboard-rtl.css",
-              "src/assets/css/material-dashboard.css",
               "node_modules/angular-calendar/css/angular-calendar.css",
               "node_modules/@flaticon/flaticon-uicons/css/regular/rounded.css",
               "node_modules/@coreui/icons/css/free.css",
@@ -36,7 +34,6 @@
               "node_modules/font-awesome/css/font-awesome.css",
               "node_modules/simple-line-icons/dist/styles/simple-line-icons.css",
               "node_modules/alertifyjs/build/css/alertify.min.css",
-              "node_modules/alertifyjs/build/css/themes/bootstrap.min.css",
               "node_modules/@syncfusion/ej2-base/styles/material.css",
               "node_modules/@syncfusion/ej2-buttons/styles/material.css",
               "node_modules/@syncfusion/ej2-calendars/styles/material.css",
@@ -57,12 +54,8 @@
             },
             "scripts": [
               "src/assets/js/core/jquery.min.js",
-              "src/assets/js/core/popper.min.js",
-              "src/assets/js/core/bootstrap-material-design.min.js",
               "src/assets/js/plugins/perfect-scrollbar.jquery.min.js",
               "src/assets/js/plugins/chartist.min.js",
-              "src/assets/js/plugins/bootstrap-notify.js",
-              "src/assets/js/material-dashboard.js",
               "node_modules/alertifyjs/build/alertify.min.js",
               "src/assets/js/apexcharts.js"
             ],

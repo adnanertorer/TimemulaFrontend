@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { ActivatedRoute } from '@angular/router';
-import { NgbDateStruct, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DatePickerComponent } from '@syncfusion/ej2-angular-calendars';
 import { ReplaySubject, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -18,6 +17,7 @@ import { FilterResponseModel } from 'src/app/shared/model/filter-response-model'
 import { LessonModel } from 'src/app/shared/model/lesson-model';
 import { SellPackageCriteriaModel } from 'src/app/shared/model/sell-package-criteria-model';
 import { StaffModel } from 'src/app/shared/model/staff-model';
+import { DateStruct, TimeStruct } from 'src/app/shared/model/date-time-struct';
 import { VLessons } from 'src/app/shared/model/v-lessons';
 import { PageRequestLessonById } from 'src/app/shared/requests/page_request_lesson_by_id';
 import { PaginateResponse } from 'src/app/shared/responses/paginate.response';
@@ -63,10 +63,10 @@ export class ActualCustomerPackageComponent implements OnInit {
   public minDate: Date = new Date(this.fullYear, this.month, 7);
   public maxDate: Date = new Date(this.fullYear, this.month, 27);
 
-  startDateModel: NgbDateStruct;
+  startDateModel: DateStruct;
 
-  time: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
-  timeLast: NgbTimeStruct = { hour: 13, minute: 30, second: 0 };
+  time: TimeStruct = { hour: 13, minute: 30, second: 0 };
+  timeLast: TimeStruct = { hour: 13, minute: 30, second: 0 };
   hourStep = 1;
   minuteStep = 15;
   secondStep = 30;
@@ -285,6 +285,15 @@ export class ActualCustomerPackageComponent implements OnInit {
 
   onDateChange() {
     this.dateValue = this.Date.value;
+  }
+
+  formatTime(time: TimeStruct): string {
+    return `${('0' + time.hour).slice(-2)}:${('0' + time.minute).slice(-2)}`;
+  }
+
+  updateTime(value: string, target: 'time' | 'timeLast'): void {
+    const [hour, minute] = value.split(':').map((item) => parseInt(item, 10));
+    this[target] = { hour: hour || 0, minute: minute || 0, second: 0 };
   }
 
   getStaffs() {

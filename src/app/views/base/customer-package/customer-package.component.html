@@ -171,30 +171,6 @@
                 </div>
               </div>            
             </div>
-              <!--<div class="form-group row" *ngIf="selectedDays.length>0">
-              <div class="col-md-4" style="padding-top: 55px;">
-                <label class="col-md-6 col-form-label" for="startDate">Başlama Tarihi Seçiniz</label>
-                <div class="input-group">
-                  <input class="form-control"
-                (dateSelect)="onStartDateSelection($event)"
-                 placeholder="yyyy-mm-dd"
-                name="startDate" [(ngModel)]="startDateModel" ngbDatepicker #d="ngbDatepicker">
-                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
-                     <img (click)="show(d)" src="../../../../assets/img/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
-                  </button>
-                </div>
-              </div>
-                <div class="col-md-3">
-                  <label class="col-md-6 col-form-label" for="time">Başlama Saati Seçiniz</label>
-                <ngb-timepicker [(ngModel)]="time" [seconds]="true"
-                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="time"></ngb-timepicker>
-                </div>
-                <div class="col-md-3">
-                <label class="col-md-6 col-form-label" for="timeLast">Bitiş Saati Seçiniz</label>
-                <ngb-timepicker [(ngModel)]="timeLast" [seconds]="true"
-                [hourStep]="hourStep" [minuteStep]="minuteStep" [secondStep]="secondStep" name="timeLast"></ngb-timepicker>
-              </div>
-            </div>-->
             <div class="card-footer">
               <button type="button"  (click)="sendCriteria()" class="btn btn-sm btn-primary"><i class="fi fi-rr-search"></i> Kontrol Et</button>
               <button type="button" (click)="reset()" class="btn btn-sm btn-red"><i class="fi fi-rr-cross-circle"></i> Formu Temizle</button>
@@ -303,3 +279,4 @@
       </div><!--/.col-->
     </div><!--/.row-->
 </div>
+
