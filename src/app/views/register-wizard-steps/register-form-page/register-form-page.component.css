@@ -16,6 +16,7 @@
   gap: 24px;
   width: min(1440px, 100%);
   margin: 0 auto;
+  height: auto;
 }
 
 .setup-sidebar,
@@ -30,12 +31,20 @@
   position: sticky;
   top: 24px;
   display: flex;
-  height: calc(100vh - 56px);
-  min-height: 640px;
+  height: auto;
+  max-height: none;
+  min-height: 0;
   flex-direction: column;
   gap: 28px;
   overflow: hidden;
   padding: 28px;
+}
+
+.setup-sidebar app-register-wizard-steps {
+  display: block;
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow: hidden;
 }
 
 .setup-brand {
@@ -75,6 +84,7 @@
 }
 
 .setup-intro {
+  flex: 0 0 auto;
   padding-bottom: 20px;
   border-bottom: 1px solid #d9e2ee;
 }
@@ -198,6 +208,7 @@
   .setup-sidebar {
     position: static;
     height: auto;
+    max-height: none;
     min-height: 0;
   }
 }

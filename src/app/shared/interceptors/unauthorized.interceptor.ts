@@ -63,6 +63,9 @@ export class UnauthorizedInterceptor implements HttpInterceptor {
               });
               this.errorService.error(errorMessage, this.options);
               return throwError(errorMessage);
+            }else{
+              this.errorService.error(err.error.clientMessage, this.options);
+              return throwError(err.error.clientMessage);
             }
           }
 

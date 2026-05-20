@@ -74,7 +74,7 @@ export class LessonEducatorComponent implements OnInit {
       if (data.success) {
         const response = data as PaginateResponse<any>;
         this.list = response.dynamicClass.items as LessonEducatorModel[];
-
+        console.log(this.list);
         if (this.paginator) {
           this.paginator.pageIndex = this.pageIndex;
           this.paginator.length = this.total;

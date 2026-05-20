@@ -1,3 +1,6 @@
-﻿<div *ngFor="let alert of alerts" style="width: 300px; z-index: 9999; " class="{{cssClass(alert)}}">
-  <span [innerHTML]="alert.message"></span>
+<div class="error-toast-stack" aria-live="polite" aria-atomic="false">
+  <div *ngFor="let alert of alerts" class="{{cssClass(alert)}}">
+    <span class="error-toast-message" [innerHTML]="alert.message"></span>
+    <button type="button" class="error-toast-close" aria-label="Uyarıyı kapat" (click)="removeAlert(alert)">×</button>
+  </div>
 </div>

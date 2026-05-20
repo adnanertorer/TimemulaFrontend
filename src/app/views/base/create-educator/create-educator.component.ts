@@ -11,9 +11,9 @@ import Constants from 'src/app/shared/tools/constants';
 })
 export class CreateEducatorComponent implements OnInit {
 
-  staff: StaffModel;
+  staff: StaffModel | undefined;
   staffList: any[] = [];
-  pageOfItems: Array<any>;
+  pageOfItems: Array<any> | undefined;
   buttonText = Constants.Save;
   
   constructor(private service: StaffService) { }
@@ -24,16 +24,16 @@ export class CreateEducatorComponent implements OnInit {
       callenderOrder: 0,
       createdBy: 0,
       email: '',
-      workFinishDateTime: null,
+      workFinishDateTime: undefined,
       workStarDateTime: new Date(),
       gsm: '',
       id: 0,
       identityNumber: '',
       name: '',
-      salaryTypeId: 0,
-      staffTypeId: 0,
+      salaryTypeId: 1,
+      staffTypeId: 5,
       surname: '',
-      birthDate: null,
+      birthDate: undefined,
       branchId: 0,
       isTeacher: false,
       salaryAmount: 0
@@ -69,7 +69,7 @@ export class CreateEducatorComponent implements OnInit {
   }
 
   add(): void {
-    if(this.staff.id == 0){
+    if( this.staff && this.staff.id == 0){
       this.staff.identityNumber = this.staff.identityNumber.toString();
       this.service.add(this.staff).subscribe((data)=>{
         if(data.success){
@@ -80,15 +80,17 @@ export class CreateEducatorComponent implements OnInit {
         }
       });
     }else{
-      this.staff.identityNumber = this.staff.identityNumber.toString();
-      this.service.update(this.staff).subscribe((data)=>{
-        if(data.success){
-          alert(data.clientMessage);
-          this.ngOnInit();
-        }else{
-          alert(data.clientMessage);
-        }
-      });
+      if(this.staff){
+        this.staff.identityNumber = this.staff.identityNumber.toString();
+        this.service.update(this.staff).subscribe((data)=>{
+          if(data.success){
+            alert(data.clientMessage);
+            this.ngOnInit();
+          }else{
+            alert(data.clientMessage);
+          }
+        });
+      }
     }
   }
 

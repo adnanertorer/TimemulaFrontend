@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   // tslint:disable-next-line: typedef
   ngOnInit() {
     if (typeof alertify !== 'undefined') {
-      alertify.set('notifier', 'position', 'top-right');
+      alertify.set('notifier', 'position', 'bottom-right');
       alertify.set('notifier', 'delay', 3);
       alertify.defaults.transition = 'fade';
       alertify.defaults.theme.ok = 'btn btn-primary';

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5000/api',
-  mainUrl: 'http://localhost:5000/',
+  apiUrl: 'http://localhost:5001/api',
+  mainUrl: 'http://localhost:5001/',
   access_token_name: 'access_token',
   refresh_token_name: 'refresh-token',
   permission_codes_name: 'permission-codes',

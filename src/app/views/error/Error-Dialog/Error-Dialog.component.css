@@ -1,0 +1,124 @@
+:host {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 9999;
+  display: block;
+  pointer-events: none;
+}
+
+.error-toast-stack {
+  display: grid;
+  gap: 12px;
+  width: min(360px, calc(100vw - 32px));
+}
+
+.error-toast {
+  position: relative;
+  display: block;
+  min-height: 58px;
+  padding: 14px 44px 14px 52px;
+  overflow: hidden;
+  color: #172033;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(217, 226, 238, 0.95);
+  border-radius: 14px;
+  box-shadow: 0 18px 44px rgba(23, 32, 51, 0.16), 0 2px 8px rgba(23, 32, 51, 0.06);
+  backdrop-filter: blur(14px);
+  pointer-events: auto;
+  transform: translateY(0);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.error-toast.fade {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.error-toast::before {
+  content: "";
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: #64748b;
+  box-shadow: inset 0 0 0 6px rgba(255, 255, 255, 0.72);
+}
+
+.error-toast::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: #64748b;
+}
+
+.error-toast.alert-success {
+  border-color: rgba(0, 166, 138, 0.24);
+}
+
+.error-toast.alert-success::before,
+.error-toast.alert-success::after {
+  background: #00a68a;
+}
+
+.error-toast.alert-danger {
+  border-color: rgba(229, 72, 77, 0.26);
+}
+
+.error-toast.alert-danger::before,
+.error-toast.alert-danger::after {
+  background: #e5484d;
+}
+
+.error-toast.alert-info::before,
+.error-toast.alert-info::after {
+  background: #2f6bff;
+}
+
+.error-toast.alert-warning::before,
+.error-toast.alert-warning::after {
+  background: #f59e0b;
+}
+
+.error-toast-message {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.error-toast-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #475569;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.08);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.error-toast-close:hover {
+  background: rgba(15, 23, 42, 0.14);
+}
+
+@media (max-width: 768px) {
+  :host {
+    right: 12px;
+    bottom: 12px;
+  }
+}

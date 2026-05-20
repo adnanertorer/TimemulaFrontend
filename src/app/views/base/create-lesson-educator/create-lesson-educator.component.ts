@@ -70,7 +70,7 @@ export class CreateLessonEducatorComponent implements OnInit {
       if (data.success) {
         const response = data as PaginateResponse<any>;
         this.modelList = response.dynamicClass.items as any[];
-        
+        console.log(this.modelList);
         this.paginator.pageIndex = this.pageIndex;
         this.paginator.length = this.total;
       }

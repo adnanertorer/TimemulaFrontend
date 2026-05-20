@@ -7,9 +7,9 @@
     [class.is-complete]="step.isComplete"
     (click)="onStepClick(step)">
     <span class="step-index">{{ step.stepIndex }}</span>
-    <span class="step-copy">
+  <span class="step-copy">
       <strong>{{ step.stepName }}</strong>
-      <small>{{ step.isComplete ? 'Tamamlandı' : 'Bekliyor' }}</small>
+      <!--  <small>{{ step.isComplete ? 'Tamamlandı' : 'Bekliyor' }}</small>-->
     </span>
   </button>
 </nav>

@@ -17,9 +17,9 @@ declare let alertify: any;
 })
 export class RegisterComponent implements OnInit {
 
-  model: RegisterCompanyModel;
+  model: RegisterCompanyModel | undefined;
   passwordAgain: string = "";
-  registerForm: FormGroup;
+  registerForm: FormGroup | undefined;
   cities: CityModel[] = [];
   districts: DistrictModel[] = [];
 
@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
     });
   }
 
-  cityOnChange(id) {
+  cityOnChange(id: number) {
     this.getDistricts(id);
   }
 
@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    if (this.registerForm.valid) {
+    if (this.registerForm && this.registerForm.valid) {
       const formValues = this.registerForm.value;
 
       if (formValues.password === formValues.passwordAgain) {
@@ -112,16 +112,16 @@ export class RegisterComponent implements OnInit {
               this.service.setLocalStorage(tokenModel);
               this.service.startTokenTimer();
               this.router.navigate(['form']);
-            }else{
-              alertify.error(response.clientMessage, 3);
             }
+          }else{
+            alertify.error("Bir hata oluştu", 3);
           }
         });
       } else {
-        alert('Parolalar uyuşmuyor');
+         alertify.error('Parolalar uyuşmuyor');
       }
     } else {
-      alert('Lütfen formu eksiksiz ve doğru doldurunuz.');
+       alertify.error('Lütfen formu eksiksiz ve doğru doldurunuz.');
     }
   }
   login() {

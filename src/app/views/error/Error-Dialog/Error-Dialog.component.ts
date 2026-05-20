@@ -85,7 +85,7 @@ export class ErrorDialogComponent implements OnInit {
   cssClass(alert: Alert) {
     if (!alert) return;
 
-    const classes = ['alert', 'alert-dismissable'];
+    const classes = ['error-toast', 'alert', 'alert-dismissable'];
 
     const alertTypeClass = {
       [AlertType.Success]: 'alert-success',

@@ -881,8 +881,10 @@
     z-index: 3000;
   }
 
-  .alertify-notifier.ajs-top {
-    top: 88px;
+  .alertify-notifier.ajs-top,
+  .alertify-notifier.ajs-bottom {
+    top: auto !important;
+    bottom: 18px !important;
   }
 
   .alertify-notifier.ajs-right {
@@ -1042,8 +1044,10 @@
       padding: 10px 12px !important;
     }
 
-    .alertify-notifier.ajs-top {
-      top: 76px;
+    .alertify-notifier.ajs-top,
+    .alertify-notifier.ajs-bottom {
+      top: auto !important;
+      bottom: 12px !important;
     }
 
     .alertify-notifier.ajs-right {
